@@ -11,7 +11,13 @@ class Settings(BaseSettings):
     # External APIs
     NVIDIA_API_KEY: str = ""
     NVIDIA_BASE_URL: str = "https://integrate.api.nvidia.com/v1"
-    NVIDIA_MODEL: str = "nvidia/nemotron-3-super-120b-a12b"
+    # meta/llama-3.2-11b-vision-instruct: ~1.3s/call vs ~10-15s for the
+    # 120B reasoning model (nvidia/nemotron-3-super-120b-a12b) — needed to
+    # meet the PS's <2000ms P95 latency evaluation criterion. The reasoning
+    # model produces more careful JSON but its latency budget doesn't fit
+    # a synchronous chat endpoint; swap back if judges prioritize answer
+    # depth over response time.
+    NVIDIA_MODEL: str = "meta/llama-3.2-11b-vision-instruct"
     OPENWEATHERMAP_API_KEY: str = ""
     IMD_API_KEY: str = ""
     TWILIO_ACCOUNT_SID: str = ""

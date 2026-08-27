@@ -62,7 +62,10 @@ async def _fetch_with_retry(client: httpx.AsyncClient, url: str, params: dict, r
 
 async def fetch_gfs_forecast(lat: float, lon: float, date: str) -> dict | None:
     redis = get_redis()
-    cache_key = f"gfs:{lat:.2f}:{lon:.2f}:{date}"
+    # v2: switched from synthetic seeded data to real Open-Meteo/GFS values —
+    # versioned so stale synthetic cache entries from before this change
+    # can't be served after redeploy.
+    cache_key = f"gfs:v2:{lat:.2f}:{lon:.2f}:{date}"
     cached = await redis.get(cache_key)
     if cached:
         return json.loads(cached)
