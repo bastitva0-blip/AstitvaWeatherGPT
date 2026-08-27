@@ -105,7 +105,7 @@ def classify_intent(en_text: str) -> dict:
                     "{ \"intent\": one of [" + "|".join(INTENT_TYPES[:-1]) + "], \"confidence\": 0.0-1.0 }"
                 ),
                 user=en_text,
-                max_tokens=200,
+                max_tokens=600,
             )
             data = json.loads(raw)
             if data.get("confidence", 0) < 0.7:
@@ -133,7 +133,7 @@ def extract_slots(en_text: str, intent: str) -> dict:
                     "fishing_zone from this weather query. Return ONLY JSON. Use null for missing fields."
                 ),
                 user=en_text,
-                max_tokens=300,
+                max_tokens=700,
             )
             return json.loads(raw)
         except Exception as e:
