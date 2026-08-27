@@ -52,9 +52,9 @@ def _fallback_response(weather_data: dict, nlp_result: dict, gfs_data: list[dict
     }]
     if gfs_data:
         citations.append({
-            "source": "GFS NOMADS",
-            "detail": f"GFS 0.25deg NWP forecast, run {gfs_data[0].get('run_time')}",
-            "url": gfs_data[0].get("source_url", "https://nomads.ncep.noaa.gov"),
+            "source": "GFS (via Open-Meteo)",
+            "detail": f"GFS NWP forecast, {gfs_data[0].get('run_time')}",
+            "url": gfs_data[0].get("source_url", "https://api.open-meteo.com/v1/forecast"),
         })
 
     fishing_safe = _fishing_zone_safe(weather_data) if use_case == "fisherman" else None
@@ -99,12 +99,29 @@ async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict,
             llm_client.chat_completion, SYSTEM_PROMPT, json.dumps(context), 1800
         )
         parsed = json.loads(raw)
+
+        # Some NVIDIA-hosted models (esp. vision-capable ones) wrap JSON
+        # output in a content-block shape — {"type": "text", "text": {...}}
+        # — instead of the flat object we asked for. Unwrap it.
+        if set(parsed.keys()) == {"type", "text"} and isinstance(parsed.get("text"), dict):
+            parsed = parsed["text"]
+
+        if not parsed.get("answer"):
+            raise ValueError("LLM response missing 'answer' field after unwrap")
+
         if not parsed.get("citations"):
+            parsed["citations"] = []
+        default_citation_url = weather_data.get("source_url", "https://mausam.imd.gov.in")
+        for citation in parsed["citations"]:
+            citation.setdefault("detail", f"{citation.get('source', 'source')} data for {weather_data.get('location', 'this location')}")
+            citation.setdefault("url", default_citation_url)
+        if not parsed["citations"]:
             parsed["citations"] = [{
                 "source": weather_data.get("source", "IMD"),
                 "detail": "fallback citation — LLM omitted citations",
-                "url": weather_data.get("source_url", "https://mausam.imd.gov.in"),
+                "url": default_citation_url,
             }]
+
         if not parsed.get("weather_summary"):
             parsed["weather_summary"] = {"location": weather_data.get("location"), "date": weather_data.get("date")}
         # Validate against the response schema — the LLM's JSON can be
