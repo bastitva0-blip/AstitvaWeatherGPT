@@ -2,11 +2,12 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, UploadFile
 from sqlalchemy import delete
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.auth import verify_api_key
+from app.core.cache import get_redis
 from app.models.database import LocationCache, get_db
 from app.services import rag_service
-from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
 
@@ -20,10 +21,24 @@ async def ingest(file: UploadFile, domain: str = "general", api_key: str = Depen
 
 @router.delete("/api/admin/location-cache/{name}")
 async def purge_location_cache(name: str, api_key: str = Depends(verify_api_key), db: AsyncSession = Depends(get_db)):
-    """Purge a bad GIS geocoding cache entry — a wrong-city mismatch needs a
-    code fix AND this, since resolve_location checks the DB cache before
-    ever re-geocoding, so a stale/wrong entry survives any geocoding fix
-    until purged."""
-    result = await db.execute(delete(LocationCache).where(LocationCache.name == name.strip().lower()))
+    """Purge a bad GIS geocoding cache entry AND the Redis weather cache
+    keyed by that location name. A wrong-city mismatch survives a geocoding
+    code fix until both are purged: resolve_location checks the Postgres
+    LocationCache before re-geocoding, and fetch_weather separately caches
+    the (previously wrong-location) weather blob in Redis by name — deleting
+    only one of the two still serves stale data from the other."""
+    normalized = name.strip().lower()
+    result = await db.execute(delete(LocationCache).where(LocationCache.name == normalized))
     await db.commit()
-    return {"name": name, "rows_deleted": result.rowcount}
+
+    redis = get_redis()
+    weather_keys_deleted = 0
+    async for key in redis.scan_iter(match=f"weather:v2:{normalized}:*"):
+        await redis.delete(key)
+        weather_keys_deleted += 1
+
+    return {
+        "name": normalized,
+        "location_cache_rows_deleted": result.rowcount,
+        "weather_cache_keys_deleted": weather_keys_deleted,
+    }
