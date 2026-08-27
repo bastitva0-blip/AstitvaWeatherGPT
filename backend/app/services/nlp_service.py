@@ -112,7 +112,7 @@ def translate_from_english(en_text: str, tgt_lang: str) -> str:
 
 
 _KEYWORD_INTENT_RULES: list[tuple[str, list[str]]] = [
-    ("marine_advisory", ["samudra", "machhli", "machhwar", "fishing", "fisherm", "wave", "lahr", "kadal", "thiramala", "sea", "coast", "കടല", "തിരമാല"]),
+    ("marine_advisory", ["samudra", "machhli", "machhwar", "fishing", "fisherm", "wave height", "high waves", "lahr", "kadal", "thiramala", "sea", "coastal", "കടല", "തിരമാല"]),
     ("aviation_briefing", ["airport", "metar", "icao", "vidp", "runway", "visibility at"]),
     ("cyclone_track", ["cyclone track", "kahan hai cyclone", "cyclone kaha"]),
     ("alert_check", ["alert", "warning", "chetavani"]),
@@ -124,10 +124,27 @@ _KEYWORD_INTENT_RULES: list[tuple[str, list[str]]] = [
 ]
 
 
+# Deliberately partial stems (match "fisherman"/"fishermen"/"irrigation" etc)
+# — matched with a leading \b but no trailing \b. Every other single-word
+# keyword requires a full \bword\b match.
+_STEM_KEYWORDS = {"fisherm", "irrigat", "machhwar"}
+
+
 def _keyword_classify(en_text_lower: str) -> tuple[str, float]:
+    # Word-boundary matching — a plain substring check would match "wave"
+    # inside "heatwave" or "sea" inside "season"/"disease", misrouting the
+    # intent (this misrouted a Jaisalmer heatwave query to marine_advisory
+    # in testing).
     for intent, keywords in _KEYWORD_INTENT_RULES:
-        if any(kw in en_text_lower for kw in keywords):
-            return intent, 0.85
+        for kw in keywords:
+            if " " in kw:
+                if kw in en_text_lower:
+                    return intent, 0.85
+            elif kw in _STEM_KEYWORDS:
+                if re.search(rf"\b{re.escape(kw)}", en_text_lower):
+                    return intent, 0.85
+            elif re.search(rf"\b{re.escape(kw)}\b", en_text_lower):
+                return intent, 0.85
     return "general_weather", 0.6
 
 
