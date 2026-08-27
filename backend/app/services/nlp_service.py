@@ -179,6 +179,33 @@ def _extract_location(en_text: str) -> str | None:
     return None
 
 
+def _extract_location_llm(en_text: str) -> str | None:
+    """LLM fallback for when the proper-noun regex finds nothing — covers
+    casually-typed lowercase queries ("will it be sunny in lucknow") and
+    any place name worldwide, not just capitalized Indian towns. Only
+    called when the fast regex path comes up empty, so it doesn't add
+    latency to the common well-formed-capitalization case."""
+    if not llm_client.is_configured():
+        return None
+    try:
+        raw = llm_client.chat_completion(
+            system=(
+                "Extract the place name (city, town, region, or landmark) mentioned in this "
+                "weather query, anywhere in the world. Reply with ONLY the place name, "
+                "properly capitalized, nothing else. If no place is mentioned, reply NONE."
+            ),
+            user=en_text,
+            max_tokens=30,
+            temperature=0.0,
+        ).strip().strip('"')
+        if not raw or raw.upper() == "NONE":
+            return None
+        return raw
+    except Exception as e:
+        logger.warning(f"LLM location extraction failed: {e}")
+        return None
+
+
 def extract_slots(en_text: str, intent: str) -> dict:
     text_lower = en_text.lower()
     slots: dict = {k: None for k in SLOT_TYPES}
@@ -228,6 +255,8 @@ async def nlp_pipeline(raw_message: str) -> dict:
     intent = intent_result["intent"]
     confidence = intent_result["confidence"]
     slots = extract_slots(en_text, intent) if intent != "clarification_needed" else {}
+    if intent != "clarification_needed" and not slots.get("location"):
+        slots["location"] = await asyncio.to_thread(_extract_location_llm, en_text)
     return {
         "lang": lang,
         "en_text": en_text,

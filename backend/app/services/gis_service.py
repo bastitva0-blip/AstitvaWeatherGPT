@@ -97,29 +97,38 @@ async def resolve_location(name: str) -> GISLocation | None:
 
         lat = lon = None
         district = state = None
+        country = "IN"
         source = "nominatim"
-        try:
-            geo = _geocoder.geocode(f"{name}, India", language="en", addressdetails=True, timeout=10)
-            if geo:
-                lat, lon = geo.latitude, geo.longitude
-                addr = geo.raw.get("address", {})
-                district = addr.get("state_district") or addr.get("county")
-                state = addr.get("state")
-        except Exception as e:
-            logger.warning(f"Nominatim geocode failed for {name}: {e}")
+        # Try India-biased first (this app's primary audience), then fall
+        # back to an unrestricted global lookup — WeatherGPT should resolve
+        # any place on Earth, not just Indian towns, even though IMD/GFS
+        # grounding is India-focused.
+        for query, timeout in ((f"{name}, India", 8), (name, 8)):
+            try:
+                geo = _geocoder.geocode(query, language="en", addressdetails=True, timeout=timeout)
+                if geo:
+                    lat, lon = geo.latitude, geo.longitude
+                    addr = geo.raw.get("address", {})
+                    district = addr.get("state_district") or addr.get("county")
+                    state = addr.get("state")
+                    country = (addr.get("country_code") or "in").upper()
+                    break
+            except Exception as e:
+                logger.warning(f"Nominatim geocode failed for '{query}': {e}")
 
         if lat is None and settings.OPENWEATHERMAP_API_KEY:
             try:
                 async with httpx.AsyncClient() as client:
                     resp = await client.get(
                         "https://api.openweathermap.org/geo/1.0/direct",
-                        params={"q": f"{name},IN", "limit": 1, "appid": settings.OPENWEATHERMAP_API_KEY},
+                        params={"q": name, "limit": 1, "appid": settings.OPENWEATHERMAP_API_KEY},
                         timeout=10.0,
                     )
                     arr = resp.json()
                     if arr:
                         lat, lon = arr[0]["lat"], arr[0]["lon"]
                         state = arr[0].get("state")
+                        country = arr[0].get("country", "IN")
                         source = "owm_geo"
             except Exception as e:
                 logger.warning(f"OWM geo fallback failed for {name}: {e}")
@@ -129,7 +138,8 @@ async def resolve_location(name: str) -> GISLocation | None:
 
         geohash = compute_geohash(lat, lon)
         row = LocationCache(
-            name=normalized, lat=lat, lon=lon, district=district, state=state, geohash=geohash
+            name=normalized, lat=lat, lon=lon, district=district, state=state,
+            country=country, geohash=geohash,
         )
         db.add(row)
         await db.commit()
@@ -137,7 +147,7 @@ async def resolve_location(name: str) -> GISLocation | None:
         zone = await get_coastal_zone(lat, lon)
         return GISLocation(
             name=normalized, lat=lat, lon=lon, district=district, state=state,
-            geohash=geohash, coastal_zone=zone, source=source,
+            country=country, geohash=geohash, coastal_zone=zone, source=source,
         )
 
 
