@@ -1,6 +1,16 @@
 import pytest
 
+from app.services import gfs_service
 from app.services.gfs_service import convert_gfs_units, fetch_gfs_forecast
+
+
+@pytest.fixture(autouse=True)
+def _no_retry_backoff(monkeypatch):
+    # _fetch_with_retry sleeps 2s between attempts; skip the real delay in tests.
+    async def instant_sleep(seconds):
+        return None
+
+    monkeypatch.setattr(gfs_service.asyncio, "sleep", instant_sleep)
 
 
 @pytest.mark.asyncio

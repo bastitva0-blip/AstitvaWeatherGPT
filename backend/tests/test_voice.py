@@ -28,8 +28,16 @@ def test_voice_endpoint_webm(client, sample_webm_audio):
     assert len(data["transcribed_text"]) > 0
 
 
-def test_voice_endpoint_rejects_oversized_file(client):
-    big_audio = b"0" * (11 * 1024 * 1024)
+def test_voice_endpoint_rejects_oversized_file(client, monkeypatch):
+    # Lower the limit instead of transferring a real 10MB+ payload — the
+    # 413 branch only depends on len(body) > MAX_AUDIO_BYTES, not on the
+    # actual limit value, and a real 10MB multipart upload through
+    # Starlette's spooled-tempfile parser adds tens of seconds to the suite
+    # for no extra coverage.
+    from app.routes import voice as voice_route
+    monkeypatch.setattr(voice_route.voice_service, "MAX_AUDIO_BYTES", 1024)
+
+    big_audio = b"0" * 2048
     response = client.post(
         "/api/nlp/voice",
         files={"audio": ("big.webm", big_audio, "audio/webm")},

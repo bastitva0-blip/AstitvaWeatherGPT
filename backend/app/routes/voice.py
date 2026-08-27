@@ -19,6 +19,9 @@ async def voice_transcribe(
     if audio.content_type not in voice_service.SUPPORTED_MIME_TYPES:
         raise HTTPException(status_code=415, detail=f"Unsupported audio format: {audio.content_type}")
 
+    if audio.size is not None and audio.size > voice_service.MAX_AUDIO_BYTES:
+        raise HTTPException(status_code=413, detail="Audio file exceeds 10MB limit")
+
     body = await audio.read()
     if len(body) > voice_service.MAX_AUDIO_BYTES:
         raise HTTPException(status_code=413, detail="Audio file exceeds 10MB limit")
