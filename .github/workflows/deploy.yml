@@ -22,7 +22,7 @@ jobs:
       - name: Run tests
         run: pytest tests/ --cov=app --cov-report=xml
         env:
-          DATABASE_URL: sqlite+aiosqlite:///:memory:
+          DATABASE_URL: "sqlite+aiosqlite:///:memory:"
           API_KEYS: test-key
           ANTHROPIC_API_KEY: ""
           OPENWEATHERMAP_API_KEY: ""
