@@ -112,7 +112,7 @@ def translate_from_english(en_text: str, tgt_lang: str) -> str:
 
 
 _KEYWORD_INTENT_RULES: list[tuple[str, list[str]]] = [
-    ("marine_advisory", ["samudra", "machhli", "machhwar", "fishing", "fisherman", "wave", "lahr", "kadal", "thiramala", "കടല", "തിരമാല"]),
+    ("marine_advisory", ["samudra", "machhli", "machhwar", "fishing", "fisherm", "wave", "lahr", "kadal", "thiramala", "sea", "coast", "കടല", "തിരമാല"]),
     ("aviation_briefing", ["airport", "metar", "icao", "vidp", "runway", "visibility at"]),
     ("cyclone_track", ["cyclone track", "kahan hai cyclone", "cyclone kaha"]),
     ("alert_check", ["alert", "warning", "chetavani"]),
@@ -187,7 +187,7 @@ def extract_slots(en_text: str, intent: str) -> dict:
 
 def use_case_for_intent(intent: str, en_text: str) -> str:
     text_lower = en_text.lower()
-    if intent == "marine_advisory" or "fisherman" in text_lower or "machhwar" in text_lower:
+    if intent == "marine_advisory" or "fisherm" in text_lower or "machhwar" in text_lower:
         return "fisherman"
     if intent == "agro_advisory":
         return "farmer"
