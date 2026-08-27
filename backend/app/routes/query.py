@@ -36,10 +36,12 @@ async def query(body: QueryRequest, api_key: str = Depends(verify_api_key), db: 
     nlp_result = await nlp_service.nlp_pipeline(body.message)
 
     if nlp_result["intent"] == "clarification_needed":
+        clarification = await asyncio.to_thread(
+            nlp_service.translate_from_english,
+            "Could you clarify your location and what weather info you need?", nlp_result["lang"],
+        )
         return QueryResponse(
-            answer=nlp_service.translate_from_english(
-                "Could you clarify your location and what weather info you need?", nlp_result["lang"]
-            ),
+            answer=clarification,
             citations=[{"source": "WeatherGPT", "detail": "clarification requested", "url": ""}],
             weather_summary={"location": "unknown", "date": "unknown"},
             alert_level="none",
@@ -83,7 +85,9 @@ async def query(body: QueryRequest, api_key: str = Depends(verify_api_key), db: 
         weather_data["coastal_zone"] = coastal_info
 
     llm_response = await llm_service.generate(weather_data, rag_chunks, nlp_result, gfs_data)
-    llm_response["answer"] = nlp_service.translate_from_english(llm_response["answer"], nlp_result["lang"])
+    llm_response["answer"] = await asyncio.to_thread(
+        nlp_service.translate_from_english, llm_response["answer"], nlp_result["lang"]
+    )
 
     await _ensure_session(db, body.session_id, api_key, nlp_result["lang"])
     row = QueryRow(

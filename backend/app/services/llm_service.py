@@ -1,6 +1,7 @@
 """LLM response generation via NVIDIA NIM (Llama) — grounded, cited, zero-hallucination."""
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 
@@ -94,7 +95,9 @@ async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict,
             "intent": nlp_result.get("intent"),
             "use_case_context": nlp_result.get("use_case_context"),
         }
-        raw = llm_client.chat_completion(system=SYSTEM_PROMPT, user=json.dumps(context), max_tokens=1800)
+        raw = await asyncio.to_thread(
+            llm_client.chat_completion, SYSTEM_PROMPT, json.dumps(context), 1800
+        )
         parsed = json.loads(raw)
         if not parsed.get("citations"):
             parsed["citations"] = [{

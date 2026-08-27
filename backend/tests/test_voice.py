@@ -2,6 +2,15 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
+from app.services import voice_service
+
+
+@pytest.fixture(autouse=True)
+def _force_stub_transcriber(monkeypatch):
+    # Force the deterministic stub path regardless of whether faster-whisper
+    # is installed locally — real transcription needs a model download and
+    # actual audio bytes, neither of which belong in a fast/offline test.
+    monkeypatch.setattr(voice_service, "load_whisper_model", lambda: "stub")
 
 
 @pytest.fixture

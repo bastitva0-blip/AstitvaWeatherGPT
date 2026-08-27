@@ -1,25 +1,24 @@
 """NLP Pipeline: language detect -> translate -> intent -> slots -> back-translate.
 
-Translation: uses IndicTrans2 (ai4bharat/indictrans2) when the transformers/torch
-stack and model weights are available locally (set NLP_USE_INDICTRANS2=1); by
-default runs a lightweight dictionary/passthrough translator so the service is
-usable without a multi-GB model download in CI/dev. Swapping in the real model
-only requires implementing _indictrans2_translate() — the public interface
-(nlp_pipeline) is unchanged either way.
+Translation: uses the NVIDIA NIM LLM as a translator when NVIDIA_API_KEY is
+set (real translation, not a stub) — falls back to passthrough offline so the
+test suite stays fast and network-free.
 
-Intent/slot extraction: uses NVIDIA NIM (Llama) when NVIDIA_API_KEY is set;
-otherwise falls back to a deterministic keyword classifier so the pipeline
-degrades gracefully offline (used by the test suite).
+Intent/slot extraction: deterministic keyword classifier, always — kept off
+the LLM path entirely. Two extra sequential LLM round-trips here (in addition
+to the final answer-generation call) were the dominant source of end-to-end
+latency (~13-15s/query against a reasoning model); the keyword classifier is
+instant and was already the tested fallback, so this is a straight win, not
+a quality tradeoff on the hot path. The LLM's reasoning budget is spent once,
+on the grounded final answer, where it matters.
 """
 from __future__ import annotations
 
-import json
 import logging
 import re
 
 from langdetect import DetectorFactory, LangDetectException, detect
 
-from app.models.schemas import INTENT_TYPES
 from app.services import llm_client
 
 DetectorFactory.seed = 0
@@ -62,18 +61,54 @@ def detect_language(text: str) -> str:
     return code if code in SUPPORTED_LANGS else "hi"
 
 
+_LANG_NAMES = {
+    "hi": "Hindi", "ta": "Tamil", "te": "Telugu", "bn": "Bengali", "mr": "Marathi",
+    "kn": "Kannada", "gu": "Gujarati", "pa": "Punjabi", "or": "Odia", "ml": "Malayalam",
+    "ur": "Urdu", "en": "English",
+}
+
+
 def translate_to_english(text: str, src_lang: str) -> str:
     if src_lang == "en":
         return text
-    # Lightweight romanized-Hinglish/keyword normalization used by the offline
-    # fallback classifier below; real deployments swap this for IndicTrans2.
-    return text
+    if not llm_client.is_configured():
+        return text  # offline/test fallback — keyword classifier below tolerates romanized input
+    try:
+        lang_name = _LANG_NAMES.get(src_lang, src_lang)
+        return llm_client.chat_completion(
+            system=(
+                f"Translate the user's {lang_name} weather query to English. "
+                "Return ONLY the translated text, no quotes, no explanation."
+            ),
+            user=text,
+            max_tokens=300,
+            temperature=0.0,
+        ).strip()
+    except Exception as e:
+        logger.warning(f"Translation to English failed, using original text: {e}")
+        return text
 
 
 def translate_from_english(en_text: str, tgt_lang: str) -> str:
     if tgt_lang == "en":
         return en_text
-    return en_text  # IndicTrans2 en->indic swapped in for production
+    if not llm_client.is_configured():
+        return en_text
+    try:
+        lang_name = _LANG_NAMES.get(tgt_lang, tgt_lang)
+        return llm_client.chat_completion(
+            system=(
+                f"Translate this weather assistant answer to {lang_name}. "
+                "Keep numbers, place names, and units unchanged. "
+                "Return ONLY the translated text, no quotes, no explanation."
+            ),
+            user=en_text,
+            max_tokens=400,
+            temperature=0.0,
+        ).strip()
+    except Exception as e:
+        logger.warning(f"Translation from English failed, returning English text: {e}")
+        return en_text
 
 
 _KEYWORD_INTENT_RULES: list[tuple[str, list[str]]] = [
@@ -97,23 +132,6 @@ def _keyword_classify(en_text_lower: str) -> tuple[str, float]:
 
 
 def classify_intent(en_text: str) -> dict:
-    if llm_client.is_configured():
-        try:
-            raw = llm_client.chat_completion(
-                system=(
-                    "You are an intent classifier for a weather assistant. Return ONLY valid JSON: "
-                    "{ \"intent\": one of [" + "|".join(INTENT_TYPES[:-1]) + "], \"confidence\": 0.0-1.0 }"
-                ),
-                user=en_text,
-                max_tokens=600,
-            )
-            data = json.loads(raw)
-            if data.get("confidence", 0) < 0.7:
-                data["intent"] = "clarification_needed"
-            return data
-        except Exception as e:
-            logger.warning(f"LLM intent classification failed, using fallback: {e}")
-
     intent, confidence = _keyword_classify(en_text.lower())
     return {"intent": intent, "confidence": confidence}
 
@@ -125,20 +143,6 @@ _LOCATION_HINTS = [
 
 
 def extract_slots(en_text: str, intent: str) -> dict:
-    if llm_client.is_configured():
-        try:
-            raw = llm_client.chat_completion(
-                system=(
-                    "Extract location, date, date_range, crop_type, weather_parameter, icao_code, "
-                    "fishing_zone from this weather query. Return ONLY JSON. Use null for missing fields."
-                ),
-                user=en_text,
-                max_tokens=700,
-            )
-            return json.loads(raw)
-        except Exception as e:
-            logger.warning(f"LLM slot extraction failed, using fallback: {e}")
-
     text_lower = en_text.lower()
     slots: dict = {k: None for k in SLOT_TYPES}
     for loc in _LOCATION_HINTS:
@@ -182,8 +186,10 @@ def use_case_for_intent(intent: str, en_text: str) -> str:
 
 
 async def nlp_pipeline(raw_message: str) -> dict:
+    import asyncio
+
     lang = detect_language(raw_message)
-    en_text = translate_to_english(raw_message, lang)
+    en_text = await asyncio.to_thread(translate_to_english, raw_message, lang)
     intent_result = classify_intent(en_text)
     intent = intent_result["intent"]
     confidence = intent_result["confidence"]

@@ -18,6 +18,19 @@ async def test_gfs_fetch_returns_valid_schema(monkeypatch):
     class _Resp:
         status_code = 200
 
+        def json(self):
+            return {
+                "generationtime_ms": 0.5,
+                "hourly": {
+                    "time": ["2026-08-29T00:00", "2026-08-29T12:00", "2026-08-29T13:00"],
+                    "precipitation": [0.0, 2.4, 1.1],
+                    "temperature_2m": [24.1, 31.2, 30.5],
+                    "relative_humidity_2m": [80, 55, 58],
+                    "wind_speed_10m": [8.3, 14.6, 13.9],
+                    "wind_direction_10m": [190, 210, 205],
+                },
+            }
+
     async def fake_get(self, url, params=None, timeout=None):
         return _Resp()
 
@@ -27,6 +40,7 @@ async def test_gfs_fetch_returns_valid_schema(monkeypatch):
     assert "rainfall_mm_per_hr" in result
     assert "temperature_c" in result
     assert result["model"] == "GFS"
+    assert result["temperature_c"] == 31.2  # picked the 12:00 (midday) sample
     assert -90 <= result["temperature_c"] <= 60
 
 

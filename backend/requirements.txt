@@ -23,8 +23,12 @@ geopy==2.4.1
 shapely==2.0.4
 # WIS2.0 / MQTT
 paho-mqtt==2.1.0
-# Optional heavy deps — voice/translation degrade gracefully if absent
-# faster-whisper==1.0.3
+# Voice transcription (real faster-whisper — CTranslate2, no torch needed;
+# model weights download once on first request and are cached in the
+# container). Requires system ffmpeg — see Dockerfile.
+faster-whisper==1.0.3
+# Optional heavy deps still degraded-gracefully-if-absent — not installed
+# by default to keep image size/build time down:
 # transformers==4.41.2
 # torch==2.3.0
 # chromadb==0.5.3
