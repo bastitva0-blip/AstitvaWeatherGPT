@@ -136,19 +136,36 @@ def classify_intent(en_text: str) -> dict:
     return {"intent": intent, "confidence": confidence}
 
 
-_LOCATION_HINTS = [
-    "varanasi", "kochi", "cochin", "chennai", "mumbai", "delhi", "yavatmal", "vidarbha",
-    "rameswaram", "digha", "kolkata", "goa", "kerala", "maharashtra",
-]
+# Common capitalized words that are NOT place names — excluded so the
+# proper-noun heuristic below doesn't misfire on ordinary sentence-starts
+# or weather vocabulary. This intentionally does NOT try to whitelist
+# Indian place names (that approach silently fails on remote/small towns
+# not on the list, e.g. Leh, Itanagar, Cherrapunji) — instead any
+# capitalized phrase is treated as a location candidate and left for
+# gis_service.resolve_location() (real geocoding) to confirm or reject.
+_LOCATION_STOPWORDS = {
+    "will", "is", "are", "was", "were", "what", "when", "where", "how", "should",
+    "can", "could", "would", "do", "does", "did", "please", "tell", "show", "give",
+    "kal", "tomorrow", "today", "yesterday", "gfs", "imd", "india", "indian",
+    "weather", "rain", "rainfall", "temperature", "humidity", "wind", "cyclone",
+    "monsoon", "climate", "trend", "vidp", "vabb", "vecc", "safe", "unsafe",
+}
+
+
+def _extract_location(en_text: str) -> str | None:
+    candidates = re.findall(r"\b[A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)*\b", en_text)
+    for candidate in candidates:
+        first_word = candidate.split()[0].lower()
+        if first_word in _LOCATION_STOPWORDS:
+            continue
+        return candidate
+    return None
 
 
 def extract_slots(en_text: str, intent: str) -> dict:
     text_lower = en_text.lower()
     slots: dict = {k: None for k in SLOT_TYPES}
-    for loc in _LOCATION_HINTS:
-        if loc in text_lower:
-            slots["location"] = loc.title()
-            break
+    slots["location"] = _extract_location(en_text)
     if "tomorrow" in text_lower or "kal" in text_lower:
         slots["date"] = "tomorrow"
     icao_match = re.search(r"\b(V[A-Z]{3})\b", en_text)
