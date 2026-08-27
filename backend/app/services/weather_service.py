@@ -1,6 +1,7 @@
 """Weather data integration: IMD -> OpenWeatherMap -> GFS -> WIS2 Redis -> stale cache."""
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 from datetime import datetime, timezone
@@ -31,6 +32,29 @@ async def _fetch_openweathermap(lat: float, lon: float) -> dict | None:
     return None
 
 
+async def _fetch_marine_wave_height(lat: float, lon: float) -> float | None:
+    """Real wave height from Open-Meteo Marine (backed by real ocean models).
+    Returns None for inland locations (no marine data exists there) — that
+    None is itself meaningful and must propagate, never get replaced with
+    a made-up number, since this field directly drives the fisherman
+    SAFE/UNSAFE badge."""
+    try:
+        async with httpx.AsyncClient() as client:
+            resp = await client.get(
+                "https://marine-api.open-meteo.com/v1/marine",
+                params={"latitude": lat, "longitude": lon, "hourly": "wave_height", "forecast_days": 1},
+                timeout=10.0,
+            )
+            if resp.status_code == 200:
+                values = resp.json().get("hourly", {}).get("wave_height", [])
+                for v in values:
+                    if v is not None:
+                        return round(v, 2)
+    except Exception as e:
+        logger.warning(f"Open-Meteo Marine fetch failed: {e}")
+    return None
+
+
 def _synthetic_weather(location: str, lat: float, lon: float, date: str) -> dict:
     import hashlib
     seed = int(hashlib.sha256(f"{location}{date}".encode()).hexdigest(), 16)
@@ -52,25 +76,40 @@ def _synthetic_weather(location: str, lat: float, lon: float, date: str) -> dict
 
 async def fetch_weather(gis_location, date: str) -> dict:
     redis = get_redis()
-    cache_key = f"weather:{gis_location.name.lower()}:{date}"
+    cache_key = f"weather:v2:{gis_location.name.lower()}:{date}"
     cached = await redis.get(cache_key)
     if cached:
         return json.loads(cached)
 
-    owm = await _fetch_openweathermap(gis_location.lat, gis_location.lon)
+    owm, real_wave_height = await asyncio.gather(
+        _fetch_openweathermap(gis_location.lat, gis_location.lon),
+        _fetch_marine_wave_height(gis_location.lat, gis_location.lon),
+    )
     source = "OpenWeatherMap" if owm else "Synthetic-Fallback"
     base = _synthetic_weather(gis_location.name, gis_location.lat, gis_location.lon, date)
+    base["wave_height_m"] = real_wave_height  # real (possibly None inland) — never synthetic
 
     if owm:
         main = owm.get("main", {})
         wind = owm.get("wind", {})
         weather0 = (owm.get("weather") or [{}])[0]
+        clouds_pct = owm.get("clouds", {}).get("all", 0)
+        rain_mm = (owm.get("rain") or {}).get("1h") or (owm.get("rain") or {}).get("3h") or 0.0
+        # OWM's free current-weather endpoint doesn't give a probability —
+        # derive a deterministic estimate from real signals (actual rain
+        # right now, or heavy cloud cover) instead of a random seed.
+        rainfall_probability = 0.9 if rain_mm > 0 else round(min(clouds_pct / 100 * 0.6, 0.6), 2)
         base.update({
             "temperature_max": main.get("temp_max", base["temperature_max"]),
             "temperature_min": main.get("temp_min", base["temperature_min"]),
             "humidity_percent": main.get("humidity", base["humidity_percent"]),
             "wind_speed_kmh": round(wind.get("speed", 0) * 3.6, 1) or base["wind_speed_kmh"],
             "condition": weather0.get("main", base["condition"]),
+            "rainfall_mm": round(rain_mm, 1),
+            "rainfall_probability": rainfall_probability,
+            "visibility_km": round(owm["visibility"] / 1000, 1) if "visibility" in owm else base["visibility_km"],
+            "heatwave_warning": main.get("temp_max", 0) >= 40,
+            "cyclone_warning": False,  # no real cyclone-tracking feed integrated — never guess this
         })
 
     coastal_zone = await get_coastal_zone(gis_location.lat, gis_location.lon)

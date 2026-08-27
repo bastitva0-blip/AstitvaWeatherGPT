@@ -99,11 +99,16 @@ async def resolve_location(name: str) -> GISLocation | None:
         district = state = None
         country = "IN"
         source = "nominatim"
-        # Try India-biased first (this app's primary audience), then fall
-        # back to an unrestricted global lookup — WeatherGPT should resolve
-        # any place on Earth, not just Indian towns, even though IMD/GFS
-        # grounding is India-focused.
-        for query, timeout in ((f"{name}, India", 8), (name, 8)):
+        # Try an unrestricted global lookup FIRST — Nominatim's relevance
+        # ranking correctly resolves well-known places ("Paris" -> Paris,
+        # France) without a country hint. An India-biased query tried first
+        # was found to silently mismatch famous non-Indian places to an
+        # unrelated, low-relevance Indian locality that happened to share
+        # the name (e.g. "Paris, India" resolved to a spot in Mumbai, not
+        # Paris, France) — confirmed live via lat/lon in production testing.
+        # The India-biased query is now only a fallback for the case a
+        # small/remote Indian place doesn't rank in an unrestricted search.
+        for query, timeout in ((name, 8), (f"{name}, India", 8)):
             try:
                 geo = _geocoder.geocode(query, language="en", addressdetails=True, timeout=timeout)
                 if geo:
