@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import logging
 
+from app.models.schemas import QueryResponse
 from app.services import llm_client
 
 logger = logging.getLogger(__name__)
@@ -101,7 +102,15 @@ async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict,
                 "detail": "fallback citation — LLM omitted citations",
                 "url": weather_data.get("source_url", "https://mausam.imd.gov.in"),
             }]
-        return parsed
+        if not parsed.get("weather_summary"):
+            parsed["weather_summary"] = {"location": weather_data.get("location"), "date": weather_data.get("date")}
+        # Validate against the response schema — the LLM's JSON can be
+        # well-formed but still miss required fields (e.g. citation
+        # detail/url); catch that here rather than letting it crash the
+        # route as an unhandled Pydantic ValidationError (500, no CORS
+        # headers on the error response, browser reports "Failed to fetch").
+        validated = QueryResponse(**parsed)
+        return validated.model_dump()
     except Exception as e:
         logger.warning(f"NVIDIA LLM generation failed, using grounded fallback: {e}")
         return _fallback_response(weather_data, nlp_result, gfs_data)

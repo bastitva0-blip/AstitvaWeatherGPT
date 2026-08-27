@@ -3,8 +3,9 @@ from __future__ import annotations
 import asyncio
 import logging
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from prometheus_fastapi_instrumentator import Instrumentator
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -40,6 +41,20 @@ app.include_router(climate.router, tags=["climate"])
 app.include_router(websocket.router, tags=["websocket"])
 
 Instrumentator().instrument(app).expose(app)
+
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    # An unhandled exception can reach the client before CORSMiddleware gets
+    # a chance to attach headers, so the browser reports a bare "Failed to
+    # fetch" with no error detail. Return valid JSON with CORS headers set
+    # explicitly so the frontend always gets a diagnosable error.
+    logger.exception(f"Unhandled exception on {request.url.path}: {exc}")
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error"},
+        headers={"Access-Control-Allow-Origin": "*"},
+    )
 
 _wis2_subscriber: WIS2Subscriber | None = None
 
