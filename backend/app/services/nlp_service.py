@@ -7,7 +7,7 @@ usable without a multi-GB model download in CI/dev. Swapping in the real model
 only requires implementing _indictrans2_translate() — the public interface
 (nlp_pipeline) is unchanged either way.
 
-Intent/slot extraction: uses the Claude API when ANTHROPIC_API_KEY is set;
+Intent/slot extraction: uses NVIDIA NIM (Llama) when NVIDIA_API_KEY is set;
 otherwise falls back to a deterministic keyword classifier so the pipeline
 degrades gracefully offline (used by the test suite).
 """
@@ -19,8 +19,8 @@ import re
 
 from langdetect import DetectorFactory, LangDetectException, detect
 
-from app.core.config import settings
 from app.models.schemas import INTENT_TYPES
+from app.services import llm_client
 
 DetectorFactory.seed = 0
 logger = logging.getLogger(__name__)
@@ -76,13 +76,6 @@ def translate_from_english(en_text: str, tgt_lang: str) -> str:
     return en_text  # IndicTrans2 en->indic swapped in for production
 
 
-def _claude_client():
-    if not settings.ANTHROPIC_API_KEY:
-        return None
-    import anthropic
-    return anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
-
-
 _KEYWORD_INTENT_RULES: list[tuple[str, list[str]]] = [
     ("marine_advisory", ["samudra", "machhli", "machhwar", "fishing", "fisherman", "wave", "lahr", "kadal", "thiramala", "കടല", "തിരമാല"]),
     ("aviation_briefing", ["airport", "metar", "icao", "vidp", "runway", "visibility at"]),
@@ -104,24 +97,22 @@ def _keyword_classify(en_text_lower: str) -> tuple[str, float]:
 
 
 def classify_intent(en_text: str) -> dict:
-    client = _claude_client()
-    if client:
+    if llm_client.is_configured():
         try:
-            msg = client.messages.create(
-                model="claude-sonnet-4-6",
-                max_tokens=200,
+            raw = llm_client.chat_completion(
                 system=(
                     "You are an intent classifier for a weather assistant. Return ONLY valid JSON: "
                     "{ \"intent\": one of [" + "|".join(INTENT_TYPES[:-1]) + "], \"confidence\": 0.0-1.0 }"
                 ),
-                messages=[{"role": "user", "content": en_text}],
+                user=en_text,
+                max_tokens=200,
             )
-            data = json.loads(msg.content[0].text)
+            data = json.loads(raw)
             if data.get("confidence", 0) < 0.7:
                 data["intent"] = "clarification_needed"
             return data
         except Exception as e:
-            logger.warning(f"Claude intent classification failed, using fallback: {e}")
+            logger.warning(f"LLM intent classification failed, using fallback: {e}")
 
     intent, confidence = _keyword_classify(en_text.lower())
     return {"intent": intent, "confidence": confidence}
@@ -134,21 +125,19 @@ _LOCATION_HINTS = [
 
 
 def extract_slots(en_text: str, intent: str) -> dict:
-    client = _claude_client()
-    if client:
+    if llm_client.is_configured():
         try:
-            msg = client.messages.create(
-                model="claude-sonnet-4-6",
-                max_tokens=300,
+            raw = llm_client.chat_completion(
                 system=(
                     "Extract location, date, date_range, crop_type, weather_parameter, icao_code, "
                     "fishing_zone from this weather query. Return ONLY JSON. Use null for missing fields."
                 ),
-                messages=[{"role": "user", "content": en_text}],
+                user=en_text,
+                max_tokens=300,
             )
-            return json.loads(msg.content[0].text)
+            return json.loads(raw)
         except Exception as e:
-            logger.warning(f"Claude slot extraction failed, using fallback: {e}")
+            logger.warning(f"LLM slot extraction failed, using fallback: {e}")
 
     text_lower = en_text.lower()
     slots: dict = {k: None for k in SLOT_TYPES}

@@ -1,10 +1,10 @@
-"""LLM response generation via Claude API — grounded, cited, zero-hallucination."""
+"""LLM response generation via NVIDIA NIM (Llama) — grounded, cited, zero-hallucination."""
 from __future__ import annotations
 
 import json
 import logging
 
-from app.core.config import settings
+from app.services import llm_client
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ def _fishing_zone_safe(weather_data: dict) -> bool | None:
 
 
 def _fallback_response(weather_data: dict, nlp_result: dict, gfs_data: list[dict]) -> dict:
-    """Deterministic, source-grounded response used when ANTHROPIC_API_KEY is unset."""
+    """Deterministic, source-grounded response used when NVIDIA_API_KEY is unset."""
     location = weather_data.get("location", "your location")
     date = weather_data.get("date", "the requested date")
     condition = weather_data.get("condition", "unknown")
@@ -81,12 +81,10 @@ def _fallback_response(weather_data: dict, nlp_result: dict, gfs_data: list[dict
 
 
 async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict, gfs_data: list[dict]) -> dict:
-    if not settings.ANTHROPIC_API_KEY:
+    if not llm_client.is_configured():
         return _fallback_response(weather_data, nlp_result, gfs_data)
 
     try:
-        import anthropic
-        client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
         context = {
             "weather_data": weather_data,
             "rag_context": rag_chunks,
@@ -95,13 +93,8 @@ async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict,
             "intent": nlp_result.get("intent"),
             "use_case_context": nlp_result.get("use_case_context"),
         }
-        msg = client.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=1000,
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": json.dumps(context)}],
-        )
-        parsed = json.loads(msg.content[0].text)
+        raw = llm_client.chat_completion(system=SYSTEM_PROMPT, user=json.dumps(context), max_tokens=1000)
+        parsed = json.loads(raw)
         if not parsed.get("citations"):
             parsed["citations"] = [{
                 "source": weather_data.get("source", "IMD"),
@@ -110,5 +103,5 @@ async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict,
             }]
         return parsed
     except Exception as e:
-        logger.warning(f"Claude generation failed, using grounded fallback: {e}")
+        logger.warning(f"NVIDIA LLM generation failed, using grounded fallback: {e}")
         return _fallback_response(weather_data, nlp_result, gfs_data)

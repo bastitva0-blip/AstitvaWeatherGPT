@@ -24,7 +24,7 @@ jobs:
         env:
           DATABASE_URL: "sqlite+aiosqlite:///:memory:"
           API_KEYS: test-key
-          ANTHROPIC_API_KEY: ""
+          NVIDIA_API_KEY: ""
           OPENWEATHERMAP_API_KEY: ""
           WIS2_ENABLED: "false"
 

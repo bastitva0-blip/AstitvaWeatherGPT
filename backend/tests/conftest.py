@@ -3,7 +3,7 @@ import os
 
 os.environ.setdefault("DATABASE_URL", "sqlite+aiosqlite:///:memory:")
 os.environ.setdefault("API_KEYS", "test-key")
-os.environ.setdefault("ANTHROPIC_API_KEY", "")
+os.environ.setdefault("NVIDIA_API_KEY", "")
 os.environ.setdefault("OPENWEATHERMAP_API_KEY", "")
 
 import pytest
