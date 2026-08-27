@@ -1,0 +1,60 @@
+:root {
+  --brand-blue: #1D4ED8;
+  --safe-green: #16A34A;
+  --unsafe-red: #DC2626;
+  font-size: 16px; /* rural accessibility: min 16px */
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.app-shell { display: flex; flex-direction: column; min-height: 100vh; }
+.app-shell__content { flex: 1; padding: 1rem; padding-bottom: 4.5rem; max-width: 720px; margin: 0 auto; width: 100%; }
+
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  display: flex; justify-content: space-around;
+  background: #fff; border-top: 1px solid #e2e8f0; padding: 0.5rem 0;
+}
+.bottom-nav a { color: #334155; text-decoration: none; font-size: 0.85rem; }
+.bottom-nav a.active { color: var(--brand-blue); font-weight: 600; }
+
+.chat-page__header { display: flex; justify-content: space-between; align-items: center; }
+.chat-page__messages { display: flex; flex-direction: column; gap: 0.75rem; margin: 1rem 0; }
+.chat-page__input-row { display: flex; gap: 0.5rem; position: sticky; bottom: 3.5rem; background: #f8fafc; padding: 0.5rem 0; }
+.chat-page__input-row input { flex: 1; padding: 0.75rem; border-radius: 8px; border: 1px solid #cbd5e1; }
+.chat-page__alert-banner { background: #fef3c7; padding: 0.5rem 1rem; border-radius: 8px; margin: 0.5rem 0; }
+
+.chat-bubble { padding: 0.75rem 1rem; border-radius: 12px; max-width: 90%; }
+.chat-bubble--user { align-self: flex-end; background: var(--brand-blue); color: #fff; margin-left: auto; }
+.chat-bubble--assistant { background: #fff; border: 1px solid #e2e8f0; }
+
+.weather-card { margin-top: 0.5rem; }
+.weather-card__header { display: flex; gap: 0.5rem; align-items: center; font-weight: 600; }
+.weather-card__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem; font-size: 0.9rem; margin: 0.5rem 0; }
+.weather-card__citations { display: flex; gap: 0.5rem; flex-wrap: wrap; font-size: 0.8rem; }
+.weather-card__citations a { color: var(--brand-blue); }
+
+.badge { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 999px; background: #e2e8f0; }
+.badge--nwp { background: #dbeafe; color: var(--brand-blue); }
+.badge--alert-warning { background: var(--unsafe-red); color: #fff; }
+.badge--alert-watch { background: #f59e0b; color: #fff; }
+.badge--alert-advisory { background: #fde68a; }
+
+.sea-safety-badge { color: #fff; font-weight: 700; text-align: center; padding: 0.5rem; border-radius: 8px; margin-top: 0.5rem; }
+
+.voice-button { border-radius: 50%; width: 44px; height: 44px; border: none; background: #e2e8f0; font-size: 1.2rem; }
+.voice-button--recording { background: var(--unsafe-red); color: #fff; animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+.alert-toast { border-left: 4px solid; padding: 0.75rem; margin-bottom: 0.5rem; background: #fff; border-radius: 8px; }
+.alert-toast--warning { border-color: var(--unsafe-red); }
+.alert-toast--watch { border-color: #f59e0b; }
+.alert-toast--advisory { border-color: #94a3b8; }
+.alert-toast__banner { color: var(--unsafe-red); display: block; }

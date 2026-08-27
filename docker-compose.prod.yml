@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  fastapi:
+    build: ./backend
+    image: weathergpt/backend:latest
+    restart: unless-stopped
+    env_file: .env
+    deploy:
+      replicas: 3
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  react-ui:
+    build: ./frontend
+    image: weathergpt/frontend:latest
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  postgres:
+    image: postgis/postgis:15-3.3
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  chromadb:
+    image: chromadb/chroma:latest
+    restart: unless-stopped
+    volumes:
+      - chromadata:/chroma/chroma
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on: [fastapi, react-ui]
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  chromadata:

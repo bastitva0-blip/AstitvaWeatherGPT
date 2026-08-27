@@ -1,0 +1,90 @@
+// Canonical documented schema (see app/models/database.py for the SQLAlchemy
+// runtime implementation of the same tables — prisma-client-py codegen needs
+// network access at build time, so runtime persistence uses SQLAlchemy/asyncpg).
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider  = "prisma-client-py"
+  interface = "asyncio"
+}
+
+model User {
+  id                 String               @id @default(cuid())
+  apiKey             String               @unique
+  name               String?
+  createdAt          DateTime             @default(now())
+  sessions           Session[]
+  alertSubscriptions AlertSubscription[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  lang      String   @default("hi")
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  queries   Query[]
+}
+
+model Query {
+  id         String   @id @default(cuid())
+  sessionId  String
+  message    String
+  enText     String
+  intent     String
+  slots      Json
+  response   String
+  citations  Json
+  lang       String
+  inputMode  String   @default("text")
+  createdAt  DateTime @default(now())
+  session    Session  @relation(fields: [sessionId], references: [id])
+}
+
+model AlertSubscription {
+  id             String   @id @default(cuid())
+  userId         String
+  location       String
+  thresholdType  String
+  thresholdValue Float
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id])
+}
+
+model ClimateRecord {
+  id        String   @id @default(cuid())
+  location  String
+  parameter String
+  year      Int
+  month     Int?
+  value     Float
+  unit      String
+  source    String
+  createdAt DateTime @default(now())
+}
+
+model HallucinationLog {
+  id        String   @id @default(cuid())
+  queryId   String
+  response  String
+  issue     String
+  createdAt DateTime @default(now())
+}
+
+model LocationCache {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  lat       Float
+  lon       Float
+  district  String?
+  state     String?
+  country   String   @default("IN")
+  geohash   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

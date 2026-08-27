@@ -1,0 +1,18 @@
+{
+  "nav": { "chat": "চ্যাট", "alerts": "সতর্কতা", "history": "ইতিহাস", "climate": "জলবায়ু", "settings": "সেটিংস" },
+  "chat": {
+    "placeholder": "আবহাওয়া সম্পর্কে জিজ্ঞাসা করুন...", "send": "পাঠান", "listening": "শুনছি...",
+    "thinking": "ভাবছি...", "voice_denied": "মাইক্রোফোন অনুমতি নেই",
+    "voice_too_long": "রেকর্ডিং ৬০ সেকেন্ডের বেশি হতে পারবে না"
+  },
+  "alerts": {
+    "cyclone": "ঘূর্ণিঝড় সতর্কতা", "heavy_rain": "ভারী বৃষ্টি", "heatwave": "তাপপ্রবাহ সতর্কতা",
+    "marine_warning": "সামুদ্রিক সতর্কতা", "fishermen_alert": "জেলে সতর্কতা — সমুদ্রে যাবেন না", "dismiss": "বন্ধ করুন"
+  },
+  "weather": {
+    "rainfall": "বৃষ্টিপাত", "temperature": "তাপমাত্রা", "humidity": "আর্দ্রতা", "wind": "বাতাস",
+    "wave_height": "ঢেউয়ের উচ্চতা", "visibility": "দৃশ্যমানতা", "nwp_model": "NWP মডেল",
+    "sea_safe": "সমুদ্রে যাওয়া নিরাপদ", "sea_unsafe": "সমুদ্রে যাবেন না — বিপজ্জনক"
+  },
+  "climate": { "title": "জলবায়ু প্রবণতা", "fetch": "প্রবণতা দেখুন", "download_csv": "CSV ডাউনলোড করুন", "increasing": "বাড়ছে", "decreasing": "কমছে" }
+}

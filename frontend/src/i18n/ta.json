@@ -1,0 +1,18 @@
+{
+  "nav": { "chat": "அரட்டை", "alerts": "எச்சரிக்கைகள்", "history": "வரலாறு", "climate": "காலநிலை", "settings": "அமைப்புகள்" },
+  "chat": {
+    "placeholder": "வானிலை பற்றி கேளுங்கள்...", "send": "அனுப்பு", "listening": "கேட்கிறேன்...",
+    "thinking": "யோசிக்கிறேன்...", "voice_denied": "மைக்ரோஃபோன் அனுமதி இல்லை",
+    "voice_too_long": "பதிவு 60 வினாடிகளுக்கு மேல் இருக்கக்கூடாது"
+  },
+  "alerts": {
+    "cyclone": "புயல் எச்சரிக்கை", "heavy_rain": "கனமழை", "heatwave": "வெப்ப அலை எச்சரிக்கை",
+    "marine_warning": "கடல் எச்சரிக்கை", "fishermen_alert": "மீனவர் எச்சரிக்கை — கடலுக்குச் செல்ல வேண்டாம்", "dismiss": "மூடு"
+  },
+  "weather": {
+    "rainfall": "மழை", "temperature": "வெப்பநிலை", "humidity": "ஈரப்பதம்", "wind": "காற்று",
+    "wave_height": "அலை உயரம்", "visibility": "தெரிவுநிலை", "nwp_model": "NWP மாதிரி",
+    "sea_safe": "கடலுக்குச் செல்வது பாதுகாப்பானது", "sea_unsafe": "கடலுக்குச் செல்ல வேண்டாம் — ஆபத்து"
+  },
+  "climate": { "title": "காலநிலை போக்கு", "fetch": "போக்கைக் காண்க", "download_csv": "CSV பதிவிறக்கு", "increasing": "அதிகரிக்கிறது", "decreasing": "குறைகிறது" }
+}

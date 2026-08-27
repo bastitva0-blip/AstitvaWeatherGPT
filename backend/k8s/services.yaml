@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: weathergpt-ingress-gateway
+spec:
+  selector:
+    app: weathergpt-frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: weathergpt-secrets
+type: Opaque
+stringData:
+  DATABASE_URL: "postgresql+asyncpg://weathergpt:changeme@postgres:5432/weathergpt"
+  REDIS_URL: "redis://redis:6379"
+  ANTHROPIC_API_KEY: "REPLACE_ME"
+  OPENWEATHERMAP_API_KEY: "REPLACE_ME"

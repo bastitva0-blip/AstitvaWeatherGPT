@@ -1,0 +1,18 @@
+{
+  "nav": { "chat": "چیٹ", "alerts": "انتباہات", "history": "تاریخ", "climate": "موسمیات", "settings": "ترتیبات" },
+  "chat": {
+    "placeholder": "موسم کے بارے میں پوچھیں...", "send": "بھیجیں", "listening": "سن رہا ہوں...",
+    "thinking": "سوچ رہا ہوں...", "voice_denied": "مائیکروفون کی اجازت نہیں",
+    "voice_too_long": "ریکارڈنگ 60 سیکنڈ سے زیادہ نہیں ہونی چاہیے"
+  },
+  "alerts": {
+    "cyclone": "طوفانی انتباہ", "heavy_rain": "شدید بارش", "heatwave": "لو کا انتباہ",
+    "marine_warning": "سمندری انتباہ", "fishermen_alert": "ماہی گیر انتباہ — سمندر میں نہ جائیں", "dismiss": "بند کریں"
+  },
+  "weather": {
+    "rainfall": "بارش", "temperature": "درجہ حرارت", "humidity": "نمی", "wind": "ہوا",
+    "wave_height": "لہر کی اونچائی", "visibility": "مرئیت", "nwp_model": "NWP ماڈل",
+    "sea_safe": "سمندر میں جانا محفوظ ہے", "sea_unsafe": "سمندر میں نہ جائیں — خطرناک"
+  },
+  "climate": { "title": "موسمیاتی رجحان", "fetch": "رجحان دیکھیں", "download_csv": "CSV ڈاؤن لوڈ کریں", "increasing": "بڑھ رہا ہے", "decreasing": "کم ہو رہا ہے" }
+}

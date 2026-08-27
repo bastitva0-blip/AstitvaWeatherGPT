@@ -1,0 +1,18 @@
+{
+  "nav": { "chat": "ଚାଟ୍", "alerts": "ସତର୍କତା", "history": "ଇତିହାସ", "climate": "ଜଳବାୟୁ", "settings": "ସେଟିଂସ୍" },
+  "chat": {
+    "placeholder": "ପାଣିପାଗ ବିଷୟରେ ପଚାରନ୍ତୁ...", "send": "ପଠାନ୍ତୁ", "listening": "ଶୁଣୁଛି...",
+    "thinking": "ଚିନ୍ତା କରୁଛି...", "voice_denied": "ମାଇକ୍ରୋଫୋନ ଅନୁମତି ନାହିଁ",
+    "voice_too_long": "ରେକର୍ଡିଂ 60 ସେକେଣ୍ଡରୁ ଅଧିକ ହେବା ଉଚିତ ନୁହେଁ"
+  },
+  "alerts": {
+    "cyclone": "ଘୂର୍ଣ୍ଣିବାତ୍ୟା ସତର୍କତା", "heavy_rain": "ପ୍ରବଳ ବର୍ଷା", "heatwave": "ଉତ୍ତାପ ପ୍ରବାହ ସତର୍କତା",
+    "marine_warning": "ସାମୁଦ୍ରିକ ସତର୍କତା", "fishermen_alert": "ମତ୍ସ୍ୟଜୀବୀ ସତର୍କତା — ସମୁଦ୍ରକୁ ଯାଆନ୍ତୁ ନାହିଁ", "dismiss": "ବନ୍ଦ କରନ୍ତୁ"
+  },
+  "weather": {
+    "rainfall": "ବର୍ଷା", "temperature": "ତାପମାତ୍ରା", "humidity": "ଆର୍ଦ୍ରତା", "wind": "ପବନ",
+    "wave_height": "ଢେଉର ଉଚ୍ଚତା", "visibility": "ଦୃଶ୍ୟମାନତା", "nwp_model": "NWP ମଡେଲ",
+    "sea_safe": "ସମୁଦ୍ରକୁ ଯିବା ସୁରକ୍ଷିତ", "sea_unsafe": "ସମୁଦ୍ରକୁ ଯାଆନ୍ତୁ ନାହିଁ — ବିପଜ୍ଜନକ"
+  },
+  "climate": { "title": "ଜଳବାୟୁ ଧାରା", "fetch": "ଧାରା ଦେଖନ୍ତୁ", "download_csv": "CSV ଡାଉନଲୋଡ୍ କରନ୍ତୁ", "increasing": "ବଢୁଛି", "decreasing": "କମୁଛି" }
+}

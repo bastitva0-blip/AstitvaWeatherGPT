@@ -1,0 +1,15 @@
+{
+  "title": "WeatherGPT — SIH26068",
+  "panels": [
+    { "title": "Request rate", "type": "graph", "targets": [{ "expr": "rate(http_requests_total[5m])" }] },
+    { "title": "P95 latency", "type": "graph", "targets": [{ "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))" }] },
+    { "title": "Error rate", "type": "graph", "targets": [{ "expr": "rate(http_requests_total{status=~\"5..\"}[5m])" }] },
+    { "title": "Cache hit rate", "type": "stat", "targets": [{ "expr": "weathergpt_cache_hit_rate" }] },
+    { "title": "GFS coverage rate", "type": "stat", "targets": [{ "expr": "weathergpt_gfs_coverage_rate" }] },
+    { "title": "GIS resolution accuracy", "type": "stat", "targets": [{ "expr": "weathergpt_gis_resolution_accuracy" }] },
+    { "title": "WIS2 Redis mirror latency (ms)", "type": "stat", "targets": [{ "expr": "weathergpt_wis2_redis_mirror_latency_ms" }] },
+    { "title": "Intent accuracy", "type": "stat", "targets": [{ "expr": "weathergpt_intent_accuracy" }] },
+    { "title": "Fisherman safety accuracy", "type": "stat", "targets": [{ "expr": "weathergpt_fisherman_safety_accuracy" }] },
+    { "title": "Active WebSocket alert subscriptions", "type": "stat", "targets": [{ "expr": "weathergpt_active_ws_connections" }] }
+  ]
+}

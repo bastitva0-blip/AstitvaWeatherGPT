@@ -1,0 +1,114 @@
+"""LLM response generation via Claude API — grounded, cited, zero-hallucination."""
+from __future__ import annotations
+
+import json
+import logging
+
+from app.core.config import settings
+
+logger = logging.getLogger(__name__)
+
+SYSTEM_PROMPT = """You are WeatherGPT, a trusted weather assistant for India built for the Ministry of Earth Sciences.
+Rules you MUST follow:
+1. Base your answer ONLY on the weather data and RAG context provided. Never invent numbers.
+2. ALWAYS include citations array in your JSON response with at least one entry.
+3. If weather data is missing, say so honestly. Never guess weather values.
+4. Keep answers concise, practical, and actionable for your user's context
+   (farmer, fisherman, disaster manager, researcher, pilot, urban planner).
+5. Response must be in English — translation happens after.
+6. For aviation queries: include QNH, visibility, wind speed/direction if available.
+7. For marine queries: include wave height, swell period, wind direction,
+   and fishing zone safety status if available.
+8. For fisherman queries: explicitly state whether it is SAFE or UNSAFE to go to sea,
+   citing wave height and wind speed thresholds from IMD Fishermen Alert bulletins.
+9. Return ONLY valid JSON. No markdown, no preamble."""
+
+FISHERMEN_WAVE_THRESHOLD_M = 2.5
+FISHERMEN_WIND_THRESHOLD_KMH = 45
+
+
+def _fishing_zone_safe(weather_data: dict) -> bool | None:
+    wave = weather_data.get("wave_height_m")
+    wind = weather_data.get("wind_speed_kmh")
+    if wave is None or wind is None:
+        return None
+    return not (wave > FISHERMEN_WAVE_THRESHOLD_M and wind > FISHERMEN_WIND_THRESHOLD_KMH)
+
+
+def _fallback_response(weather_data: dict, nlp_result: dict, gfs_data: list[dict]) -> dict:
+    """Deterministic, source-grounded response used when ANTHROPIC_API_KEY is unset."""
+    location = weather_data.get("location", "your location")
+    date = weather_data.get("date", "the requested date")
+    condition = weather_data.get("condition", "unknown")
+    rainfall = weather_data.get("rainfall_mm", 0)
+    use_case = nlp_result.get("use_case_context", "general")
+
+    citations = [{
+        "source": weather_data.get("source", "IMD OpenAPI"),
+        "detail": f"Live observation/forecast for {location} on {date}",
+        "url": weather_data.get("source_url", "https://mausam.imd.gov.in"),
+    }]
+    if gfs_data:
+        citations.append({
+            "source": "GFS NOMADS",
+            "detail": f"GFS 0.25deg NWP forecast, run {gfs_data[0].get('run_time')}",
+            "url": gfs_data[0].get("source_url", "https://nomads.ncep.noaa.gov"),
+        })
+
+    fishing_safe = _fishing_zone_safe(weather_data) if use_case == "fisherman" else None
+    answer = f"In {location} on {date}, expect {condition.lower()} with {rainfall}mm rainfall."
+    if fishing_safe is not None:
+        answer += " SAFE to go to sea." if fishing_safe else " UNSAFE — do not venture into the sea."
+
+    return {
+        "answer": answer,
+        "citations": citations,
+        "weather_summary": {
+            "location": location,
+            "date": date,
+            "rainfall_mm": rainfall,
+            "condition": condition,
+            "nwp_model": "GFS" if gfs_data else None,
+            "wave_height_m": weather_data.get("wave_height_m"),
+            "fishing_zone_safe": fishing_safe,
+            "coastal_zone": weather_data.get("coastal_zone"),
+        },
+        "alert_level": "warning" if weather_data.get("cyclone_warning") else (
+            "advisory" if weather_data.get("heatwave_warning") else "none"
+        ),
+        "use_case_context": use_case,
+    }
+
+
+async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict, gfs_data: list[dict]) -> dict:
+    if not settings.ANTHROPIC_API_KEY:
+        return _fallback_response(weather_data, nlp_result, gfs_data)
+
+    try:
+        import anthropic
+        client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+        context = {
+            "weather_data": weather_data,
+            "rag_context": rag_chunks,
+            "gfs_data": gfs_data,
+            "query": nlp_result.get("en_text"),
+            "intent": nlp_result.get("intent"),
+            "use_case_context": nlp_result.get("use_case_context"),
+        }
+        msg = client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=1000,
+            system=SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": json.dumps(context)}],
+        )
+        parsed = json.loads(msg.content[0].text)
+        if not parsed.get("citations"):
+            parsed["citations"] = [{
+                "source": weather_data.get("source", "IMD"),
+                "detail": "fallback citation — LLM omitted citations",
+                "url": weather_data.get("source_url", "https://mausam.imd.gov.in"),
+            }]
+        return parsed
+    except Exception as e:
+        logger.warning(f"Claude generation failed, using grounded fallback: {e}")
+        return _fallback_response(weather_data, nlp_result, gfs_data)

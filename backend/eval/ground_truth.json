@@ -1,0 +1,12 @@
+[
+  {"en_text": "Will it rain in Varanasi tomorrow?", "intent": "forecast_query"},
+  {"en_text": "Is there a cyclone alert?", "intent": "alert_check"},
+  {"en_text": "What should I do for my wheat crop irrigation?", "intent": "agro_advisory"},
+  {"en_text": "What is the visibility at VIDP airport?", "intent": "aviation_briefing"},
+  {"en_text": "How high are the waves near Kochi?", "intent": "marine_advisory"},
+  {"en_text": "Is it safe to go fishing near Rameswaram tomorrow?", "intent": "marine_advisory"},
+  {"en_text": "Show me the rainfall trend for Vidarbha 2010 to 2024", "intent": "climate_trend"},
+  {"en_text": "What is the AQI and weather for the smart city dashboard?", "intent": "urban_monitoring"},
+  {"en_text": "What was the rainfall last June in this district?", "intent": "historical_climate"},
+  {"en_text": "What is the humidity today?", "intent": "general_weather"}
+]

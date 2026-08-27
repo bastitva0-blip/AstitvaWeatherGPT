@@ -1,0 +1,18 @@
+{
+  "nav": { "chat": "ਗੱਲਬਾਤ", "alerts": "ਚੇਤਾਵਨੀਆਂ", "history": "ਇਤਿਹਾਸ", "climate": "ਜਲਵਾਯੂ", "settings": "ਸੈਟਿੰਗਾਂ" },
+  "chat": {
+    "placeholder": "ਮੌਸਮ ਬਾਰੇ ਪੁੱਛੋ...", "send": "ਭੇਜੋ", "listening": "ਸੁਣ ਰਿਹਾ ਹਾਂ...",
+    "thinking": "ਸੋਚ ਰਿਹਾ ਹਾਂ...", "voice_denied": "ਮਾਈਕ੍ਰੋਫੋਨ ਦੀ ਇਜਾਜ਼ਤ ਨਹੀਂ",
+    "voice_too_long": "ਰਿਕਾਰਡਿੰਗ 60 ਸਕਿੰਟਾਂ ਤੋਂ ਵੱਧ ਨਹੀਂ ਹੋਣੀ ਚਾਹੀਦੀ"
+  },
+  "alerts": {
+    "cyclone": "ਚੱਕਰਵਾਤ ਚੇਤਾਵਨੀ", "heavy_rain": "ਭਾਰੀ ਮੀਂਹ", "heatwave": "ਗਰਮੀ ਦੀ ਲਹਿਰ ਚੇਤਾਵਨੀ",
+    "marine_warning": "ਸਮੁੰਦਰੀ ਚੇਤਾਵਨੀ", "fishermen_alert": "ਮਛੇਰਾ ਚੇਤਾਵਨੀ — ਸਮੁੰਦਰ ਵਿੱਚ ਨਾ ਜਾਓ", "dismiss": "ਬੰਦ ਕਰੋ"
+  },
+  "weather": {
+    "rainfall": "ਵਰਖਾ", "temperature": "ਤਾਪਮਾਨ", "humidity": "ਨਮੀ", "wind": "ਹਵਾ",
+    "wave_height": "ਲਹਿਰ ਦੀ ਉਚਾਈ", "visibility": "ਦਿੱਖ", "nwp_model": "NWP ਮਾਡਲ",
+    "sea_safe": "ਸਮੁੰਦਰ ਵਿੱਚ ਜਾਣਾ ਸੁਰੱਖਿਅਤ ਹੈ", "sea_unsafe": "ਸਮੁੰਦਰ ਵਿੱਚ ਨਾ ਜਾਓ — ਖ਼ਤਰਨਾਕ"
+  },
+  "climate": { "title": "ਜਲਵਾਯੂ ਰੁਝਾਨ", "fetch": "ਰੁਝਾਨ ਵੇਖੋ", "download_csv": "CSV ਡਾਊਨਲੋਡ ਕਰੋ", "increasing": "ਵਧ ਰਿਹਾ ਹੈ", "decreasing": "ਘਟ ਰਿਹਾ ਹੈ" }
+}

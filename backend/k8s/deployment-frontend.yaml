@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weathergpt-frontend
+  labels:
+    app: weathergpt-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: weathergpt-frontend
+  template:
+    metadata:
+      labels:
+        app: weathergpt-frontend
+    spec:
+      containers:
+        - name: react-ui
+          image: weathergpt/frontend:latest
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weathergpt-frontend-svc
+spec:
+  selector:
+    app: weathergpt-frontend
+  ports:
+    - port: 3000
+      targetPort: 3000
+  type: ClusterIP
