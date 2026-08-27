@@ -98,10 +98,15 @@ async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict,
         try:
             facts_summary = (
                 f"Location: {weather_data.get('location')}, Date: {weather_data.get('date')}, "
-                f"Condition: {weather_data.get('condition')}, Rainfall: {weather_data.get('rainfall_mm')}mm, "
+                f"Condition: {weather_data.get('condition')}, Rainfall: {weather_data.get('rainfall_mm')}mm "
+                f"({weather_data.get('rainfall_probability')} probability), "
                 f"Temperature: {weather_data.get('temperature_min')}-{weather_data.get('temperature_max')}C, "
-                f"Wind: {weather_data.get('wind_speed_kmh')}km/h, "
+                f"Humidity: {weather_data.get('humidity_percent')}%, "
+                f"Wind: {weather_data.get('wind_speed_kmh')}km/h {weather_data.get('wind_direction')}, "
+                f"Visibility: {weather_data.get('visibility_km')}km, "
                 f"Wave height: {weather_data.get('wave_height_m')}m, "
+                f"Cyclone warning: {weather_data.get('cyclone_warning')}, "
+                f"Heatwave warning: {weather_data.get('heatwave_warning')}, "
                 f"Fishing zone safe: {fishing_safe}, "
                 f"Use case: {nlp_result.get('use_case_context')}, "
                 f"User query: {nlp_result.get('en_text')}"
