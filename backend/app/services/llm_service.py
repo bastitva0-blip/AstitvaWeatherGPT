@@ -1,32 +1,33 @@
-"""LLM response generation via NVIDIA NIM (Llama) — grounded, cited, zero-hallucination."""
+"""LLM response generation via NVIDIA NIM (Llama) — grounded, cited, zero-hallucination.
+
+Design: the LLM is used ONLY to write the natural-language answer sentence,
+never to produce structured facts (citations, weather_summary, alert_level).
+Those are always assembled in code directly from weather_data/gfs_data — the
+same real API responses regardless of whether the LLM call succeeds. This
+was a deliberate change after testing showed small instruction-tuned models
+on NVIDIA NIM are unreliable at strict JSON schemas (wrapping output in
+content-block shapes) and can even invent a plausible-looking but fabricated
+citation URL when asked to produce citations themselves. Splitting the
+concerns removes both failure modes: the LLM's job (short text generation)
+is one it's actually good at and fast at, and every fact in the response is
+guaranteed to trace back to a real API call, never the model's imagination.
+"""
 from __future__ import annotations
 
 import asyncio
-import json
 import logging
 
-from app.models.schemas import QueryResponse
 from app.services import llm_client
 
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = """You are WeatherGPT, a trusted weather assistant for India built for the Ministry of Earth Sciences.
-Rules you MUST follow:
-1. Base your answer ONLY on the weather data and RAG context provided. Never invent numbers.
-2. ALWAYS include citations array in your JSON response with at least one entry.
-3. If weather data is missing, say so honestly. Never guess weather values.
-4. Keep answers concise, practical, and actionable for your user's context
-   (farmer, fisherman, disaster manager, researcher, pilot, urban planner).
-5. Response must be in English — translation happens after.
-6. For aviation queries: include QNH, visibility, wind speed/direction if available.
-7. For marine queries: include wave height, swell period, wind direction,
-   and fishing zone safety status if available.
-8. For fisherman queries: explicitly state whether it is SAFE or UNSAFE to go to sea,
-   citing wave height and wind speed thresholds from IMD Fishermen Alert bulletins.
-9. Return ONLY valid JSON. No markdown, no preamble."""
-
 FISHERMEN_WAVE_THRESHOLD_M = 2.5
 FISHERMEN_WIND_THRESHOLD_KMH = 45
+
+ANSWER_SYSTEM_PROMPT = """You are WeatherGPT, a weather assistant for India built for the Ministry of Earth Sciences.
+Write ONE short, natural, practical sentence (max 2 sentences) answering the user's query,
+using ONLY the weather facts given to you below — never invent or add numbers, locations,
+or conditions not present in those facts. Plain text only, no JSON, no markdown, no preamble."""
 
 
 def _fishing_zone_safe(weather_data: dict) -> bool | None:
@@ -37,17 +38,11 @@ def _fishing_zone_safe(weather_data: dict) -> bool | None:
     return not (wave > FISHERMEN_WAVE_THRESHOLD_M and wind > FISHERMEN_WIND_THRESHOLD_KMH)
 
 
-def _fallback_response(weather_data: dict, nlp_result: dict, gfs_data: list[dict]) -> dict:
-    """Deterministic, source-grounded response used when NVIDIA_API_KEY is unset."""
-    location = weather_data.get("location", "your location")
-    date = weather_data.get("date", "the requested date")
-    condition = weather_data.get("condition", "unknown")
-    rainfall = weather_data.get("rainfall_mm", 0)
-    use_case = nlp_result.get("use_case_context", "general")
-
+def _build_citations(weather_data: dict, gfs_data: list[dict]) -> list[dict]:
     citations = [{
         "source": weather_data.get("source", "IMD OpenAPI"),
-        "detail": f"Live observation/forecast for {location} on {date}",
+        "detail": f"Live observation/forecast for {weather_data.get('location', 'this location')} "
+                  f"on {weather_data.get('date', 'the requested date')}",
         "url": weather_data.get("source_url", "https://mausam.imd.gov.in"),
     }]
     if gfs_data:
@@ -56,20 +51,20 @@ def _fallback_response(weather_data: dict, nlp_result: dict, gfs_data: list[dict
             "detail": f"GFS NWP forecast, {gfs_data[0].get('run_time')}",
             "url": gfs_data[0].get("source_url", "https://api.open-meteo.com/v1/forecast"),
         })
+    return citations
 
+
+def _build_facts(weather_data: dict, nlp_result: dict, gfs_data: list[dict]) -> dict:
+    """Everything in the response except `answer` — always code-derived, never LLM output."""
+    use_case = nlp_result.get("use_case_context", "general")
     fishing_safe = _fishing_zone_safe(weather_data) if use_case == "fisherman" else None
-    answer = f"In {location} on {date}, expect {condition.lower()} with {rainfall}mm rainfall."
-    if fishing_safe is not None:
-        answer += " SAFE to go to sea." if fishing_safe else " UNSAFE — do not venture into the sea."
-
     return {
-        "answer": answer,
-        "citations": citations,
+        "citations": _build_citations(weather_data, gfs_data),
         "weather_summary": {
-            "location": location,
-            "date": date,
-            "rainfall_mm": rainfall,
-            "condition": condition,
+            "location": weather_data.get("location"),
+            "date": weather_data.get("date"),
+            "rainfall_mm": weather_data.get("rainfall_mm"),
+            "condition": weather_data.get("condition"),
             "nwp_model": "GFS" if gfs_data else None,
             "wave_height_m": weather_data.get("wave_height_m"),
             "fishing_zone_safe": fishing_safe,
@@ -79,58 +74,46 @@ def _fallback_response(weather_data: dict, nlp_result: dict, gfs_data: list[dict
             "advisory" if weather_data.get("heatwave_warning") else "none"
         ),
         "use_case_context": use_case,
+        "fishing_safe": fishing_safe,
     }
 
 
+def _deterministic_answer(weather_data: dict, fishing_safe: bool | None) -> str:
+    location = weather_data.get("location", "your location")
+    date = weather_data.get("date", "the requested date")
+    condition = (weather_data.get("condition") or "unknown").lower()
+    rainfall = weather_data.get("rainfall_mm", 0)
+    answer = f"In {location} on {date}, expect {condition} with {rainfall}mm rainfall."
+    if fishing_safe is not None:
+        answer += " SAFE to go to sea." if fishing_safe else " UNSAFE — do not venture into the sea."
+    return answer
+
+
 async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict, gfs_data: list[dict]) -> dict:
-    if not llm_client.is_configured():
-        return _fallback_response(weather_data, nlp_result, gfs_data)
+    facts = _build_facts(weather_data, nlp_result, gfs_data)
+    fishing_safe = facts.pop("fishing_safe")
 
-    try:
-        context = {
-            "weather_data": weather_data,
-            "rag_context": rag_chunks,
-            "gfs_data": gfs_data,
-            "query": nlp_result.get("en_text"),
-            "intent": nlp_result.get("intent"),
-            "use_case_context": nlp_result.get("use_case_context"),
-        }
-        raw = await asyncio.to_thread(
-            llm_client.chat_completion, SYSTEM_PROMPT, json.dumps(context), 1800
-        )
-        parsed = json.loads(raw)
+    answer = None
+    if llm_client.is_configured():
+        try:
+            facts_summary = (
+                f"Location: {weather_data.get('location')}, Date: {weather_data.get('date')}, "
+                f"Condition: {weather_data.get('condition')}, Rainfall: {weather_data.get('rainfall_mm')}mm, "
+                f"Temperature: {weather_data.get('temperature_min')}-{weather_data.get('temperature_max')}C, "
+                f"Wind: {weather_data.get('wind_speed_kmh')}km/h, "
+                f"Wave height: {weather_data.get('wave_height_m')}m, "
+                f"Fishing zone safe: {fishing_safe}, "
+                f"Use case: {nlp_result.get('use_case_context')}, "
+                f"User query: {nlp_result.get('en_text')}"
+            )
+            raw = await asyncio.to_thread(
+                llm_client.chat_completion, ANSWER_SYSTEM_PROMPT, facts_summary, 150
+            )
+            answer = raw.strip().strip('"')
+        except Exception as e:
+            logger.warning(f"NVIDIA LLM answer generation failed, using deterministic answer: {e}")
 
-        # Some NVIDIA-hosted models (esp. vision-capable ones) wrap JSON
-        # output in a content-block shape — {"type": "text", "text": {...}}
-        # — instead of the flat object we asked for. Unwrap it.
-        if set(parsed.keys()) == {"type", "text"} and isinstance(parsed.get("text"), dict):
-            parsed = parsed["text"]
+    if not answer:
+        answer = _deterministic_answer(weather_data, fishing_safe)
 
-        if not parsed.get("answer"):
-            raise ValueError("LLM response missing 'answer' field after unwrap")
-
-        if not parsed.get("citations"):
-            parsed["citations"] = []
-        default_citation_url = weather_data.get("source_url", "https://mausam.imd.gov.in")
-        for citation in parsed["citations"]:
-            citation.setdefault("detail", f"{citation.get('source', 'source')} data for {weather_data.get('location', 'this location')}")
-            citation.setdefault("url", default_citation_url)
-        if not parsed["citations"]:
-            parsed["citations"] = [{
-                "source": weather_data.get("source", "IMD"),
-                "detail": "fallback citation — LLM omitted citations",
-                "url": default_citation_url,
-            }]
-
-        if not parsed.get("weather_summary"):
-            parsed["weather_summary"] = {"location": weather_data.get("location"), "date": weather_data.get("date")}
-        # Validate against the response schema — the LLM's JSON can be
-        # well-formed but still miss required fields (e.g. citation
-        # detail/url); catch that here rather than letting it crash the
-        # route as an unhandled Pydantic ValidationError (500, no CORS
-        # headers on the error response, browser reports "Failed to fetch").
-        validated = QueryResponse(**parsed)
-        return validated.model_dump()
-    except Exception as e:
-        logger.warning(f"NVIDIA LLM generation failed, using grounded fallback: {e}")
-        return _fallback_response(weather_data, nlp_result, gfs_data)
+    return {"answer": answer, **facts}
