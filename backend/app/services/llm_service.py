@@ -42,7 +42,10 @@ def _answer_system_prompt(target_lang: str) -> str:
     # English then back-translating in a second LLM call) cuts one full
     # round-trip off every non-English query's latency — found to add
     # ~1.3-3s per query in production testing.
-    return _BASE_ANSWER_RULES + f"\nWrite your answer in {_LANG_NAMES[target_lang]}, not English."
+    return _BASE_ANSWER_RULES + (
+        f"\nWrite your answer in {_LANG_NAMES[target_lang]}, using its native script "
+        f"(e.g. Devanagari for Hindi/Marathi, not romanized/Latin transliteration) — not English."
+    )
 
 
 def _fishing_zone_safe(weather_data: dict) -> bool | None:
