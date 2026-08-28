@@ -58,7 +58,7 @@ export function ChatPage() {
           placeholder="Ask about weather..."
           style={{ fontSize: 16 }}
         />
-        <VoiceButton sessionId={sessionId} onTranscript={(text) => submit(text, "voice")} />
+        <VoiceButton sessionId={sessionId} onTranscript={(text) => setInput(text)} />
         <button type="submit">Send</button>
       </form>
     </div>
