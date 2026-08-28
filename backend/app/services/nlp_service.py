@@ -166,6 +166,7 @@ _LOCATION_STOPWORDS = {
     "kal", "tomorrow", "today", "yesterday", "gfs", "imd", "india", "indian",
     "weather", "rain", "rainfall", "temperature", "humidity", "wind", "cyclone",
     "monsoon", "climate", "trend", "vidp", "vabb", "vecc", "safe", "unsafe",
+    "aqi", "metar", "irrigate", "irrigation",
 }
 
 
