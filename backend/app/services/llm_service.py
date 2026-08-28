@@ -93,9 +93,12 @@ def _deterministic_answer(weather_data: dict, fishing_safe: bool | None) -> str:
     return answer
 
 
-async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict, gfs_data: list[dict]) -> dict:
+async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict, gfs_data: list[dict],
+                    extra_facts: str | None = None, extra_citations: list[dict] | None = None) -> dict:
     facts = _build_facts(weather_data, nlp_result, gfs_data)
     fishing_safe = facts.pop("fishing_safe")
+    if extra_citations:
+        facts["citations"].extend(extra_citations)
 
     answer = None
     if llm_client.is_configured():
@@ -114,6 +117,7 @@ async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict,
                 f"Fishing zone safe: {fishing_safe}, "
                 f"Use case: {nlp_result.get('use_case_context')}, "
                 f"User query: {nlp_result.get('en_text')}"
+                + (f", {extra_facts}" if extra_facts else "")
             )
             raw = await asyncio.to_thread(
                 llm_client.chat_completion, ANSWER_SYSTEM_PROMPT, facts_summary, 150
