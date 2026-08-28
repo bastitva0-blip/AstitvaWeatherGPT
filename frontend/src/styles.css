@@ -49,8 +49,15 @@ body {
 
 .sea-safety-badge { color: #fff; font-weight: 700; text-align: center; padding: 0.5rem; border-radius: 8px; margin-top: 0.5rem; }
 
+.voice-button-wrap { position: relative; }
 .voice-button { border-radius: 50%; width: 44px; height: 44px; border: none; background: #e2e8f0; font-size: 1.2rem; }
 .voice-button--recording { background: var(--unsafe-red); color: #fff; animation: pulse 1s infinite; }
+.voice-button__error {
+  position: absolute; top: 100%; right: 0; margin-top: 0.25rem;
+  font-size: 0.75rem; color: var(--unsafe-red); background: #fff;
+  border: 1px solid var(--unsafe-red); border-radius: 6px; padding: 0.25rem 0.5rem;
+  white-space: nowrap; z-index: 10;
+}
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
 
 .alert-toast { border-left: 4px solid; padding: 0.75rem; margin-bottom: 0.5rem; background: #fff; border-radius: 8px; }
