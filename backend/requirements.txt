@@ -27,6 +27,7 @@ paho-mqtt==2.1.0
 # model weights download once on first request and are cached in the
 # container). Requires system ffmpeg — see Dockerfile.
 faster-whisper==1.0.3
+requests==2.32.3
 # Optional heavy deps still degraded-gracefully-if-absent — not installed
 # by default to keep image size/build time down:
 # transformers==4.41.2
