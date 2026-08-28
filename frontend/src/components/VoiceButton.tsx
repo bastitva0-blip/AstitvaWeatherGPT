@@ -9,27 +9,29 @@ const ERROR_MESSAGES: Record<string, string> = {
 
 export function VoiceButton({
   sessionId,
-  onTranscript,
+  onLiveText,
+  onStatusChange,
 }: {
   sessionId: string;
-  onTranscript: (text: string, lang: string | null) => void;
+  onLiveText: (text: string) => void;
+  onStatusChange?: (status: "idle" | "recording" | "processing") => void;
 }) {
-  const { isRecording, start, stop, transcript, detectedLang, error } = useVoiceRecorder(sessionId);
-  const lastHandledTranscript = useRef<string | null>(null);
+  const { isRecording, isProcessing, start, stop, transcript, interimTranscript, error } =
+    useVoiceRecorder(sessionId);
 
-  // transcript arrives asynchronously (after the network round trip to
-  // /api/nlp/voice, which completes well after stop() returns) — reading it
-  // synchronously right after calling stop() always saw the stale
-  // pre-recording value. Firing on the transcript state change instead is
-  // what actually works.
+  // Live-update the input box as the user speaks (Web Speech path streams
+  // interim results continuously) rather than only filling it once at the
+  // very end — this is what "shows the text in the bar as I speak" means.
   useEffect(() => {
-    if (transcript && transcript !== lastHandledTranscript.current) {
-      lastHandledTranscript.current = transcript;
-      onTranscript(transcript, detectedLang);
-    }
-  }, [transcript, detectedLang, onTranscript]);
+    const combined = interimTranscript ? `${transcript} ${interimTranscript}`.trim() : transcript;
+    if (combined) onLiveText(combined);
+  }, [transcript, interimTranscript, onLiveText]);
 
-  if (typeof MediaRecorder === "undefined") return null;
+  useEffect(() => {
+    onStatusChange?.(isProcessing ? "processing" : isRecording ? "recording" : "idle");
+  }, [isRecording, isProcessing, onStatusChange]);
+
+  if (typeof MediaRecorder === "undefined" && !(window as any).webkitSpeechRecognition) return null;
 
   const handleClick = () => {
     if (isRecording) {

@@ -11,6 +11,7 @@ export function ChatPage() {
   const { sessionId, messages, addMessage } = useChatStore();
   const [input, setInput] = useState("");
   const [thinking, setThinking] = useState(false);
+  const [voiceStatus, setVoiceStatus] = useState<"idle" | "recording" | "processing">("idle");
   const alerts = useAlertStore((s) => s.alerts);
   useWebSocket(sessionId);
 
@@ -42,6 +43,8 @@ export function ChatPage() {
         {messages.map((m) => (
           <ChatBubble key={m.id} message={m} />
         ))}
+        {voiceStatus === "recording" && <p className="chat-page__voice-status">🎤 Listening...</p>}
+        {voiceStatus === "processing" && <p className="chat-page__voice-status">Processing your voice...</p>}
         {thinking && <p className="chat-page__thinking">Thinking...</p>}
       </div>
 
@@ -58,7 +61,7 @@ export function ChatPage() {
           placeholder="Ask about weather..."
           style={{ fontSize: 16 }}
         />
-        <VoiceButton sessionId={sessionId} onTranscript={(text) => setInput(text)} />
+        <VoiceButton sessionId={sessionId} onLiveText={setInput} onStatusChange={setVoiceStatus} />
         <button type="submit">Send</button>
       </form>
     </div>
