@@ -74,7 +74,7 @@ def _build_facts(weather_data: dict, nlp_result: dict, gfs_data: list[dict]) -> 
             "fishing_zone_safe": fishing_safe,
             "coastal_zone": weather_data.get("coastal_zone"),
         },
-        "alert_level": "warning" if weather_data.get("cyclone_warning") else (
+        "alert_level": "warning" if (weather_data.get("cyclone_warning") or weather_data.get("flood_warning")) else (
             "advisory" if weather_data.get("heatwave_warning") else "none"
         ),
         "use_case_context": use_case,
@@ -112,7 +112,10 @@ async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict,
                 f"Wind: {weather_data.get('wind_speed_kmh')}km/h {weather_data.get('wind_direction')}, "
                 f"Visibility: {weather_data.get('visibility_km')}km, "
                 f"Wave height: {weather_data.get('wave_height_m')}m, "
-                f"Cyclone warning: {weather_data.get('cyclone_warning')}, "
+                f"Cyclone warning: {weather_data.get('cyclone_warning')} "
+                f"(name: {weather_data.get('cyclone_name')}), "
+                f"Flood warning: {weather_data.get('flood_warning')} "
+                f"(name: {weather_data.get('flood_name')}), "
                 f"Heatwave warning: {weather_data.get('heatwave_warning')}, "
                 f"Fishing zone safe: {fishing_safe}, "
                 f"Use case: {nlp_result.get('use_case_context')}, "

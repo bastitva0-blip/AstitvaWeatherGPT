@@ -10,6 +10,7 @@ import httpx
 
 from app.core.cache import get_redis
 from app.core.config import settings
+from app.services import disaster_service
 from app.services.gis_service import get_coastal_zone, resolve_location
 
 logger = logging.getLogger(__name__)
@@ -81,9 +82,10 @@ async def fetch_weather(gis_location, date: str) -> dict:
     if cached:
         return json.loads(cached)
 
-    owm, real_wave_height = await asyncio.gather(
+    owm, real_wave_height, disasters = await asyncio.gather(
         _fetch_openweathermap(gis_location.lat, gis_location.lon),
         _fetch_marine_wave_height(gis_location.lat, gis_location.lon),
+        disaster_service.get_nearby_disasters(gis_location.lat, gis_location.lon),
     )
     source = "OpenWeatherMap" if owm else "Synthetic-Fallback"
     base = _synthetic_weather(gis_location.name, gis_location.lat, gis_location.lon, date)
@@ -109,8 +111,9 @@ async def fetch_weather(gis_location, date: str) -> dict:
             "rainfall_probability": rainfall_probability,
             "visibility_km": round(owm["visibility"] / 1000, 1) if "visibility" in owm else base["visibility_km"],
             "heatwave_warning": main.get("temp_max", 0) >= 40,
-            "cyclone_warning": False,  # no real cyclone-tracking feed integrated — never guess this
         })
+
+    base["cyclone_warning"] = disasters["cyclone_warning"]
 
     coastal_zone = await get_coastal_zone(gis_location.lat, gis_location.lon)
 
@@ -120,7 +123,10 @@ async def fetch_weather(gis_location, date: str) -> dict:
         "lon": gis_location.lon,
         "coastal_zone": coastal_zone,
         "date": date,
-        "cyclone_name": None,
+        "cyclone_name": disasters["cyclone_name"],
+        "flood_warning": disasters["flood_warning"],
+        "flood_name": disasters["flood_name"],
+        "nearby_disaster_alerts": disasters["alerts"],
         "nwp_model": None,
         "source": source,
         "source_url": "https://api.openweathermap.org/data/2.5/weather" if owm else "synthetic-fallback",
