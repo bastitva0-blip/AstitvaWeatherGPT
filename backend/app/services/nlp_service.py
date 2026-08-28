@@ -225,6 +225,22 @@ def extract_slots(en_text: str, intent: str) -> dict:
     for crop in ["wheat", "rice", "cotton", "gehu"]:
         if crop in text_lower:
             slots["crop_type"] = "wheat" if crop == "gehu" else crop
+
+    # weather_parameter drives climate_trend's data series choice — without
+    # this, "temperature trend" silently defaulted to a rainfall trend
+    # (nonsensical values like "-2002/decade" for a temperature request),
+    # found via live testing.
+    if re.search(r"\btemperature\b", text_lower):
+        slots["weather_parameter"] = "temperature"
+    elif re.search(r"\bhumidity\b", text_lower):
+        slots["weather_parameter"] = "humidity"
+    elif re.search(r"\b(wind|breez)", text_lower):
+        slots["weather_parameter"] = "wind_speed"
+    elif re.search(r"\bvisibilit", text_lower):
+        slots["weather_parameter"] = "visibility"
+    elif re.search(r"\b(rain|rainfall|precipitation)\b", text_lower):
+        slots["weather_parameter"] = "rainfall"
+
     if intent == "marine_advisory":
         slots["weather_parameter"] = slots["weather_parameter"] or "wave_height"
     return slots
