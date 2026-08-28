@@ -18,13 +18,14 @@ import asyncio
 import logging
 
 from app.services import llm_client
+from app.services.nlp_service import _LANG_NAMES
 
 logger = logging.getLogger(__name__)
 
 FISHERMEN_WAVE_THRESHOLD_M = 2.5
 FISHERMEN_WIND_THRESHOLD_KMH = 45
 
-ANSWER_SYSTEM_PROMPT = """You are WeatherGPT, a weather assistant for India built for the Ministry of Earth Sciences.
+_BASE_ANSWER_RULES = """You are WeatherGPT, a weather assistant for India built for the Ministry of Earth Sciences.
 Write ONE short, natural, practical sentence (max 2 sentences) answering the user's query,
 using ONLY the weather facts given to you below — never invent or add numbers, locations,
 or conditions not present in those facts. Plain text only, no JSON, no markdown, no preamble.
@@ -32,6 +33,16 @@ Safety-critical rule: the "Fishing zone safe" fact is a pre-computed verdict fro
 thresholds — you MUST use its exact value (True = SAFE, False = UNSAFE) if it is not None, and
 MUST NOT independently judge safety from the wind/wave numbers yourself. If it is None, say
 there isn't enough data to judge sea safety — do not guess SAFE or UNSAFE."""
+
+
+def _answer_system_prompt(target_lang: str) -> str:
+    if target_lang == "en" or target_lang not in _LANG_NAMES:
+        return _BASE_ANSWER_RULES
+    # Writing the answer directly in the target language (instead of writing
+    # English then back-translating in a second LLM call) cuts one full
+    # round-trip off every non-English query's latency — found to add
+    # ~1.3-3s per query in production testing.
+    return _BASE_ANSWER_RULES + f"\nWrite your answer in {_LANG_NAMES[target_lang]}, not English."
 
 
 def _fishing_zone_safe(weather_data: dict) -> bool | None:
@@ -94,7 +105,8 @@ def _deterministic_answer(weather_data: dict, fishing_safe: bool | None) -> str:
 
 
 async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict, gfs_data: list[dict],
-                    extra_facts: str | None = None, extra_citations: list[dict] | None = None) -> dict:
+                    extra_facts: str | None = None, extra_citations: list[dict] | None = None,
+                    target_lang: str = "en") -> dict:
     facts = _build_facts(weather_data, nlp_result, gfs_data)
     fishing_safe = facts.pop("fishing_safe")
     if extra_citations:
@@ -123,7 +135,7 @@ async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict,
                 + (f", {extra_facts}" if extra_facts else "")
             )
             raw = await asyncio.to_thread(
-                llm_client.chat_completion, ANSWER_SYSTEM_PROMPT, facts_summary, 150
+                llm_client.chat_completion, _answer_system_prompt(target_lang), facts_summary, 150
             )
             answer = raw.strip().strip('"')
         except Exception as e:

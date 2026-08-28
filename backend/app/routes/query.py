@@ -130,11 +130,14 @@ async def query(body: QueryRequest, api_key: str = Depends(verify_api_key), db: 
         if advisory:
             extra_facts = advisory
 
+    # llm_service.generate() writes the answer directly in nlp_result["lang"]
+    # when the LLM is configured — this avoids a second back-translation
+    # LLM call (was adding ~1.3-3s per non-English query). Its deterministic
+    # (LLM-unconfigured/failed) fallback is English-only; that's an accepted
+    # degradation on an already-degraded path, not worth a second LLM call.
     llm_response = await llm_service.generate(
-        weather_data, rag_chunks, nlp_result, gfs_data, extra_facts=extra_facts, extra_citations=extra_citations
-    )
-    llm_response["answer"] = await asyncio.to_thread(
-        nlp_service.translate_from_english, llm_response["answer"], nlp_result["lang"]
+        weather_data, rag_chunks, nlp_result, gfs_data, extra_facts=extra_facts, extra_citations=extra_citations,
+        target_lang=nlp_result["lang"],
     )
 
     await _ensure_session(db, body.session_id, api_key, nlp_result["lang"])
