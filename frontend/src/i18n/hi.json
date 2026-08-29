@@ -1,18 +1,53 @@
 {
-  "nav": { "chat": "चैट", "alerts": "अलर्ट", "history": "इतिहास", "climate": "जलवायु", "settings": "सेटिंग" },
+  "nav": {
+    "chat": "चैट",
+    "alerts": "अलर्ट",
+    "history": "इतिहास",
+    "climate": "जलवायु",
+    "settings": "सेटिंग"
+  },
   "chat": {
-    "placeholder": "मौसम के बारे में पूछें...", "send": "भेजें", "listening": "सुन रहा हूँ...",
-    "thinking": "सोच रहा हूँ...", "voice_denied": "माइक्रोफ़ोन अनुमति नहीं मिली",
-    "voice_too_long": "रिकॉर्डिंग 60 सेकंड से अधिक नहीं होनी चाहिए"
+    "placeholder": "मौसम के बारे में पूछें...",
+    "send": "भेजें",
+    "listening": "सुन रहा हूँ...",
+    "thinking": "सोच रहा हूँ...",
+    "voice_denied": "माइक्रोफ़ोन अनुमति नहीं मिली",
+    "voice_too_long": "रिकॉर्डिंग 60 सेकंड से अधिक नहीं होनी चाहिए",
+    "processing": "सुन रहा हूँ...",
+    "error": "मौसम के बारे में पूछें..."
   },
   "alerts": {
-    "cyclone": "चक्रवात चेतावनी", "heavy_rain": "भारी वर्षा", "heatwave": "लू की चेतावनी",
-    "marine_warning": "समुद्री चेतावनी", "fishermen_alert": "मछुआरा चेतावनी — समुद्र में न जाएं", "dismiss": "बंद करें"
+    "cyclone": "चक्रवात चेतावनी",
+    "heavy_rain": "भारी वर्षा",
+    "heatwave": "लू की चेतावनी",
+    "marine_warning": "समुद्री चेतावनी",
+    "fishermen_alert": "मछुआरा चेतावनी — समुद्र में न जाएं",
+    "dismiss": "बंद करें",
+    "no_alerts": "No active alerts"
   },
   "weather": {
-    "rainfall": "वर्षा", "temperature": "तापमान", "humidity": "नमी", "wind": "हवा",
-    "wave_height": "लहर की ऊंचाई", "visibility": "दृश्यता", "nwp_model": "NWP मॉडल",
-    "sea_safe": "समुद्र में जाना सुरक्षित है", "sea_unsafe": "समुद्र में न जाएं — खतरनाक"
+    "rainfall": "वर्षा",
+    "temperature": "तापमान",
+    "humidity": "नमी",
+    "wind": "हवा",
+    "wave_height": "लहर की ऊंचाई",
+    "visibility": "दृश्यता",
+    "nwp_model": "NWP मॉडल",
+    "sea_safe": "समुद्र में जाना सुरक्षित है",
+    "sea_unsafe": "समुद्र में न जाएं — खतरनाक"
   },
-  "climate": { "title": "जलवायु रुझान", "fetch": "रुझान देखें", "download_csv": "CSV डाउनलोड करें", "increasing": "बढ़ रहा है", "decreasing": "घट रहा है" }
+  "climate": {
+    "title": "जलवायु रुझान",
+    "fetch": "रुझान देखें",
+    "download_csv": "CSV डाउनलोड करें",
+    "increasing": "बढ़ रहा है",
+    "decreasing": "घट रहा है"
+  },
+  "home": {
+    "greeting": "Hello, {{name}}"
+  },
+  "voice": {
+    "denied": "माइक्रोफ़ोन अनुमति नहीं मिली",
+    "unsupported": "Voice input not supported"
+  }
 }

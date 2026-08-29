@@ -31,7 +31,7 @@ async def get_nearby_disasters(lat: float, lon: float, radius_km: float = NEARBY
     result = {"cyclone_warning": False, "cyclone_name": None, "flood_warning": False, "flood_name": None, "alerts": []}
     try:
         async with httpx.AsyncClient() as client:
-            resp = await client.get(GDACS_URL, params={"eventlist": "TC;FL"}, timeout=10.0)
+            resp = await client.get(GDACS_URL, params=[("eventlist", "TC"), ("eventlist", "FL")], timeout=10.0)
             if resp.status_code != 200:
                 return result
             features = resp.json().get("features", [])
@@ -42,7 +42,8 @@ async def get_nearby_disasters(lat: float, lon: float, radius_km: float = NEARBY
     for feature in features:
         try:
             props = feature["properties"]
-            if props.get("iscurrent") != "true":
+            is_current = props.get("iscurrent")
+            if str(is_current).lower() not in ("true", "1", "yes"):
                 continue
             coords = feature["geometry"]["coordinates"]
             event_lon, event_lat = coords[0], coords[1]

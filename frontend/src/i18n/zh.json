@@ -1,0 +1,21 @@
+{
+  "nav": { "chat": "聊天", "alerts": "警报", "history": "历史", "climate": "气候", "settings": "设置" },
+  "chat": {
+    "placeholder": "询问天气...", "send": "发送", "listening": "正在聆听...",
+    "thinking": "思考中...", "voice_denied": "麦克风权限被拒绝", "voice_too_long": "录音不得超过60秒",
+    "processing": "正在处理您的语音...", "error": "无法处理该消息，请尝试重新表述您的天气问题。"
+  },
+  "alerts": {
+    "cyclone": "气旋警报", "heavy_rain": "暴雨", "heatwave": "热浪警报",
+    "marine_warning": "海事警报", "fishermen_alert": "渔民警报 — 请勿出海", "dismiss": "关闭",
+    "no_alerts": "没有活跃警报"
+  },
+  "weather": {
+    "rainfall": "降雨量", "temperature": "温度", "humidity": "湿度", "wind": "风",
+    "wave_height": "浪高", "visibility": "能见度", "nwp_model": "数值预报模型",
+    "sea_safe": "可以安全出海", "sea_unsafe": "请勿出海 — 危险"
+  },
+  "climate": { "title": "气候趋势", "fetch": "查看趋势", "download_csv": "下载CSV", "increasing": "上升", "decreasing": "下降" },
+  "home": { "greeting": "你好，{{name}}" },
+  "voice": { "denied": "麦克风权限被拒绝", "unsupported": "不支持语音输入" }
+}

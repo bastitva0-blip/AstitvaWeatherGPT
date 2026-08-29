@@ -26,6 +26,7 @@ ARCHIVE_URL = "https://archive-api.open-meteo.com/v1/archive"
 _PARAMETER_TO_DAILY_VAR = {
     "rainfall": "precipitation_sum",
     "temperature": "temperature_2m_mean",
+    "humidity": "relativehumidity_2m_mean",
 }
 
 

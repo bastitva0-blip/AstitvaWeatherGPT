@@ -1,18 +1,53 @@
 {
-  "nav": { "chat": "गप्पा", "alerts": "सूचना", "history": "इतिहास", "climate": "हवामान", "settings": "सेटिंग्ज" },
+  "nav": {
+    "chat": "गप्पा",
+    "alerts": "सूचना",
+    "history": "इतिहास",
+    "climate": "हवामान",
+    "settings": "सेटिंग्ज"
+  },
   "chat": {
-    "placeholder": "हवामानाबद्दल विचारा...", "send": "पाठवा", "listening": "ऐकत आहे...",
-    "thinking": "विचार करत आहे...", "voice_denied": "मायक्रोफोन परवानगी नाही",
-    "voice_too_long": "रेकॉर्डिंग 60 सेकंदांपेक्षा जास्त नसावी"
+    "placeholder": "हवामानाबद्दल विचारा...",
+    "send": "पाठवा",
+    "listening": "ऐकत आहे...",
+    "thinking": "विचार करत आहे...",
+    "voice_denied": "मायक्रोफोन परवानगी नाही",
+    "voice_too_long": "रेकॉर्डिंग 60 सेकंदांपेक्षा जास्त नसावी",
+    "processing": "ऐकत आहे...",
+    "error": "हवामानाबद्दल विचारा..."
   },
   "alerts": {
-    "cyclone": "चक्रीवादळ इशारा", "heavy_rain": "मुसळधार पाऊस", "heatwave": "उष्णतेची लाट इशारा",
-    "marine_warning": "सागरी इशारा", "fishermen_alert": "मच्छीमार इशारा — समुद्रात जाऊ नका", "dismiss": "बंद करा"
+    "cyclone": "चक्रीवादळ इशारा",
+    "heavy_rain": "मुसळधार पाऊस",
+    "heatwave": "उष्णतेची लाट इशारा",
+    "marine_warning": "सागरी इशारा",
+    "fishermen_alert": "मच्छीमार इशारा — समुद्रात जाऊ नका",
+    "dismiss": "बंद करा",
+    "no_alerts": "No active alerts"
   },
   "weather": {
-    "rainfall": "पर्जन्य", "temperature": "तापमान", "humidity": "आर्द्रता", "wind": "वारा",
-    "wave_height": "लाटेची उंची", "visibility": "दृश्यमानता", "nwp_model": "NWP मॉडेल",
-    "sea_safe": "समुद्रात जाणे सुरक्षित आहे", "sea_unsafe": "समुद्रात जाऊ नका — धोकादायक"
+    "rainfall": "पर्जन्य",
+    "temperature": "तापमान",
+    "humidity": "आर्द्रता",
+    "wind": "वारा",
+    "wave_height": "लाटेची उंची",
+    "visibility": "दृश्यमानता",
+    "nwp_model": "NWP मॉडेल",
+    "sea_safe": "समुद्रात जाणे सुरक्षित आहे",
+    "sea_unsafe": "समुद्रात जाऊ नका — धोकादायक"
   },
-  "climate": { "title": "हवामान कल", "fetch": "कल पहा", "download_csv": "CSV डाउनलोड करा", "increasing": "वाढत आहे", "decreasing": "कमी होत आहे" }
+  "climate": {
+    "title": "हवामान कल",
+    "fetch": "कल पहा",
+    "download_csv": "CSV डाउनलोड करा",
+    "increasing": "वाढत आहे",
+    "decreasing": "कमी होत आहे"
+  },
+  "home": {
+    "greeting": "Hello, {{name}}"
+  },
+  "voice": {
+    "denied": "मायक्रोफोन परवानगी नाही",
+    "unsupported": "Voice input not supported"
+  }
 }

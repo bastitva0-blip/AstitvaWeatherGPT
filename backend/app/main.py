@@ -13,7 +13,7 @@ from slowapi.util import get_remote_address
 
 from app.core.cache import close_redis, get_redis
 from app.models.database import init_db
-from app.routes import admin, alerts, climate, query, voice, weather, websocket
+from app.routes import admin, alerts, climate, misc, query, voice, weather, websocket
 from app.services.gis_service import load_coastal_zones
 from app.services.wis2_service import WIS2Subscriber
 
@@ -39,6 +39,7 @@ app.include_router(admin.router, tags=["admin"])
 app.include_router(voice.router, tags=["voice"])
 app.include_router(climate.router, tags=["climate"])
 app.include_router(websocket.router, tags=["websocket"])
+app.include_router(misc.router, tags=["misc"])
 
 Instrumentator().instrument(app).expose(app)
 

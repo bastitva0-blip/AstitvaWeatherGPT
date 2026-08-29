@@ -34,7 +34,11 @@ SLOT_TYPES = {
     "fishing_zone": "coastal/fishing zone name — for marine queries",
 }
 
-SUPPORTED_LANGS = {"hi", "ta", "te", "bn", "mr", "kn", "gu", "pa", "or", "ml", "ur", "en"}
+SUPPORTED_LANGS = {
+    "hi", "ta", "te", "bn", "mr", "kn", "gu", "pa", "or", "ml", "ur",
+    "ar", "fr", "es", "zh", "sw",
+    "en",
+}
 
 _LANG_MARKERS = {
     "ml": ["ഀ", "ൿ"],  # Malayalam unicode block
@@ -47,6 +51,9 @@ _LANG_MARKERS = {
     "kn": ["ಀ", "೿"],
     "or": ["଀", "୿"],
     "ur": ["؀", "ۿ"],
+    "ar": ["؀", "ۿ"],  # Arabic block
+    "zh": ["一", "鿿"],  # CJK Unified Ideographs
+    # French, Spanish, Swahili use Latin script — langdetect handles them
 }
 
 
@@ -65,6 +72,7 @@ _LANG_NAMES = {
     "hi": "Hindi", "ta": "Tamil", "te": "Telugu", "bn": "Bengali", "mr": "Marathi",
     "kn": "Kannada", "gu": "Gujarati", "pa": "Punjabi", "or": "Odia", "ml": "Malayalam",
     "ur": "Urdu", "en": "English",
+    "ar": "Arabic", "fr": "French", "es": "Spanish", "zh": "Chinese (Simplified)", "sw": "Swahili",
 }
 
 
@@ -222,9 +230,18 @@ def extract_slots(en_text: str, intent: str) -> dict:
         all_years = re.findall(r"\b((?:19|20)\d{2})\b", en_text)
         if len(all_years) >= 2:
             slots["date_range"] = {"start": all_years[0], "end": all_years[-1]}
-    for crop in ["wheat", "rice", "cotton", "gehu"]:
+    _CROP_ALIASES = {
+        "gehu": "wheat",
+        "maize": "maize", "corn": "maize", "makka": "maize",
+        "sugarcane": "sugarcane", "ganna": "sugarcane",
+        "mustard": "mustard", "sarson": "mustard",
+        "soybean": "soybean", "soya": "soybean",
+        "groundnut": "groundnut", "mungfali": "groundnut", "moongfali": "groundnut",
+    }
+    for crop in ["wheat", "rice", "cotton", *_CROP_ALIASES]:
         if crop in text_lower:
-            slots["crop_type"] = "wheat" if crop == "gehu" else crop
+            slots["crop_type"] = _CROP_ALIASES.get(crop, crop)
+            break
 
     # weather_parameter drives climate_trend's data series choice — without
     # this, "temperature trend" silently defaulted to a rainfall trend

@@ -1,28 +1,39 @@
-import { useState } from "react";
-import { ChatBubble } from "../components/ChatBubble";
-import { LanguageSelect } from "../components/LanguageSelect";
-import { VoiceButton } from "../components/VoiceButton";
+import { useEffect, useRef, useState } from "react";
+import { ChatBubble } from "../components/Chat/ChatBubble";
+import { ChatInput } from "../components/Chat/ChatInput";
+import { SuggestionChips } from "../components/Chat/SuggestionChips";
 import { useWebSocket } from "../hooks/useWebSocket";
 import { sendQuery } from "../lib/api";
 import { useAlertStore } from "../stores/alertStore";
 import { useChatStore } from "../stores/chatStore";
+import { useAuthStore } from "../stores/authStore";
+import { useTranslation } from "react-i18next";
+import { Alert } from "@devalok/shilp-sutra/ui/alert";
+import { Spinner } from "@devalok/shilp-sutra/ui/spinner";
 
 export function ChatPage() {
   const { sessionId, messages, addMessage } = useChatStore();
-  const [input, setInput] = useState("");
+  const { userName } = useAuthStore();
+  const { t } = useTranslation();
   const [thinking, setThinking] = useState(false);
   const [voiceStatus, setVoiceStatus] = useState<"idle" | "recording" | "processing">("idle");
   const alerts = useAlertStore((s) => s.alerts);
+  const listRef = useRef<HTMLDivElement>(null);
   useWebSocket(sessionId);
 
-  async function submit(text: string, inputMode: "text" | "voice" = "text") {
+  useEffect(() => {
+    listRef.current?.scrollTo(0, listRef.current.scrollHeight);
+  }, [messages, thinking]);
+
+  async function submit(text: string) {
     if (!text.trim()) return;
     addMessage({ id: crypto.randomUUID(), role: "user", text });
-    setInput("");
     setThinking(true);
     try {
-      const response = await sendQuery(text, sessionId, inputMode);
+      const response = await sendQuery(text, sessionId, voiceStatus !== "idle" ? "voice" : "text");
       addMessage({ id: crypto.randomUUID(), role: "assistant", text: response.answer, response });
+    } catch {
+      addMessage({ id: crypto.randomUUID(), role: "assistant", text: t("chat.error", "That message couldn't be processed. Try rephrasing your weather question.") });
     } finally {
       setThinking(false);
     }
@@ -30,40 +41,27 @@ export function ChatPage() {
 
   return (
     <div className="chat-page">
-      <header className="chat-page__header">
-        <h1>WeatherGPT</h1>
-        <LanguageSelect />
-      </header>
+      {alerts.length > 0 && <Alert color="warning">{alerts[0].message}</Alert>}
 
-      {alerts.length > 0 && (
-        <div className="chat-page__alert-banner">{alerts[0].message}</div>
-      )}
-
-      <div className="chat-page__messages">
-        {messages.map((m) => (
-          <ChatBubble key={m.id} message={m} />
-        ))}
-        {voiceStatus === "recording" && <p className="chat-page__voice-status">🎤 Listening...</p>}
-        {voiceStatus === "processing" && <p className="chat-page__voice-status">Processing your voice...</p>}
-        {thinking && <p className="chat-page__thinking">Thinking...</p>}
+      <div className="chat-page__messages" ref={listRef}>
+        {messages.length === 0 && (
+          <div className="chat-empty">
+            <div className="radar-container"><div className="radar-rings" /><div className="radar-sweep" /></div>
+            <div style={{ position: "relative", fontSize: "2rem" }}>🌩</div>
+            <h2 className="font-display" style={{ position: "relative" }}>{t("home.greeting", { name: userName || "" })}</h2>
+            <p style={{ color: "var(--text-muted)", position: "relative" }}>What would you like to know about today's weather?</p>
+            <div style={{ position: "relative", width: "100%" }}>
+              <SuggestionChips onPick={submit} />
+            </div>
+          </div>
+        )}
+        {messages.map((m) => <ChatBubble key={m.id} message={m} />)}
+        {voiceStatus === "recording" && <p style={{ color: "var(--teal)" }}>🎤 {t("chat.listening")}</p>}
+        {voiceStatus === "processing" && <p style={{ color: "var(--teal)" }}>{t("chat.processing")}</p>}
+        {thinking && <Spinner size="sm" />}
       </div>
 
-      <form
-        className="chat-page__input-row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          submit(input);
-        }}
-      >
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask about weather..."
-          style={{ fontSize: 16 }}
-        />
-        <VoiceButton sessionId={sessionId} onLiveText={setInput} onStatusChange={setVoiceStatus} />
-        <button type="submit">Send</button>
-      </form>
+      <ChatInput sessionId={sessionId} onSubmit={submit} voiceStatus={voiceStatus} onVoiceStatusChange={setVoiceStatus} />
     </div>
   );
 }

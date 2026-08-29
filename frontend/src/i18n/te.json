@@ -1,18 +1,53 @@
 {
-  "nav": { "chat": "చాట్", "alerts": "హెచ్చరికలు", "history": "చరిత్ర", "climate": "వాతావరణం", "settings": "సెట్టింగ్‌లు" },
+  "nav": {
+    "chat": "చాట్",
+    "alerts": "హెచ్చరికలు",
+    "history": "చరిత్ర",
+    "climate": "వాతావరణం",
+    "settings": "సెట్టింగ్‌లు"
+  },
   "chat": {
-    "placeholder": "వాతావరణం గురించి అడగండి...", "send": "పంపు", "listening": "వింటున్నాను...",
-    "thinking": "ఆలోచిస్తున్నాను...", "voice_denied": "మైక్రోఫోన్ అనుమతి లేదు",
-    "voice_too_long": "రికార్డింగ్ 60 సెకన్లకు మించకూడదు"
+    "placeholder": "వాతావరణం గురించి అడగండి...",
+    "send": "పంపు",
+    "listening": "వింటున్నాను...",
+    "thinking": "ఆలోచిస్తున్నాను...",
+    "voice_denied": "మైక్రోఫోన్ అనుమతి లేదు",
+    "voice_too_long": "రికార్డింగ్ 60 సెకన్లకు మించకూడదు",
+    "processing": "వింటున్నాను...",
+    "error": "వాతావరణం గురించి అడగండి..."
   },
   "alerts": {
-    "cyclone": "తుఫాను హెచ్చరిక", "heavy_rain": "భారీ వర్షం", "heatwave": "వడగాడ్పు హెచ్చరిక",
-    "marine_warning": "సముద్ర హెచ్చరిక", "fishermen_alert": "మత్స్యకారుల హెచ్చరిక — సముద్రంలోకి వెళ్లవద్దు", "dismiss": "మూసివేయి"
+    "cyclone": "తుఫాను హెచ్చరిక",
+    "heavy_rain": "భారీ వర్షం",
+    "heatwave": "వడగాడ్పు హెచ్చరిక",
+    "marine_warning": "సముద్ర హెచ్చరిక",
+    "fishermen_alert": "మత్స్యకారుల హెచ్చరిక — సముద్రంలోకి వెళ్లవద్దు",
+    "dismiss": "మూసివేయి",
+    "no_alerts": "No active alerts"
   },
   "weather": {
-    "rainfall": "వర్షపాతం", "temperature": "ఉష్ణోగ్రత", "humidity": "తేమ", "wind": "గాలి",
-    "wave_height": "అల ఎత్తు", "visibility": "దృశ్యమానత", "nwp_model": "NWP మోడల్",
-    "sea_safe": "సముద్రంలోకి వెళ్లడం సురక్షితం", "sea_unsafe": "సముద్రంలోకి వెళ్లవద్దు — ప్రమాదం"
+    "rainfall": "వర్షపాతం",
+    "temperature": "ఉష్ణోగ్రత",
+    "humidity": "తేమ",
+    "wind": "గాలి",
+    "wave_height": "అల ఎత్తు",
+    "visibility": "దృశ్యమానత",
+    "nwp_model": "NWP మోడల్",
+    "sea_safe": "సముద్రంలోకి వెళ్లడం సురక్షితం",
+    "sea_unsafe": "సముద్రంలోకి వెళ్లవద్దు — ప్రమాదం"
   },
-  "climate": { "title": "వాతావరణ ధోరణి", "fetch": "ధోరణి చూడండి", "download_csv": "CSV డౌన్‌లోడ్ చేయండి", "increasing": "పెరుగుతోంది", "decreasing": "తగ్గుతోంది" }
+  "climate": {
+    "title": "వాతావరణ ధోరణి",
+    "fetch": "ధోరణి చూడండి",
+    "download_csv": "CSV డౌన్‌లోడ్ చేయండి",
+    "increasing": "పెరుగుతోంది",
+    "decreasing": "తగ్గుతోంది"
+  },
+  "home": {
+    "greeting": "Hello, {{name}}"
+  },
+  "voice": {
+    "denied": "మైక్రోఫోన్ అనుమతి లేదు",
+    "unsupported": "Voice input not supported"
+  }
 }

@@ -3,7 +3,9 @@
   "private": true,
   "version": "3.0.0",
   "type": "module",
-  "engines": { "node": ">=20.0.0" },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -11,22 +13,36 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@devalok/shilp-sutra": "^0.59.0",
+    "@tabler/icons-react": "^3.46.0",
+    "@tanstack/react-table": "^8.21.3",
+    "@tanstack/react-virtual": "^3.14.10",
+    "d3-axis": "^3.0.0",
+    "d3-scale": "^4.0.2",
+    "d3-selection": "^3.0.0",
+    "d3-shape": "^3.2.0",
+    "framer-motion": "^12.43.0",
+    "i18next": "^23.11.5",
+    "leaflet": "^1.9.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.23.1",
-    "zustand": "^4.5.2",
     "react-i18next": "^14.1.2",
-    "i18next": "^23.11.5",
-    "recharts": "^2.12.7",
-    "clsx": "^2.1.1"
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^6.23.1",
+    "sonner": "^2.0.8",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "vite": "^5.3.1",
-    "@vitejs/plugin-react": "^4.3.1",
-    "vite-plugin-pwa": "^0.20.1",
-    "typescript": "^5.4.5",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/leaflet": "^1.9.12",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "vitest": "^1.6.0"
+    "@vitejs/plugin-react": "^4.3.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.4.5",
+    "vite": "^5.3.1",
+    "vite-plugin-pwa": "^0.20.1",
+    "vitest": "^1.6.0",
+    "workbox-window": "^7.1.0"
   }
 }
