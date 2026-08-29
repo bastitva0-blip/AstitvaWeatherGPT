@@ -29,8 +29,10 @@ export function WeatherMap() {
       let aqi = null;
       try { aqi = await fetchAqi(name); } catch { /* optional */ }
       setPopup({
-        name, lat, lon, temp: w.temp, condition: w.condition, humidity: w.humidity,
-        wind_speed_kmh: w.wind_speed_kmh, wind_direction_deg: w.wind_direction_deg,
+        name, lat, lon,
+        temp: Math.round((w.temperature_max + w.temperature_min) / 2),
+        condition: w.condition, humidity: w.humidity_percent,
+        wind_speed_kmh: w.wind_speed_kmh,
         aqi_index: aqi?.aqi_index, aqi_label: aqi?.aqi_label,
       });
     } catch {

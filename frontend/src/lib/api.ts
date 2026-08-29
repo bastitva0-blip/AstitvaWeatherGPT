@@ -27,39 +27,37 @@ export interface QueryResponse {
   use_case_context: string;
 }
 
-export function sendQuery(message: string, sessionId: string, inputMode: "text" | "voice" = "text") {
+export function sendQuery(message: string, sessionId: string, inputMode: "text" | "voice" = "text", locationHint?: string) {
   return request<QueryResponse>("/api/query", {
     method: "POST",
-    body: JSON.stringify({ message, session_id: sessionId, input_mode: inputMode }),
+    body: JSON.stringify({ message, session_id: sessionId, input_mode: inputMode, location_hint: locationHint || undefined }),
   });
 }
 
-export interface HourlyPoint { time: string; temp: number; condition?: string }
-export interface DailyForecast { date: string; condition?: string; rain_prob?: number; temp_min: number; temp_max: number; hourly?: HourlyPoint[] }
+/** Matches the real GET /api/weather/live response shape (weather_service.fetch_weather). */
 export interface WeatherData {
   location: string;
-  temp: number;
+  date: string;
   condition: string;
-  feels_like?: number;
-  temp_min?: number;
-  temp_max?: number;
-  wind_direction_deg?: number;
+  temperature_max: number;
+  temperature_min: number;
+  humidity_percent?: number;
   wind_speed_kmh?: number;
-  humidity?: number;
-  uv?: number;
+  wind_direction?: string;
   visibility_km?: number;
-  pressure_hpa?: number;
-  sunrise?: string;
-  sunset?: string;
-  hourly?: HourlyPoint[];
-  daily?: DailyForecast[];
+  rainfall_mm?: number;
+  rainfall_probability?: number;
+  wave_height_m?: number | null;
+  coastal_zone?: string | null;
+  nwp_model?: string | null;
+  source: string;
+  source_url: string;
   cyclone_warning?: boolean;
-  cyclone_name?: string;
+  cyclone_name?: string | null;
   flood_warning?: boolean;
-  flood_name?: string;
+  flood_name?: string | null;
+  heatwave_warning?: boolean;
   nearby_disaster_alerts?: unknown[];
-  aqi?: AqiResponse | null;
-  alert_level?: "none" | "advisory" | "watch" | "warning";
 }
 export function fetchLiveWeather(location: string) {
   return request<WeatherData>(`/api/weather/live?location=${encodeURIComponent(location)}`);
