@@ -29,6 +29,7 @@ export function HomePage() {
     let cancelled = false;
     setLoading(true);
     fetchLiveWeather(cityName)
+      .catch(() => (cityName !== "Delhi" ? fetchLiveWeather("Delhi") : Promise.reject()))
       .then((d) => {
         if (cancelled) return;
         setData(d);
