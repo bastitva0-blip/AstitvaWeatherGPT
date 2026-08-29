@@ -3,16 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { WeatherHeroCard } from "../components/Weather/WeatherHeroCard";
 import { StatGrid } from "../components/Weather/StatGrid";
 import { AQICard } from "../components/Weather/AQICard";
-import { SunArcCard } from "../components/Weather/SunArcCard";
-import { ForecastRow } from "../components/Weather/ForecastRow";
 import { CycloneFullscreen } from "../components/Weather/CycloneFullscreen";
 import { FloodBanner } from "../components/Weather/FloodBanner";
 import { OfflineBanner } from "../components/Shell/OfflineBanner";
-import { fetchLiveWeather, type WeatherData } from "../lib/api";
+import { fetchLiveWeather, fetchAqi, type WeatherData, type AqiResponse } from "../lib/api";
 import { useCitiesStore } from "../stores/citiesStore";
 import { cacheTimestamp } from "../hooks/useOnlineStatus";
 import { Button } from "@devalok/shilp-sutra/ui/button";
-import { Card } from "@devalok/shilp-sutra/ui/card";
 import { Skeleton } from "@devalok/shilp-sutra/ui/skeleton";
 import { EmptyState } from "@devalok/shilp-sutra/composed/empty-state";
 import { IconMessage, IconBellPlus, IconScale, IconMap } from "@tabler/icons-react";
@@ -20,11 +17,13 @@ import { IconMessage, IconBellPlus, IconScale, IconMap } from "@tabler/icons-rea
 export function HomePage() {
   const navigate = useNavigate();
   const activeCity = useCitiesStore((s) => s.activeCity);
+  const savedCities = useCitiesStore((s) => s.cities);
   const [data, setData] = useState<WeatherData | null>(null);
+  const [aqi, setAqi] = useState<AqiResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
   const [cycloneDismissed, setCycloneDismissed] = useState(false);
-  const cityName = activeCity?.name || "Delhi";
+  const cityName = activeCity?.name || savedCities[0]?.name || "Delhi";
 
   useEffect(() => {
     let cancelled = false;
@@ -38,6 +37,7 @@ export function HomePage() {
       })
       .catch(() => !cancelled && setFailed(true))
       .finally(() => !cancelled && setLoading(false));
+    fetchAqi(cityName).then((a) => !cancelled && setAqi(a)).catch(() => !cancelled && setAqi(null));
     return () => { cancelled = true; };
   }, [cityName]);
 
@@ -85,16 +85,11 @@ export function HomePage() {
 
       <WeatherHeroCard data={data} cityLabel={cityName} usingGps={!!activeCity} />
 
-      {data.daily && (
-        <Card variant="default" style={{ margin: "0.75rem" }}>
-          {data.daily.map((d) => <ForecastRow key={d.date} day={d} />)}
-        </Card>
-      )}
-
-      <div style={{ padding: "0 0.75rem" }}>
+      <div style={{ padding: "0.75rem" }}>
         <StatGrid data={data} />
-        <AQICard aqi={data.aqi} />
-        <SunArcCard sunrise={data.sunrise} sunset={data.sunset} />
+        <div style={{ marginTop: "0.75rem" }}>
+          <AQICard aqi={aqi} />
+        </div>
       </div>
 
       <div style={{ display: "flex", gap: "0.5rem", padding: "1rem 0.75rem", flexWrap: "wrap" }}>

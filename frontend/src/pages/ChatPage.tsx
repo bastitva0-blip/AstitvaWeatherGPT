@@ -7,6 +7,7 @@ import { sendQuery } from "../lib/api";
 import { useAlertStore } from "../stores/alertStore";
 import { useChatStore } from "../stores/chatStore";
 import { useAuthStore } from "../stores/authStore";
+import { useCitiesStore } from "../stores/citiesStore";
 import { useTranslation } from "react-i18next";
 import { Alert } from "@devalok/shilp-sutra/ui/alert";
 import { Spinner } from "@devalok/shilp-sutra/ui/spinner";
@@ -18,6 +19,9 @@ export function ChatPage() {
   const [thinking, setThinking] = useState(false);
   const [voiceStatus, setVoiceStatus] = useState<"idle" | "recording" | "processing">("idle");
   const alerts = useAlertStore((s) => s.alerts);
+  const activeCity = useCitiesStore((s) => s.activeCity);
+  const savedCities = useCitiesStore((s) => s.cities);
+  const locationHint = activeCity?.name || savedCities[0]?.name;
   const listRef = useRef<HTMLDivElement>(null);
   useWebSocket(sessionId);
 
@@ -30,7 +34,7 @@ export function ChatPage() {
     addMessage({ id: crypto.randomUUID(), role: "user", text });
     setThinking(true);
     try {
-      const response = await sendQuery(text, sessionId, voiceStatus !== "idle" ? "voice" : "text");
+      const response = await sendQuery(text, sessionId, voiceStatus !== "idle" ? "voice" : "text", locationHint);
       addMessage({ id: crypto.randomUUID(), role: "assistant", text: response.answer, response });
     } catch {
       addMessage({ id: crypto.randomUUID(), role: "assistant", text: t("chat.error", "That message couldn't be processed. Try rephrasing your weather question.") });
