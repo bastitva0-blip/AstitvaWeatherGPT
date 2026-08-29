@@ -1,18 +1,53 @@
 {
-  "nav": { "chat": "ചാറ്റ്", "alerts": "മുന്നറിയിപ്പുകൾ", "history": "ചരിത്രം", "climate": "കാലാവസ്ഥ", "settings": "ക്രമീകരണങ്ങൾ" },
+  "nav": {
+    "chat": "ചാറ്റ്",
+    "alerts": "മുന്നറിയിപ്പുകൾ",
+    "history": "ചരിത്രം",
+    "climate": "കാലാവസ്ഥ",
+    "settings": "ക്രമീകരണങ്ങൾ"
+  },
   "chat": {
-    "placeholder": "കാലാവസ്ഥയെക്കുറിച്ച് ചോദിക്കൂ...", "send": "അയയ്ക്കുക", "listening": "കേൾക്കുന്നു...",
-    "thinking": "ചിന്തിക്കുന്നു...", "voice_denied": "മൈക്രോഫോൺ അനുമതി ഇല്ല",
-    "voice_too_long": "റെക്കോർഡിംഗ് 60 സെക്കൻഡിൽ കൂടരുത്"
+    "placeholder": "കാലാവസ്ഥയെക്കുറിച്ച് ചോദിക്കൂ...",
+    "send": "അയയ്ക്കുക",
+    "listening": "കേൾക്കുന്നു...",
+    "thinking": "ചിന്തിക്കുന്നു...",
+    "voice_denied": "മൈക്രോഫോൺ അനുമതി ഇല്ല",
+    "voice_too_long": "റെക്കോർഡിംഗ് 60 സെക്കൻഡിൽ കൂടരുത്",
+    "processing": "കേൾക്കുന്നു...",
+    "error": "കാലാവസ്ഥയെക്കുറിച്ച് ചോദിക്കൂ..."
   },
   "alerts": {
-    "cyclone": "ചുഴലിക്കാറ്റ് മുന്നറിയിപ്പ്", "heavy_rain": "കനത്ത മഴ", "heatwave": "ഉഷ്ണതരംഗ മുന്നറിയിപ്പ്",
-    "marine_warning": "സമുദ്ര മുന്നറിയിപ്പ്", "fishermen_alert": "മത്സ്യത്തൊഴിലാളി മുന്നറിയിപ്പ് — കടലിൽ പോകരുത്", "dismiss": "അടയ്ക്കുക"
+    "cyclone": "ചുഴലിക്കാറ്റ് മുന്നറിയിപ്പ്",
+    "heavy_rain": "കനത്ത മഴ",
+    "heatwave": "ഉഷ്ണതരംഗ മുന്നറിയിപ്പ്",
+    "marine_warning": "സമുദ്ര മുന്നറിയിപ്പ്",
+    "fishermen_alert": "മത്സ്യത്തൊഴിലാളി മുന്നറിയിപ്പ് — കടലിൽ പോകരുത്",
+    "dismiss": "അടയ്ക്കുക",
+    "no_alerts": "No active alerts"
   },
   "weather": {
-    "rainfall": "മഴ", "temperature": "താപനില", "humidity": "ആർദ്രത", "wind": "കാറ്റ്",
-    "wave_height": "തിരമാല ഉയരം", "visibility": "ദൃശ്യപരത", "nwp_model": "NWP മോഡൽ",
-    "sea_safe": "കടലിൽ പോകുന്നത് സുരക്ഷിതമാണ്", "sea_unsafe": "കടലിൽ പോകരുത് — അപകടകരം"
+    "rainfall": "മഴ",
+    "temperature": "താപനില",
+    "humidity": "ആർദ്രത",
+    "wind": "കാറ്റ്",
+    "wave_height": "തിരമാല ഉയരം",
+    "visibility": "ദൃശ്യപരത",
+    "nwp_model": "NWP മോഡൽ",
+    "sea_safe": "കടലിൽ പോകുന്നത് സുരക്ഷിതമാണ്",
+    "sea_unsafe": "കടലിൽ പോകരുത് — അപകടകരം"
   },
-  "climate": { "title": "കാലാവസ്ഥാ പ്രവണത", "fetch": "പ്രവണത കാണുക", "download_csv": "CSV ഡൗൺലോഡ് ചെയ്യുക", "increasing": "വർദ്ധിക്കുന്നു", "decreasing": "കുറയുന്നു" }
+  "climate": {
+    "title": "കാലാവസ്ഥാ പ്രവണത",
+    "fetch": "പ്രവണത കാണുക",
+    "download_csv": "CSV ഡൗൺലോഡ് ചെയ്യുക",
+    "increasing": "വർദ്ധിക്കുന്നു",
+    "decreasing": "കുറയുന്നു"
+  },
+  "home": {
+    "greeting": "Hello, {{name}}"
+  },
+  "voice": {
+    "denied": "മൈക്രോഫോൺ അനുമതി ഇല്ല",
+    "unsupported": "Voice input not supported"
+  }
 }

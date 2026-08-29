@@ -101,6 +101,15 @@ class HallucinationLog(Base):
     createdAt: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
 
 
+class PushSubscription(Base):
+    __tablename__ = "push_subscriptions"
+    id: Mapped[str] = mapped_column(String, primary_key=True, default=_cuid)
+    endpoint: Mapped[str] = mapped_column(String, unique=True)
+    p256dh: Mapped[str] = mapped_column(String)
+    auth: Mapped[str] = mapped_column(String)
+    createdAt: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
+
+
 class LocationCache(Base):
     __tablename__ = "location_cache"
     id: Mapped[str] = mapped_column(String, primary_key=True, default=_cuid)

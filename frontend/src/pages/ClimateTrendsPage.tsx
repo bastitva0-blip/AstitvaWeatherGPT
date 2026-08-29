@@ -1,7 +1,11 @@
 import { useState } from "react";
-import { ClimateTrendChart } from "../components/ClimateTrendChart";
-import { LocationPicker } from "../components/LocationPicker";
+import { ClimateTrendChart } from "../components/UI/ClimateTrendChart";
+import { LocationPicker } from "../components/UI/LocationPicker";
 import { fetchClimateTrend } from "../lib/api";
+import { PageHeader } from "@devalok/shilp-sutra/composed/page-header";
+import { Banner } from "@devalok/shilp-sutra/ui/banner";
+import { Button } from "@devalok/shilp-sutra/ui/button";
+import { Badge } from "@devalok/shilp-sutra/ui/badge";
 
 interface TrendResponse {
   location: string;
@@ -17,10 +21,18 @@ const PARAMETERS = ["rainfall", "temperature", "humidity"];
 export function ClimateTrendsPage() {
   const [parameter, setParameter] = useState("rainfall");
   const [trend, setTrend] = useState<TrendResponse | null>(null);
+  const [empty, setEmpty] = useState(false);
+  const [loc, setLoc] = useState("");
 
   async function load(location: string) {
-    const result = (await fetchClimateTrend(location, parameter)) as TrendResponse;
-    setTrend(result);
+    setLoc(location);
+    try {
+      const result = (await fetchClimateTrend(location, parameter)) as TrendResponse;
+      setTrend(result);
+      setEmpty(result.data.length === 0);
+    } catch {
+      setEmpty(true);
+    }
   }
 
   function downloadCsv() {
@@ -36,25 +48,33 @@ export function ClimateTrendsPage() {
   }
 
   return (
-    <div className="climate-trends-page">
-      <h1>Climate Trends</h1>
+    <div style={{ padding: "1rem" }}>
+      <PageHeader title="Climate Trends" />
+
+      {empty && (
+        <Banner color="warning" actions={<Button variant="ghost" size="sm" onClick={() => load(loc)}>Retry</Button>}>
+          No historical data found for {loc || "this location"} — try a major city like Delhi or Mumbai.
+        </Banner>
+      )}
+
       <LocationPicker onSelect={load} />
-      <select value={parameter} onChange={(e) => setParameter(e.target.value)}>
+      <div style={{ display: "flex", gap: "0.5rem", margin: "0.75rem 0" }}>
         {PARAMETERS.map((p) => (
-          <option key={p} value={p}>{p}</option>
+          <Button key={p} variant={parameter === p ? "soft" : "outline"} color={parameter === p ? "accent" : "neutral"} size="sm" onClick={() => setParameter(p)}>{p}</Button>
         ))}
-      </select>
-      {trend && (
+      </div>
+
+      {trend && trend.data.length > 0 && (
         <>
-          <span className={`trend-badge trend-badge--${trend.trend.direction}`}>
-            {trend.trend.direction} ({trend.trend.change_per_decade}/decade)
-          </span>
-          <ClimateTrendChart data={trend.data} unit={trend.unit} />
-          <button onClick={downloadCsv}>Download CSV</button>
+          <Badge color={trend.trend.direction === "increasing" ? "warning" : trend.trend.direction === "decreasing" ? "info" : "neutral"} variant="soft">
+            {trend.trend.direction === "increasing" ? "↑" : trend.trend.direction === "decreasing" ? "↓" : "→"} {trend.trend.direction} · {trend.trend.change_per_decade}/decade
+          </Badge>
+          <div style={{ margin: "1rem 0" }}>
+            <ClimateTrendChart data={trend.data} unit={trend.unit} />
+          </div>
+          <Button onClick={downloadCsv}>Download CSV</Button>
           <ul>
-            {trend.citations.map((c, i) => (
-              <li key={i}>{c.source}: {c.detail}</li>
-            ))}
+            {trend.citations.map((c, i) => <li key={i}><a href={c.url} target="_blank" rel="noreferrer">{c.source}</a>: {c.detail}</li>)}
           </ul>
         </>
       )}

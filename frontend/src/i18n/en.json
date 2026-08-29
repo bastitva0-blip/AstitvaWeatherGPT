@@ -1,18 +1,53 @@
 {
-  "nav": { "chat": "Chat", "alerts": "Alerts", "history": "History", "climate": "Climate", "settings": "Settings" },
+  "nav": {
+    "chat": "Chat",
+    "alerts": "Alerts",
+    "history": "History",
+    "climate": "Climate",
+    "settings": "Settings"
+  },
   "chat": {
-    "placeholder": "Ask about weather...", "send": "Send", "listening": "Listening...",
-    "thinking": "Thinking...", "voice_denied": "Microphone permission denied",
-    "voice_too_long": "Recording must not exceed 60 seconds"
+    "placeholder": "Ask about weather...",
+    "send": "Send",
+    "listening": "Listening...",
+    "thinking": "Thinking...",
+    "voice_denied": "Microphone permission denied",
+    "voice_too_long": "Recording must not exceed 60 seconds",
+    "processing": "Processing your voice...",
+    "error": "That message couldn't be processed. Try rephrasing your weather question."
   },
   "alerts": {
-    "cyclone": "Cyclone Warning", "heavy_rain": "Heavy Rain", "heatwave": "Heatwave Warning",
-    "marine_warning": "Marine Warning", "fishermen_alert": "Fishermen Alert — Do Not Go To Sea", "dismiss": "Dismiss"
+    "cyclone": "Cyclone Warning",
+    "heavy_rain": "Heavy Rain",
+    "heatwave": "Heatwave Warning",
+    "marine_warning": "Marine Warning",
+    "fishermen_alert": "Fishermen Alert — Do Not Go To Sea",
+    "dismiss": "Dismiss",
+    "no_alerts": "No active alerts"
   },
   "weather": {
-    "rainfall": "Rainfall", "temperature": "Temperature", "humidity": "Humidity", "wind": "Wind",
-    "wave_height": "Wave Height", "visibility": "Visibility", "nwp_model": "NWP Model",
-    "sea_safe": "Safe to go to sea", "sea_unsafe": "Do not go to sea — dangerous"
+    "rainfall": "Rainfall",
+    "temperature": "Temperature",
+    "humidity": "Humidity",
+    "wind": "Wind",
+    "wave_height": "Wave Height",
+    "visibility": "Visibility",
+    "nwp_model": "NWP Model",
+    "sea_safe": "Safe to go to sea",
+    "sea_unsafe": "Do not go to sea — dangerous"
   },
-  "climate": { "title": "Climate Trends", "fetch": "View Trend", "download_csv": "Download CSV", "increasing": "Increasing", "decreasing": "Decreasing" }
+  "climate": {
+    "title": "Climate Trends",
+    "fetch": "View Trend",
+    "download_csv": "Download CSV",
+    "increasing": "Increasing",
+    "decreasing": "Decreasing"
+  },
+  "home": {
+    "greeting": "Hello, {{name}}"
+  },
+  "voice": {
+    "denied": "Microphone permission denied",
+    "unsupported": "Voice input not supported"
+  }
 }

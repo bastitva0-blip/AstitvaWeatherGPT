@@ -1,6 +1,9 @@
 import { create } from "zustand";
 
-export const SUPPORTED_LANGS = ["hi", "ta", "te", "bn", "mr", "kn", "gu", "pa", "or", "ml", "ur", "en"] as const;
+export const SUPPORTED_LANGS = [
+  "hi", "ta", "te", "bn", "mr", "kn", "gu", "pa", "or", "ml", "ur", "en",
+  "ar", "fr", "es", "zh", "sw",
+] as const;
 export type Lang = (typeof SUPPORTED_LANGS)[number];
 
 interface LangState {
@@ -9,6 +12,9 @@ interface LangState {
 }
 
 export const useLangStore = create<LangState>((set) => ({
-  lang: "hi",
-  setLang: (l) => set({ lang: l }),
+  lang: (localStorage.getItem("wgpt_lang") as Lang) || "hi",
+  setLang: (l) => {
+    localStorage.setItem("wgpt_lang", l);
+    set({ lang: l });
+  },
 }));

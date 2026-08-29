@@ -1,0 +1,29 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Kerala Coast - Kochi Fishing Zone" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[75.9, 9.7], [76.5, 9.7], [76.5, 10.2], [75.9, 10.2], [75.9, 9.7]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Gulf of Mannar - Rameswaram Fishing Zone" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[78.9, 9.0], [79.5, 9.0], [79.5, 9.5], [78.9, 9.5], [78.9, 9.0]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "West Bengal Coast - Digha Fishing Zone" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[87.3, 21.4], [88.0, 21.4], [88.0, 21.9], [87.3, 21.9], [87.3, 21.4]]]
+      }
+    }
+  ]
+}

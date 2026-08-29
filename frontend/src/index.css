@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@import "@devalok/shilp-sutra/css";
+
+/* shilp-sutra Themer output — archetype: devalok, accent: hue 174° / chroma 0.160 (teal) */
+:root {
+  --radius-surface: 16px;
+  --radius-control: 10px;
+  --radius-control-inner: 6px;
+
+  --color-accent-1: oklch(0.99 0.0042 174);
+  --color-accent-2: oklch(0.97 0.0126 174);
+  --color-accent-3: oklch(0.93 0.0295 174);
+  --color-accent-4: oklch(0.89 0.0463 174);
+  --color-accent-5: oklch(0.84 0.0674 174);
+  --color-accent-6: oklch(0.78 0.0842 174);
+  --color-accent-7: oklch(0.7 0.1179 174);
+  --color-accent-8: oklch(0.62 0.1432 174);
+  --color-accent-9: oklch(0.55 0.16 174);
+  --color-accent-10: oklch(0.5 0.16 174);
+  --color-accent-11: oklch(0.43 0.1179 174);
+  --color-accent-12: oklch(0.32 0.0674 174);
+  --color-accent-fg: oklch(0.99 0 0);
+}
+
+.dark {
+  --color-accent-1: oklch(0.11 0.0042 174);
+  --color-accent-2: oklch(0.17 0.0126 174);
+  --color-accent-3: oklch(0.23 0.0337 174);
+  --color-accent-4: oklch(0.29 0.0505 174);
+  --color-accent-5: oklch(0.34 0.0674 174);
+  --color-accent-6: oklch(0.38 0.0842 174);
+  --color-accent-7: oklch(0.44 0.1095 174);
+  --color-accent-8: oklch(0.53 0.1516 174);
+  --color-accent-9: oklch(0.63 0.176 174);
+  --color-accent-10: oklch(0.58 0.176 174);
+  --color-accent-11: oklch(0.76 0.1095 174);
+  --color-accent-12: oklch(0.88 0.0421 174);
+  --color-accent-fg: oklch(0.13 0 0);
+}
+
+/* WeatherGPT ships dark-only ("Monsoon Intelligence" identity) — always .dark, no toggle */
+html { color-scheme: dark; }

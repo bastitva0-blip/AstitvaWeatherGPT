@@ -1,0 +1,21 @@
+{
+  "nav": { "chat": "Mazungumzo", "alerts": "Tahadhari", "history": "Historia", "climate": "Hali ya hewa", "settings": "Mipangilio" },
+  "chat": {
+    "placeholder": "Uliza kuhusu hali ya hewa...", "send": "Tuma", "listening": "Inasikiliza...",
+    "thinking": "Inafikiria...", "voice_denied": "Ruhusa ya maikrofoni ilikataliwa", "voice_too_long": "Kurekodi hakupaswi kuzidi sekunde 60",
+    "processing": "Inashughulikia sauti yako...", "error": "Ujumbe huo haukuweza kushughulikiwa. Jaribu kuuliza tena kwa maneno mengine."
+  },
+  "alerts": {
+    "cyclone": "Tahadhari ya kimbunga", "heavy_rain": "Mvua kubwa", "heatwave": "Tahadhari ya joto kali",
+    "marine_warning": "Onyo la baharini", "fishermen_alert": "Tahadhari ya wavuvi — Usiende baharini", "dismiss": "Funga",
+    "no_alerts": "Hakuna tahadhari za sasa"
+  },
+  "weather": {
+    "rainfall": "Mvua", "temperature": "Joto", "humidity": "Unyevu", "wind": "Upepo",
+    "wave_height": "Kimo cha mawimbi", "visibility": "Uwezo wa kuona", "nwp_model": "Mfano wa NWP",
+    "sea_safe": "Salama kuvua baharini", "sea_unsafe": "Usiende baharini — hatari"
+  },
+  "climate": { "title": "Mienendo ya hali ya hewa", "fetch": "Tazama mwenendo", "download_csv": "Pakua CSV", "increasing": "Inaongezeka", "decreasing": "Inapungua" },
+  "home": { "greeting": "Habari, {{name}}" },
+  "voice": { "denied": "Ruhusa ya maikrofoni ilikataliwa", "unsupported": "Ingizo la sauti halikubaliki" }
+}

@@ -1,0 +1,21 @@
+{
+  "nav": { "chat": "دردشة", "alerts": "تنبيهات", "history": "السجل", "climate": "المناخ", "settings": "الإعدادات" },
+  "chat": {
+    "placeholder": "اسأل عن الطقس...", "send": "إرسال", "listening": "جارٍ الاستماع...",
+    "thinking": "جارٍ التفكير...", "voice_denied": "تم رفض إذن الميكروفون", "voice_too_long": "يجب ألا يتجاوز التسجيل 60 ثانية",
+    "processing": "جارٍ معالجة صوتك...", "error": "تعذرت معالجة هذه الرسالة. حاول إعادة صياغة سؤالك."
+  },
+  "alerts": {
+    "cyclone": "تحذير إعصار", "heavy_rain": "أمطار غزيرة", "heatwave": "تحذير موجة حر",
+    "marine_warning": "تحذير بحري", "fishermen_alert": "تنبيه للصيادين — لا تذهب إلى البحر", "dismiss": "إغلاق",
+    "no_alerts": "لا تنبيهات نشطة"
+  },
+  "weather": {
+    "rainfall": "الأمطار", "temperature": "درجة الحرارة", "humidity": "الرطوبة", "wind": "الرياح",
+    "wave_height": "ارتفاع الموج", "visibility": "الرؤية", "nwp_model": "نموذج NWP",
+    "sea_safe": "آمن للذهاب إلى البحر", "sea_unsafe": "لا تذهب إلى البحر — خطر"
+  },
+  "climate": { "title": "اتجاهات المناخ", "fetch": "عرض الاتجاه", "download_csv": "تنزيل CSV", "increasing": "متزايد", "decreasing": "متناقص" },
+  "home": { "greeting": "مرحباً، {{name}}" },
+  "voice": { "denied": "تم رفض إذن الميكروفون", "unsupported": "الإدخال الصوتي غير مدعوم" }
+}

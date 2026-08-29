@@ -1,18 +1,53 @@
 {
-  "nav": { "chat": "ચેટ", "alerts": "ચેતવણીઓ", "history": "ઇતિહાસ", "climate": "આબોહવા", "settings": "સેટિંગ્સ" },
+  "nav": {
+    "chat": "ચેટ",
+    "alerts": "ચેતવણીઓ",
+    "history": "ઇતિહાસ",
+    "climate": "આબોહવા",
+    "settings": "સેટિંગ્સ"
+  },
   "chat": {
-    "placeholder": "હવામાન વિશે પૂછો...", "send": "મોકલો", "listening": "સાંભળી રહ્યો છું...",
-    "thinking": "વિચારી રહ્યો છું...", "voice_denied": "માઇક્રોફોન પરવાનગી નથી",
-    "voice_too_long": "રેકોર્ડિંગ 60 સેકન્ડથી વધુ ન હોવું જોઈએ"
+    "placeholder": "હવામાન વિશે પૂછો...",
+    "send": "મોકલો",
+    "listening": "સાંભળી રહ્યો છું...",
+    "thinking": "વિચારી રહ્યો છું...",
+    "voice_denied": "માઇક્રોફોન પરવાનગી નથી",
+    "voice_too_long": "રેકોર્ડિંગ 60 સેકન્ડથી વધુ ન હોવું જોઈએ",
+    "processing": "સાંભળી રહ્યો છું...",
+    "error": "હવામાન વિશે પૂછો..."
   },
   "alerts": {
-    "cyclone": "ચક્રવાત ચેતવણી", "heavy_rain": "ભારે વરસાદ", "heatwave": "ગરમીની લહેર ચેતવણી",
-    "marine_warning": "દરિયાઈ ચેતવણી", "fishermen_alert": "માછીમાર ચેતવણી — દરિયામાં ન જાઓ", "dismiss": "બંધ કરો"
+    "cyclone": "ચક્રવાત ચેતવણી",
+    "heavy_rain": "ભારે વરસાદ",
+    "heatwave": "ગરમીની લહેર ચેતવણી",
+    "marine_warning": "દરિયાઈ ચેતવણી",
+    "fishermen_alert": "માછીમાર ચેતવણી — દરિયામાં ન જાઓ",
+    "dismiss": "બંધ કરો",
+    "no_alerts": "No active alerts"
   },
   "weather": {
-    "rainfall": "વરસાદ", "temperature": "તાપમાન", "humidity": "ભેજ", "wind": "પવન",
-    "wave_height": "મોજાની ઊંચાઈ", "visibility": "દૃશ્યતા", "nwp_model": "NWP મોડેલ",
-    "sea_safe": "દરિયામાં જવું સુરક્ષિત છે", "sea_unsafe": "દરિયામાં ન જાઓ — જોખમી"
+    "rainfall": "વરસાદ",
+    "temperature": "તાપમાન",
+    "humidity": "ભેજ",
+    "wind": "પવન",
+    "wave_height": "મોજાની ઊંચાઈ",
+    "visibility": "દૃશ્યતા",
+    "nwp_model": "NWP મોડેલ",
+    "sea_safe": "દરિયામાં જવું સુરક્ષિત છે",
+    "sea_unsafe": "દરિયામાં ન જાઓ — જોખમી"
   },
-  "climate": { "title": "આબોહવા વલણ", "fetch": "વલણ જુઓ", "download_csv": "CSV ડાઉનલોડ કરો", "increasing": "વધી રહ્યું છે", "decreasing": "ઘટી રહ્યું છે" }
+  "climate": {
+    "title": "આબોહવા વલણ",
+    "fetch": "વલણ જુઓ",
+    "download_csv": "CSV ડાઉનલોડ કરો",
+    "increasing": "વધી રહ્યું છે",
+    "decreasing": "ઘટી રહ્યું છે"
+  },
+  "home": {
+    "greeting": "Hello, {{name}}"
+  },
+  "voice": {
+    "denied": "માઇક્રોફોન પરવાનગી નથી",
+    "unsupported": "Voice input not supported"
+  }
 }

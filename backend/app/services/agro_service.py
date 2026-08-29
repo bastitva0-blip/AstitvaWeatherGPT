@@ -11,6 +11,11 @@ _CROP_RULES = {
     "wheat": {"max_safe_temp_c": 32, "frost_risk_below_c": 4, "water_need_mm_week": 25},
     "rice": {"max_safe_temp_c": 38, "frost_risk_below_c": None, "water_need_mm_week": 50, "needs_standing_water": True},
     "cotton": {"max_safe_temp_c": 40, "frost_risk_below_c": 10, "water_need_mm_week": 30},
+    "maize": {"max_safe_temp_c": 35, "frost_risk_below_c": 2, "water_need_mm_week": 30},
+    "sugarcane": {"max_safe_temp_c": 38, "frost_risk_below_c": 5, "water_need_mm_week": 60},
+    "mustard": {"max_safe_temp_c": 30, "frost_risk_below_c": 0, "water_need_mm_week": 20},
+    "soybean": {"max_safe_temp_c": 36, "frost_risk_below_c": 2, "water_need_mm_week": 35},
+    "groundnut": {"max_safe_temp_c": 38, "frost_risk_below_c": None, "water_need_mm_week": 30},
 }
 
 

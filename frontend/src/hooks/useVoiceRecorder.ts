@@ -13,7 +13,10 @@ const AUTO_STOP_WARN_SECONDS = 55;
 const SPEECH_LANG_MAP: Record<string, string> = {
   hi: "hi-IN", ta: "ta-IN", te: "te-IN", bn: "bn-IN", mr: "mr-IN", kn: "kn-IN",
   gu: "gu-IN", pa: "pa-IN", or: "or-IN", ml: "ml-IN", ur: "ur-IN", en: "en-IN",
+  ar: "ar-SA", fr: "fr-FR", es: "es-ES", zh: "zh-CN", sw: "sw-KE",
 };
+
+const FORCE_RESET_MS = 2000;
 
 function getSpeechRecognition(): any {
   return (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -123,6 +126,12 @@ export function useVoiceRecorder(sessionId: string, hintLang?: string) {
     if (recognitionRef.current) {
       setIsProcessing(true);
       recognitionRef.current.stop();
+      // onend may never fire if recognition errors silently — force reset.
+      setTimeout(() => {
+        setIsRecording(false);
+        setIsProcessing(false);
+        setInterimTranscript("");
+      }, FORCE_RESET_MS);
     }
     mediaRecorderRef.current?.stop();
     if (timerRef.current) clearTimeout(timerRef.current);

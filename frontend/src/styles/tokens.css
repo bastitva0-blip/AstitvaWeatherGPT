@@ -1,0 +1,54 @@
+/* WeatherGPT — Monsoon Intelligence design tokens */
+:root {
+  /* backgrounds */
+  --bg-deep: #020B14;
+  --bg-surface: #071A2B;
+  --bg-elevated: #0D2640;
+  --bg-overlay: rgba(2, 11, 20, 0.92);
+
+  /* brand accent — monsoon teal */
+  --teal: #00D4AA;
+  --teal-dim: #007A62;
+  --teal-deep: #064E42;
+  --teal-glow: rgba(0, 212, 170, 0.1);
+  --teal-muted: rgba(0, 212, 170, 0.06);
+
+  /* saffron — watch level */
+  --saffron: #FF9500;
+  --saffron-dim: rgba(255, 149, 0, 0.15);
+
+  /* semantic */
+  --safe: #00D4AA;
+  --danger: #FF4444;
+  --danger-deep: #1A0000;
+  --watch: #FF9500;
+  --advisory: #64748B;
+  --flood: #3B82F6;
+
+  /* text */
+  --text-primary: #E8F4F8;
+  --text-muted: #4A6B82;
+  --text-dim: #1E3A52;
+
+  /* borders */
+  --border: #0D2640;
+  --border-bright: #1A3D5C;
+
+  /* radii */
+  --radius-card: 16px;
+  --radius-pill: 999px;
+  --radius-input: 12px;
+
+  /* shadows */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.5);
+  --shadow-float: 0 8px 40px rgba(0, 0, 0, 0.7);
+
+  /* fonts */
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", "Noto Sans SC", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root { --motion-ok: 1; }
+}

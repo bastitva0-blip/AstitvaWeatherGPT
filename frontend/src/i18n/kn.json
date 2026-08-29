@@ -1,18 +1,53 @@
 {
-  "nav": { "chat": "ಚಾಟ್", "alerts": "ಎಚ್ಚರಿಕೆಗಳು", "history": "ಇತಿಹಾಸ", "climate": "ಹವಾಮಾನ", "settings": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು" },
+  "nav": {
+    "chat": "ಚಾಟ್",
+    "alerts": "ಎಚ್ಚರಿಕೆಗಳು",
+    "history": "ಇತಿಹಾಸ",
+    "climate": "ಹವಾಮಾನ",
+    "settings": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು"
+  },
   "chat": {
-    "placeholder": "ಹವಾಮಾನದ ಬಗ್ಗೆ ಕೇಳಿ...", "send": "ಕಳುಹಿಸಿ", "listening": "ಕೇಳುತ್ತಿದ್ದೇನೆ...",
-    "thinking": "ಯೋಚಿಸುತ್ತಿದ್ದೇನೆ...", "voice_denied": "ಮೈಕ್ರೊಫೋನ್ ಅನುಮತಿ ಇಲ್ಲ",
-    "voice_too_long": "ರೆಕಾರ್ಡಿಂಗ್ 60 ಸೆಕೆಂಡುಗಳಿಗಿಂತ ಹೆಚ್ಚಿರಬಾರದು"
+    "placeholder": "ಹವಾಮಾನದ ಬಗ್ಗೆ ಕೇಳಿ...",
+    "send": "ಕಳುಹಿಸಿ",
+    "listening": "ಕೇಳುತ್ತಿದ್ದೇನೆ...",
+    "thinking": "ಯೋಚಿಸುತ್ತಿದ್ದೇನೆ...",
+    "voice_denied": "ಮೈಕ್ರೊಫೋನ್ ಅನುಮತಿ ಇಲ್ಲ",
+    "voice_too_long": "ರೆಕಾರ್ಡಿಂಗ್ 60 ಸೆಕೆಂಡುಗಳಿಗಿಂತ ಹೆಚ್ಚಿರಬಾರದು",
+    "processing": "ಕೇಳುತ್ತಿದ್ದೇನೆ...",
+    "error": "ಹವಾಮಾನದ ಬಗ್ಗೆ ಕೇಳಿ..."
   },
   "alerts": {
-    "cyclone": "ಚಂಡಮಾರುತ ಎಚ್ಚರಿಕೆ", "heavy_rain": "ಭಾರೀ ಮಳೆ", "heatwave": "ಶಾಖದ ಅಲೆ ಎಚ್ಚರಿಕೆ",
-    "marine_warning": "ಸಮುದ್ರ ಎಚ್ಚರಿಕೆ", "fishermen_alert": "ಮೀನುಗಾರರ ಎಚ್ಚರಿಕೆ — ಸಮುದ್ರಕ್ಕೆ ಹೋಗಬೇಡಿ", "dismiss": "ಮುಚ್ಚಿ"
+    "cyclone": "ಚಂಡಮಾರುತ ಎಚ್ಚರಿಕೆ",
+    "heavy_rain": "ಭಾರೀ ಮಳೆ",
+    "heatwave": "ಶಾಖದ ಅಲೆ ಎಚ್ಚರಿಕೆ",
+    "marine_warning": "ಸಮುದ್ರ ಎಚ್ಚರಿಕೆ",
+    "fishermen_alert": "ಮೀನುಗಾರರ ಎಚ್ಚರಿಕೆ — ಸಮುದ್ರಕ್ಕೆ ಹೋಗಬೇಡಿ",
+    "dismiss": "ಮುಚ್ಚಿ",
+    "no_alerts": "No active alerts"
   },
   "weather": {
-    "rainfall": "ಮಳೆ", "temperature": "ತಾಪಮಾನ", "humidity": "ಆರ್ದ್ರತೆ", "wind": "ಗಾಳಿ",
-    "wave_height": "ಅಲೆಯ ಎತ್ತರ", "visibility": "ಗೋಚರತೆ", "nwp_model": "NWP ಮಾದರಿ",
-    "sea_safe": "ಸಮುದ್ರಕ್ಕೆ ಹೋಗುವುದು ಸುರಕ್ಷಿತ", "sea_unsafe": "ಸಮುದ್ರಕ್ಕೆ ಹೋಗಬೇಡಿ — ಅಪಾಯಕಾರಿ"
+    "rainfall": "ಮಳೆ",
+    "temperature": "ತಾಪಮಾನ",
+    "humidity": "ಆರ್ದ್ರತೆ",
+    "wind": "ಗಾಳಿ",
+    "wave_height": "ಅಲೆಯ ಎತ್ತರ",
+    "visibility": "ಗೋಚರತೆ",
+    "nwp_model": "NWP ಮಾದರಿ",
+    "sea_safe": "ಸಮುದ್ರಕ್ಕೆ ಹೋಗುವುದು ಸುರಕ್ಷಿತ",
+    "sea_unsafe": "ಸಮುದ್ರಕ್ಕೆ ಹೋಗಬೇಡಿ — ಅಪಾಯಕಾರಿ"
   },
-  "climate": { "title": "ಹವಾಮಾನ ಪ್ರವೃತ್ತಿ", "fetch": "ಪ್ರವೃತ್ತಿ ನೋಡಿ", "download_csv": "CSV ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ", "increasing": "ಹೆಚ್ಚುತ್ತಿದೆ", "decreasing": "ಕಡಿಮೆಯಾಗುತ್ತಿದೆ" }
+  "climate": {
+    "title": "ಹವಾಮಾನ ಪ್ರವೃತ್ತಿ",
+    "fetch": "ಪ್ರವೃತ್ತಿ ನೋಡಿ",
+    "download_csv": "CSV ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
+    "increasing": "ಹೆಚ್ಚುತ್ತಿದೆ",
+    "decreasing": "ಕಡಿಮೆಯಾಗುತ್ತಿದೆ"
+  },
+  "home": {
+    "greeting": "Hello, {{name}}"
+  },
+  "voice": {
+    "denied": "ಮೈಕ್ರೊಫೋನ್ ಅನುಮತಿ ಇಲ್ಲ",
+    "unsupported": "Voice input not supported"
+  }
 }
