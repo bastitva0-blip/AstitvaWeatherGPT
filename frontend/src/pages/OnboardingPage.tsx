@@ -17,13 +17,26 @@ export function OnboardingPage() {
   const addCity = useCitiesStore((s) => s.addCity);
   const { granted, enable } = usePushNotifications();
 
+  const [gpsResolved, setGpsResolved] = useState(false);
+
   function useGps() {
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setCity(`${pos.coords.latitude.toFixed(2)},${pos.coords.longitude.toFixed(2)}`);
-        addCity({ name: "Current location", lat: pos.coords.latitude, lon: pos.coords.longitude, addedAt: new Date().toISOString() });
-        setLocating(false);
+      async (pos) => {
+        const { latitude: lat, longitude: lon } = pos.coords;
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+          const data = await res.json();
+          const name = data.address?.city || data.address?.town || data.address?.village
+            || data.address?.state_district || data.address?.state || `${lat.toFixed(2)},${lon.toFixed(2)}`;
+          setCity(name);
+          addCity({ name, lat, lon, addedAt: new Date().toISOString() });
+          setGpsResolved(true);
+        } catch {
+          // reverse geocode failed — leave city blank so the user types it manually
+        } finally {
+          setLocating(false);
+        }
       },
       () => setLocating(false)
     );
@@ -52,9 +65,9 @@ export function OnboardingPage() {
           <Button fullWidth style={{ maxWidth: 320, margin: "1rem 0" }} onClick={useGps} loading={locating} startIcon={<IconMapPin />}>
             Use my GPS location
           </Button>
-          <Input placeholder="Type your city" value={city} onChange={(e) => setCity(e.target.value)} style={{ width: "100%", maxWidth: 320 }} />
+          <Input placeholder="Type your city" value={city} onChange={(e) => { setCity(e.target.value); setGpsResolved(false); }} style={{ width: "100%", maxWidth: 320 }} />
           <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: "0.5rem" }}>You can add more cities later.</p>
-          <Button style={{ marginTop: "1rem" }} onClick={() => { if (city) addCity({ name: city, lat: 0, lon: 0, addedAt: new Date().toISOString() }); setStep(2); }}>Continue →</Button>
+          <Button style={{ marginTop: "1rem" }} onClick={() => { if (city && !gpsResolved) addCity({ name: city, lat: 0, lon: 0, addedAt: new Date().toISOString() }); setStep(2); }}>Continue →</Button>
         </>
       )}
 
