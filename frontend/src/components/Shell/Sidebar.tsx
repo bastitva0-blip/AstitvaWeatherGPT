@@ -3,6 +3,9 @@ import { Button } from "@devalok/shilp-sutra/ui/button";
 import { Avatar, AvatarFallback } from "@devalok/shilp-sutra/ui/avatar";
 import { useAuthStore } from "../../stores/authStore";
 
+const GITHUB_URL = "https://github.com/bastitva0-blip/AstitvaWeatherGPT";
+const DOCS_URL = "https://backend-production-c6aa1.up.railway.app/docs";
+
 export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { userName, userEmail, logout } = useAuthStore();
 
@@ -24,12 +27,14 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
       <div className="sidebar__section">
         <div className="sidebar__label">Analysis</div>
         <NavLink to="/app/climate" onClick={onClose}>Climate Trends</NavLink>
-        <NavLink to="/app/about" onClick={onClose}>About & Sources</NavLink>
+        <NavLink to="/app/about" onClick={onClose}>Coverage & Sources</NavLink>
+        <a href="/team" onClick={onClose}>About the Team ↗</a>
       </div>
       <div className="sidebar__section">
         <div className="sidebar__label">Developer</div>
         <NavLink to="/app/developer" onClick={onClose}>API & MCP</NavLink>
-        <a href="/docs" target="_blank" rel="noreferrer">API Docs ↗</a>
+        <a href={DOCS_URL} target="_blank" rel="noreferrer">API Docs ↗</a>
+        <a href={GITHUB_URL} target="_blank" rel="noreferrer">GitHub ↗</a>
       </div>
       <div className="sidebar__section">
         <div className="sidebar__label">Account</div>

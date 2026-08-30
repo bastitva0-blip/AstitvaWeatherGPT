@@ -17,6 +17,7 @@ import { SettingsPage } from "./pages/SettingsPage";
 import { DeveloperPage } from "./pages/DeveloperPage";
 import { AdminPage } from "./pages/AdminPage";
 import { AboutPage } from "./pages/AboutPage";
+import { TeamPage } from "./pages/TeamPage";
 
 function Protected({ children }: { children: ReactNode }) {
   const authed = useAuthStore((s) => s.authed);
@@ -31,6 +32,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={authed ? <Navigate to="/app" replace /> : <LandingPage />} />
       <Route path="/auth" element={<AuthPage />} />
+      <Route path="/team" element={<TeamPage />} />
       <Route path="/onboarding" element={<Protected><OnboardingPage /></Protected>} />
 
       <Route path="/app" element={<Protected><AppShell /></Protected>}>

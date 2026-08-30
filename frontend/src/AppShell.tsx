@@ -17,7 +17,7 @@ export function AppShell() {
   const titleKey = TITLE_KEYS[pathname];
   return (
     <div className="app-shell">
-      <TopBar title={titleKey ? t(titleKey) : "WeatherGPT"} transparent={isMap} />
+      <TopBar title={titleKey ? t(titleKey) : "Sanket"} transparent={isMap} />
       <main className="app-shell__content" style={isMap ? { maxWidth: "none", padding: 0 } : undefined}>
         <Outlet />
       </main>
