@@ -21,7 +21,7 @@
     "heavy_rain": "ভারী বৃষ্টি",
     "heatwave": "তাপপ্রবাহ সতর্কতা",
     "marine_warning": "সামুদ্রিক সতর্কতা",
-    "fishermen_alert": "জেলে সতর্কতা — সমুদ্রে যাবেন না",
+    "fishermen_alert": "জেলে সতর্কতা, সমুদ্রে যাবেন না",
     "dismiss": "বন্ধ করুন",
     "no_alerts": "No active alerts"
   },
@@ -34,7 +34,7 @@
     "visibility": "দৃশ্যমানতা",
     "nwp_model": "NWP মডেল",
     "sea_safe": "সমুদ্রে যাওয়া নিরাপদ",
-    "sea_unsafe": "সমুদ্রে যাবেন না — বিপজ্জনক"
+    "sea_unsafe": "সমুদ্রে যাবেন না, বিপজ্জনক"
   },
   "climate": {
     "title": "জলবায়ু প্রবণতা",

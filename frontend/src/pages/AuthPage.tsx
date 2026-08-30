@@ -83,7 +83,7 @@ export function AuthPage() {
           >
             {t("auth.google")}
           </Button>
-          <div style={{ color: "var(--text-muted)", fontSize: "0.8rem", margin: "0.5rem 0", textAlign: "center" }}>— OR —</div>
+          <div style={{ color: "var(--text-muted)", fontSize: "0.8rem", margin: "0.5rem 0", textAlign: "center" }}>OR</div>
           {showEmailForm ? (
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               <Input type="email" placeholder={t("auth.email_label")} value={email} onChange={(e) => setEmail(e.target.value)} />

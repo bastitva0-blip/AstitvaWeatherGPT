@@ -21,7 +21,7 @@
     "heavy_rain": "ਭਾਰੀ ਮੀਂਹ",
     "heatwave": "ਗਰਮੀ ਦੀ ਲਹਿਰ ਚੇਤਾਵਨੀ",
     "marine_warning": "ਸਮੁੰਦਰੀ ਚੇਤਾਵਨੀ",
-    "fishermen_alert": "ਮਛੇਰਾ ਚੇਤਾਵਨੀ — ਸਮੁੰਦਰ ਵਿੱਚ ਨਾ ਜਾਓ",
+    "fishermen_alert": "ਮਛੇਰਾ ਚੇਤਾਵਨੀ, ਸਮੁੰਦਰ ਵਿੱਚ ਨਾ ਜਾਓ",
     "dismiss": "ਬੰਦ ਕਰੋ",
     "no_alerts": "No active alerts"
   },
@@ -34,7 +34,7 @@
     "visibility": "ਦਿੱਖ",
     "nwp_model": "NWP ਮਾਡਲ",
     "sea_safe": "ਸਮੁੰਦਰ ਵਿੱਚ ਜਾਣਾ ਸੁਰੱਖਿਅਤ ਹੈ",
-    "sea_unsafe": "ਸਮੁੰਦਰ ਵਿੱਚ ਨਾ ਜਾਓ — ਖ਼ਤਰਨਾਕ"
+    "sea_unsafe": "ਸਮੁੰਦਰ ਵਿੱਚ ਨਾ ਜਾਓ, ਖ਼ਤਰਨਾਕ"
   },
   "climate": {
     "title": "ਜਲਵਾਯੂ ਰੁਝਾਨ",

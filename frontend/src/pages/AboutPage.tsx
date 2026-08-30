@@ -5,7 +5,7 @@ import { IconCheck } from "@tabler/icons-react";
 const GITHUB_URL = "https://github.com/bastitva0-blip/AstitvaWeatherGPT";
 
 const COVERAGE: string[] = [
-  "Multilingual NLP query pipeline — ask in any of 17 languages, get an answer in the same language",
+  "Multilingual NLP query pipeline, ask in any of 17 languages, get an answer in the same language",
   "Live weather via OpenWeatherMap + Open-Meteo GFS, 7-16 day forecast",
   "Real-time AQI (PM2.5/PM10/CO/NO2/O3) via OWM Air Pollution API",
   "Cyclone & flood alerts from GDACS, full-screen interrupt within 500km",
@@ -22,7 +22,7 @@ const COVERAGE: string[] = [
 ];
 
 const SOURCES: [string, string][] = [
-  ["IMD — India Meteorological Dept", "Official warnings, district forecasts, heatwave alerts"],
+  ["IMD, India Meteorological Dept", "Official warnings, district forecasts, heatwave alerts"],
   ["INCOIS", "Fishing zone safety, ocean state, coastal advisories"],
   ["GDACS (UN OCHA/EC)", "Live cyclone (TC) and flood (FL) alerts, Orange/Red severity, 500km radius"],
   ["OpenWeatherMap", "Real-time conditions, AQI, PM2.5/PM10/CO/NO2/O3"],
@@ -45,11 +45,11 @@ export function AboutPage() {
       <PageHeader title="About Sanket" />
       <p style={{ color: "var(--text-muted)" }}>
         Sanket exists to close the gap between official IMD forecasts and the people who need
-        them most urgently — fishermen deciding whether to cast their nets, farmers timing
+        them most urgently, fishermen deciding whether to cast their nets, farmers timing
         irrigation, pilots checking a METAR before takeoff. Built for SIH26068.
       </p>
 
-      <h2>SIH26068 — problem statement coverage</h2>
+      <h2>SIH26068, problem statement coverage</h2>
       <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: "0.5rem" }}>
         {COVERAGE.map((c) => (
           <li key={c} style={{ display: "flex", gap: "0.5rem", alignItems: "flex-start", color: "var(--text-muted)", fontSize: "0.9rem" }}>
@@ -65,7 +65,7 @@ export function AboutPage() {
       </Table>
 
       <h2 style={{ marginTop: "1.5rem" }}>How citations work</h2>
-      <p style={{ color: "var(--text-muted)" }}>Every QueryResponse includes a citations array — each source linked to where the data came from.</p>
+      <p style={{ color: "var(--text-muted)" }}>Every QueryResponse includes a citations array, each source linked to where the data came from.</p>
 
       <h2 style={{ marginTop: "1.5rem" }}>Languages</h2>
       <Table density="compact">

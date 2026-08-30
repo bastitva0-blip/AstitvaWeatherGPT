@@ -14,7 +14,7 @@ function playChime() {
     osc.start(ctx.currentTime);
     osc.stop(ctx.currentTime + 0.8);
   } catch {
-    // AudioContext blocked — silent fail, that's fine
+    // AudioContext blocked, silent fail, that's fine
   }
 }
 
@@ -51,7 +51,7 @@ export function CycloneFullscreen({
       {sourceUrl && <a href={sourceUrl} target="_blank" rel="noreferrer" style={{ color: "#fff", marginBottom: "1rem" }}>View full alert details</a>}
       {canDismiss && (
         <Button variant="outline" style={{ color: "#fff", borderColor: "#fff" }} onClick={dismiss}>
-          I understand — dismiss
+          I understand, dismiss
         </Button>
       )}
     </div>

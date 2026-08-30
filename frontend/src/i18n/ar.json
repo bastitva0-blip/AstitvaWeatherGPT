@@ -7,13 +7,13 @@
   },
   "alerts": {
     "cyclone": "تحذير إعصار", "heavy_rain": "أمطار غزيرة", "heatwave": "تحذير موجة حر",
-    "marine_warning": "تحذير بحري", "fishermen_alert": "تنبيه للصيادين — لا تذهب إلى البحر", "dismiss": "إغلاق",
+    "marine_warning": "تحذير بحري", "fishermen_alert": "تنبيه للصيادين, لا تذهب إلى البحر", "dismiss": "إغلاق",
     "no_alerts": "لا تنبيهات نشطة"
   },
   "weather": {
     "rainfall": "الأمطار", "temperature": "درجة الحرارة", "humidity": "الرطوبة", "wind": "الرياح",
     "wave_height": "ارتفاع الموج", "visibility": "الرؤية", "nwp_model": "نموذج NWP",
-    "sea_safe": "آمن للذهاب إلى البحر", "sea_unsafe": "لا تذهب إلى البحر — خطر"
+    "sea_safe": "آمن للذهاب إلى البحر", "sea_unsafe": "لا تذهب إلى البحر, خطر"
   },
   "climate": { "title": "اتجاهات المناخ", "fetch": "عرض الاتجاه", "download_csv": "تنزيل CSV", "increasing": "متزايد", "decreasing": "متناقص" },
   "home": { "greeting": "مرحباً، {{name}}" },

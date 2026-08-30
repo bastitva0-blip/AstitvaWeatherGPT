@@ -19,7 +19,7 @@ export function ChatBubble({ message }: { message: ChatMessage }) {
           </div>
           {r.use_case_context === "fisherman" && r.weather_summary.fishing_zone_safe != null && (
             <Badge color={r.weather_summary.fishing_zone_safe ? "success" : "error"} variant="solid" style={{ marginTop: "0.4rem" }}>
-              {r.weather_summary.fishing_zone_safe ? "SAFE to go to sea" : "UNSAFE — do not go to sea"}
+              {r.weather_summary.fishing_zone_safe ? "SAFE to go to sea" : "UNSAFE, do not go to sea"}
             </Badge>
           )}
           <div style={{ marginTop: "0.4rem", display: "flex", gap: "0.25rem", flexWrap: "wrap" }}>

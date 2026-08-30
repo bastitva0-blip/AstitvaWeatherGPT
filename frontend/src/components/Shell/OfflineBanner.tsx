@@ -18,7 +18,7 @@ export function OfflineBanner({ route }: { route: string }) {
 
   return (
     <Banner color="warning" onDismiss={() => setDismissed(true)}>
-      ⚡ Offline — showing data cached {mins != null ? `${mins} minutes ago` : "earlier"}
+      ⚡ Offline, showing data cached {mins != null ? `${mins} minutes ago` : "earlier"}
     </Banner>
   );
 }

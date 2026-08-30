@@ -78,7 +78,7 @@ export function SettingsPage() {
 
       <div className="settings-group">
         <div className="settings-group__title">Data & Privacy</div>
-        <div className="settings-cell"><span>Last sync</span><span>{lastSync ? `${Math.round((Date.now() - lastSync.getTime()) / 60000)} minutes ago` : "—"}</span></div>
+        <div className="settings-cell"><span>Last sync</span><span>{lastSync ? `${Math.round((Date.now() - lastSync.getTime()) / 60000)} minutes ago` : "N/A"}</span></div>
         <div className="settings-cell"><Button variant="ghost" color="error" onClick={() => setConfirmClear("chat")}>Clear chat history</Button></div>
         <div className="settings-cell"><Button variant="ghost" color="error" onClick={() => setConfirmClear("cities")}>Clear saved locations</Button></div>
         <div className="settings-cell"><Button variant="ghost" onClick={exportData}>Export my data</Button></div>

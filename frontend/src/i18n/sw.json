@@ -7,13 +7,13 @@
   },
   "alerts": {
     "cyclone": "Tahadhari ya kimbunga", "heavy_rain": "Mvua kubwa", "heatwave": "Tahadhari ya joto kali",
-    "marine_warning": "Onyo la baharini", "fishermen_alert": "Tahadhari ya wavuvi — Usiende baharini", "dismiss": "Funga",
+    "marine_warning": "Onyo la baharini", "fishermen_alert": "Tahadhari ya wavuvi, Usiende baharini", "dismiss": "Funga",
     "no_alerts": "Hakuna tahadhari za sasa"
   },
   "weather": {
     "rainfall": "Mvua", "temperature": "Joto", "humidity": "Unyevu", "wind": "Upepo",
     "wave_height": "Kimo cha mawimbi", "visibility": "Uwezo wa kuona", "nwp_model": "Mfano wa NWP",
-    "sea_safe": "Salama kuvua baharini", "sea_unsafe": "Usiende baharini — hatari"
+    "sea_safe": "Salama kuvua baharini", "sea_unsafe": "Usiende baharini, hatari"
   },
   "climate": { "title": "Mienendo ya hali ya hewa", "fetch": "Tazama mwenendo", "download_csv": "Pakua CSV", "increasing": "Inaongezeka", "decreasing": "Inapungua" },
   "home": { "greeting": "Habari, {{name}}" },

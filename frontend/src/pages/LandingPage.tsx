@@ -10,7 +10,7 @@ const GITHUB_URL = "https://github.com/bastitva0-blip/AstitvaWeatherGPT";
 const DOCS_URL = "https://backend-production-c6aa1.up.railway.app/docs";
 
 const SOURCES: [string, string][] = [
-  ["IMD — India Meteorological Dept", "Official warnings, district forecasts, heatwave alerts"],
+  ["IMD, India Meteorological Dept", "Official warnings, district forecasts, heatwave alerts"],
   ["INCOIS", "Fishing zone safety, ocean state, coastal advisories"],
   ["GDACS (UN OCHA/EC)", "Live cyclone (TC) and flood (FL) alerts, Orange/Red severity, 500km radius"],
   ["OpenWeatherMap", "Real-time conditions, AQI, PM2.5/PM10/CO/NO2/O3"],
@@ -21,18 +21,18 @@ const SOURCES: [string, string][] = [
 ];
 
 const COVERAGE: string[] = [
-  "Multilingual NLP query pipeline — ask in any of 17 languages, get an answer in the same language",
+  "Multilingual NLP query pipeline, ask in any of 17 languages, get an answer in the same language",
   "Live weather via OpenWeatherMap + Open-Meteo GFS, 7-16 day forecast",
   "Real-time AQI (PM2.5/PM10/CO/NO2/O3) via OWM Air Pollution API",
   "Cyclone & flood alerts from GDACS, full-screen interrupt within 500km",
-  "Fishing-zone safety advisories from INCOIS — \"Do Not Go To Sea\" banner",
+  "Fishing-zone safety advisories from INCOIS, \"Do Not Go To Sea\" banner",
   "Crop-specific agro advisories against IMD/ICAR thresholds",
   "Aviation METAR briefings for Indian ICAO codes",
   "30+ year climate trend charts with CSV export",
   "Threshold-based alert subscriptions + push notifications (even app closed)",
   "Voice input/output, on-device speech recognition with server fallback",
   "Offline-capable PWA with cached last-known weather",
-  "Every answer cites its source — zero-hallucination by design",
+  "Every answer cites its source, zero-hallucination by design",
   "MCP server exposing 7 tools for any AI agent (Claude, Gemini, GPT, Cursor)",
   "Per-user API keys + live developer console with real request try-it",
   "Admin analytics: query volume, intent distribution, hallucination log",
@@ -78,7 +78,7 @@ export function LandingPage() {
         <div className="radar-container"><div className="radar-rings" /><div className="radar-sweep" /></div>
         <div className="hero-eyebrow">India's weather intelligence</div>
         <h1 className="hero-headline">Weather for farmers.<br />Fishermen. Pilots. All of India.</h1>
-        <p className="hero-sub">Real-time forecasts, cyclone alerts, fishing advisories, AQI, and climate trends — in your language, for your district.</p>
+        <p className="hero-sub">Real-time forecasts, cyclone alerts, fishing advisories, AQI, and climate trends, in your language, for your district.</p>
         <div className="hero-ctas">
           <Button shape="pill" size="lg" onClick={() => navigate("/auth")}>Start for free →</Button>
           <Button variant="outline" shape="pill" size="lg" onClick={() => document.querySelector(".preview-card")?.scrollIntoView({ behavior: "smooth" })}>Watch demo</Button>
@@ -102,9 +102,9 @@ export function LandingPage() {
       <section className="section" id="features">
         <div className="section-eyebrow">Why we built this</div>
         <h2 className="section-headline">India's weather, for the people who actually live with it.</h2>
-        <p className="section-body">IMD forecasts exist. But reaching a fisherman in Odisha with a fishing-zone safety advisory in Odia, at 4am, before he casts his nets — that gap is what Sanket fills. Every answer cites its source. Nothing is made up.</p>
+        <p className="section-body">IMD forecasts exist. But reaching a fisherman in Odisha with a fishing-zone safety advisory in Odia, at 4am, before he casts his nets, that gap is what Sanket fills. Every answer cites its source. Nothing is made up.</p>
         <div className="feature-grid">
-          <div className="feature-cell"><strong>Speaks your language</strong><p>12 Indian languages — Hindi to Odia. Plus Arabic, French, Spanish, Chinese, and Swahili for international users and India's global partners.</p></div>
+          <div className="feature-cell"><strong>Speaks your language</strong><p>12 Indian languages, Hindi to Odia. Plus Arabic, French, Spanish, Chinese, and Swahili for international users and India's global partners.</p></div>
           <div className="feature-cell"><strong>Knows your use case</strong><p>Farmer, fisherman, pilot, city planner. The answer changes based on who's asking.</p></div>
           <div className="feature-cell"><strong>Zero hallucination promise</strong><p>Every answer cites its data source: IMD, INCOIS, OWM, GFS, GDACS, aviationweather.gov.</p></div>
           <div className="feature-cell"><strong>Built for rural connectivity</strong><p>PWA with offline cache. SMS fallback planned. Works on a 2G connection.</p></div>
@@ -116,9 +116,9 @@ export function LandingPage() {
         <h2 className="section-headline">Open the app before you cast your nets.</h2>
         <div className="timeline">
           {[
-            ["5:30 AM", '"Is it safe to go to sea today?"', "Safe/Unsafe badge, wave height 1.2m, wind ESE Force 2 — INCOIS"],
-            ["8:00 AM", '"Will it rain on my wheat crop this week?"', "7-day rainfall forecast, irrigation not needed — OWM + IMD"],
-            ["2:00 PM", '"AQI near my factory in Surat?"', "AQI 89 Moderate, PM2.5 breakdown — OWM Air Pollution API"],
+            ["5:30 AM", '"Is it safe to go to sea today?"', "Safe/Unsafe badge, wave height 1.2m, wind ESE Force 2, INCOIS"],
+            ["8:00 AM", '"Will it rain on my wheat crop this week?"', "7-day rainfall forecast, irrigation not needed, OWM + IMD"],
+            ["2:00 PM", '"AQI near my factory in Surat?"', "AQI 89 Moderate, PM2.5 breakdown, OWM Air Pollution API"],
             ["6:00 PM", '"Cyclone warning in my district?"', "Full-screen red alert, GDACS Orange, 340km away"],
             ["Anytime", "Ask in Tamil. Get the answer in Tamil.", "Voice input, multilingual"],
           ].map(([time, q, a]) => (
@@ -190,14 +190,14 @@ print(result.alert_level)`}</div>
       </section>
 
       <section className="section" id="coverage">
-        <div className="section-eyebrow">SIH26068 — problem statement coverage</div>
+        <div className="section-eyebrow">SIH26068, problem statement coverage</div>
         <h2 className="section-headline">Every requirement, and more.</h2>
         <ul className="coverage-list">
           {COVERAGE.map((c) => (
             <li key={c}><IconCheck size={16} className="coverage-list__check" /><span>{c}</span></li>
           ))}
         </ul>
-        <h3 style={{ marginTop: "2rem" }}>Zero hallucinations — every answer has a source</h3>
+        <h3 style={{ marginTop: "2rem" }}>Zero hallucinations, every answer has a source</h3>
         <Table>
           <TableHeader><TableRow><TableHead>Source</TableHead><TableHead>Provides</TableHead></TableRow></TableHeader>
           <TableBody>{SOURCES.map(([s, d]) => <TableRow key={s}><TableCell>{s}</TableCell><TableCell>{d}</TableCell></TableRow>)}</TableBody>

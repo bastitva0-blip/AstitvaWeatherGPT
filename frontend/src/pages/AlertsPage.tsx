@@ -98,7 +98,7 @@ export function AlertsPage() {
             <AccordionTrigger>No smartphone? Get SMS alerts (coming soon)</AccordionTrigger>
             <AccordionContent>
               <Input type="tel" placeholder="Phone number" />
-              <Button variant="outline" disabled style={{ marginLeft: "0.5rem" }}>SMS via Twilio — coming soon</Button>
+              <Button variant="outline" disabled style={{ marginLeft: "0.5rem" }}>SMS via Twilio, coming soon</Button>
             </AccordionContent>
           </AccordionItem>
         </Accordion>

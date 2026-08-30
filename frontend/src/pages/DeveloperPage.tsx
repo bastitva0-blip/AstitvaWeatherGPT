@@ -15,7 +15,7 @@ const TABS = ["Claude Desktop", "Cursor / Windsurf", "Gemini", "OpenAI"] as cons
 
 const TOOLS = [
   { name: "ask_weather", desc: "Natural-language weather query in any of 17 languages. Full NLP pipeline: language detection → intent classification → geocoding → multi-source fetch → LLM answer.", route: "POST /api/query" },
-  { name: "get_live_weather", desc: "Raw structured weather data. No NLP — direct fetch from OpenWeatherMap + Open-Meteo GFS.", route: "GET /api/weather/live" },
+  { name: "get_live_weather", desc: "Raw structured weather data. No NLP, direct fetch from OpenWeatherMap + Open-Meteo GFS.", route: "GET /api/weather/live" },
   { name: "get_aqi", desc: "Real-time AQI via OWM Air Pollution API. Scale 1-5.", route: "GET /api/aqi" },
   { name: "get_agro_advisory", desc: "Crop-specific advisory using IMD/ICAR thresholds.", route: "GET /api/agro" },
   { name: "get_metar", desc: "Live METAR from aviationweather.gov for Indian ICAO codes.", route: "GET /api/metar" },

@@ -7,13 +7,13 @@
   },
   "alerts": {
     "cyclone": "Alerta de ciclón", "heavy_rain": "Lluvias intensas", "heatwave": "Alerta de ola de calor",
-    "marine_warning": "Aviso marítimo", "fishermen_alert": "Alerta de pescadores — No salgas al mar", "dismiss": "Cerrar",
+    "marine_warning": "Aviso marítimo", "fishermen_alert": "Alerta de pescadores, No salgas al mar", "dismiss": "Cerrar",
     "no_alerts": "Sin alertas activas"
   },
   "weather": {
     "rainfall": "Lluvia", "temperature": "Temperatura", "humidity": "Humedad", "wind": "Viento",
     "wave_height": "Altura de las olas", "visibility": "Visibilidad", "nwp_model": "Modelo NWP",
-    "sea_safe": "Seguro salir al mar", "sea_unsafe": "No salgas al mar — peligroso"
+    "sea_safe": "Seguro salir al mar", "sea_unsafe": "No salgas al mar, peligroso"
   },
   "climate": { "title": "Tendencias climáticas", "fetch": "Ver tendencia", "download_csv": "Descargar CSV", "increasing": "En aumento", "decreasing": "En descenso" },
   "home": { "greeting": "Hola, {{name}}" },

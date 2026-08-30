@@ -21,7 +21,7 @@
     "heavy_rain": "मुसळधार पाऊस",
     "heatwave": "उष्णतेची लाट इशारा",
     "marine_warning": "सागरी इशारा",
-    "fishermen_alert": "मच्छीमार इशारा — समुद्रात जाऊ नका",
+    "fishermen_alert": "मच्छीमार इशारा, समुद्रात जाऊ नका",
     "dismiss": "बंद करा",
     "no_alerts": "No active alerts"
   },
@@ -34,7 +34,7 @@
     "visibility": "दृश्यमानता",
     "nwp_model": "NWP मॉडेल",
     "sea_safe": "समुद्रात जाणे सुरक्षित आहे",
-    "sea_unsafe": "समुद्रात जाऊ नका — धोकादायक"
+    "sea_unsafe": "समुद्रात जाऊ नका, धोकादायक"
   },
   "climate": {
     "title": "हवामान कल",

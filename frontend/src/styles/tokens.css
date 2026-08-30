@@ -1,4 +1,4 @@
-/* Sanket — Monsoon Intelligence design tokens */
+/* Sanket, Monsoon Intelligence design tokens */
 :root {
   /* backgrounds */
   --bg-deep: #020B14;
@@ -6,14 +6,14 @@
   --bg-elevated: #0D2640;
   --bg-overlay: rgba(2, 11, 20, 0.92);
 
-  /* brand accent — monsoon teal */
+  /* brand accent, monsoon teal */
   --teal: #00D4AA;
   --teal-dim: #007A62;
   --teal-deep: #064E42;
   --teal-glow: rgba(0, 212, 170, 0.1);
   --teal-muted: rgba(0, 212, 170, 0.06);
 
-  /* saffron — watch level */
+  /* saffron, watch level */
   --saffron: #FF9500;
   --saffron-dim: rgba(255, 149, 0, 0.15);
 

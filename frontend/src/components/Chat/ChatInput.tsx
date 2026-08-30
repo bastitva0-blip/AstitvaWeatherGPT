@@ -20,7 +20,7 @@ export function ChatInput({
   function submit(t: string) {
     if (t.trim().length === 0) return;
     if (t.length > MAX_MESSAGE_LENGTH) {
-      setError(`Message too long — max ${MAX_MESSAGE_LENGTH} characters`);
+      setError(`Message too long, max ${MAX_MESSAGE_LENGTH} characters`);
       return;
     }
     setError(null);

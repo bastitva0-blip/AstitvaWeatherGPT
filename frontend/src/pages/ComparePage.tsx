@@ -67,8 +67,8 @@ export function ComparePage() {
             const win = typeof metric === "string" && metric ? better(mode, metric, Number(av), Number(bv)) : null;
             return (
               <div key={label as string} className="compare-row" style={{ gridColumn: "1/-1", display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-                <div className={`compare-cell ${win === "a" ? "compare-cell--winner" : ""}`}>{label}: {String(av ?? "—")}</div>
-                <div className={`compare-cell ${win === "b" ? "compare-cell--winner" : ""}`}>{label}: {String(bv ?? "—")}</div>
+                <div className={`compare-cell ${win === "a" ? "compare-cell--winner" : ""}`}>{label}: {String(av ?? "N/A")}</div>
+                <div className={`compare-cell ${win === "b" ? "compare-cell--winner" : ""}`}>{label}: {String(bv ?? "N/A")}</div>
               </div>
             );
           })}

@@ -43,7 +43,7 @@ export function WeatherMap() {
 
   if (tileError) {
     return <div className="map-page" style={{ display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg-deep)" }}>
-      <p style={{ color: "var(--text-muted)" }}>Map unavailable — check connection</p>
+      <p style={{ color: "var(--text-muted)" }}>Map unavailable, check connection</p>
     </div>;
   }
 
