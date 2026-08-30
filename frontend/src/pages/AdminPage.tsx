@@ -18,8 +18,8 @@ export function AdminPage() {
   if (!stats) return <p style={{ padding: "1rem", color: "var(--text-muted)" }}>Loading analytics…</p>;
 
   const intentData = Object.entries(stats.intent_distribution).map(([intent, count]) => ({ intent, count }));
-  const topIntent = intentData.sort((a, b) => b.count - a.count)[0]?.intent || "—";
-  const topLocation = stats.top_locations[0]?.location || "—";
+  const topIntent = intentData.sort((a, b) => b.count - a.count)[0]?.intent || "N/A";
+  const topLocation = stats.top_locations[0]?.location || "N/A";
   const pageItems = stats.recent_queries.slice(page * 20, page * 20 + 20);
 
   return (

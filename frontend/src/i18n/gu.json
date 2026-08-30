@@ -21,7 +21,7 @@
     "heavy_rain": "ભારે વરસાદ",
     "heatwave": "ગરમીની લહેર ચેતવણી",
     "marine_warning": "દરિયાઈ ચેતવણી",
-    "fishermen_alert": "માછીમાર ચેતવણી — દરિયામાં ન જાઓ",
+    "fishermen_alert": "માછીમાર ચેતવણી, દરિયામાં ન જાઓ",
     "dismiss": "બંધ કરો",
     "no_alerts": "No active alerts"
   },
@@ -34,7 +34,7 @@
     "visibility": "દૃશ્યતા",
     "nwp_model": "NWP મોડેલ",
     "sea_safe": "દરિયામાં જવું સુરક્ષિત છે",
-    "sea_unsafe": "દરિયામાં ન જાઓ — જોખમી"
+    "sea_unsafe": "દરિયામાં ન જાઓ, જોખમી"
   },
   "climate": {
     "title": "આબોહવા વલણ",

@@ -7,7 +7,7 @@ import { useLangStore, type Lang } from "../../stores/langStore";
 const INDIAN: Lang[] = ["hi", "ta", "te", "bn", "mr", "kn", "gu", "pa", "or", "ml", "ur", "en"];
 const INTL: Lang[] = ["ar", "fr", "es", "zh", "sw"];
 
-/** One flat, saturated hue per language — Hotstar/Netflix-style tile picker. */
+/** One flat, saturated hue per language, Hotstar/Netflix-style tile picker. */
 const COLORS: Record<Lang, string> = {
   hi: "#E63946", ta: "#F4A261", te: "#2A9D8F", bn: "#8E44AD", mr: "#E76F51",
   kn: "#457B9D", gu: "#F1C40F", pa: "#06A77D", or: "#D62839", ml: "#3D5A80",
@@ -51,7 +51,7 @@ function LangTile({ lang, selected, onClick }: { lang: Lang; selected: boolean; 
   );
 }
 
-/** Full grid picker — for onboarding / bottom sheet. Netflix/Hotstar-style colorful tiles. */
+/** Full grid picker, for onboarding / bottom sheet. Netflix/Hotstar-style colorful tiles. */
 export function LanguageGrid({ onDone }: { onDone?: () => void }) {
   const lang = useLangStore((s) => s.lang);
   const setLang = useLangStore((s) => s.setLang);

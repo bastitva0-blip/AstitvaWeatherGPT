@@ -36,7 +36,7 @@ export function OnboardingPage() {
           addCity({ name, lat, lon, addedAt: new Date().toISOString() });
           setGpsResolved(true);
         } catch {
-          // reverse geocode failed — leave city blank so the user types it manually
+          // reverse geocode failed, leave city blank so the user types it manually
         } finally {
           setLocating(false);
         }

@@ -31,7 +31,7 @@
     "city_hint": "You can add more cities later.",
     "city_selected": "Selected location",
     "notif_title": "Get alerts before they matter.",
-    "notif_body": "Sanket can send push notifications for cyclone warnings and threshold alerts — even when the app is closed.",
+    "notif_body": "Sanket can send push notifications for cyclone warnings and threshold alerts, even when the app is closed.",
     "notif_ready": "You're all set",
     "notif_enable": "Enable push notifications",
     "notif_later": "You can enable this later in Settings",
@@ -53,7 +53,7 @@
     "heavy_rain": "Heavy Rain",
     "heatwave": "Heatwave Warning",
     "marine_warning": "Marine Warning",
-    "fishermen_alert": "Fishermen Alert — Do Not Go To Sea",
+    "fishermen_alert": "Fishermen Alert, Do Not Go To Sea",
     "dismiss": "Dismiss",
     "no_alerts": "No active alerts"
   },
@@ -66,7 +66,7 @@
     "visibility": "Visibility",
     "nwp_model": "NWP Model",
     "sea_safe": "Safe to go to sea",
-    "sea_unsafe": "Do not go to sea — dangerous"
+    "sea_unsafe": "Do not go to sea, dangerous"
   },
   "climate": {
     "title": "Climate Trends",

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "@devalok/shilp-sutra/css";
 
-/* shilp-sutra Themer output — archetype: devalok, accent: hue 174° / chroma 0.160 (teal) */
+/* shilp-sutra Themer output, archetype: devalok, accent: hue 174° / chroma 0.160 (teal) */
 :root {
   --radius-surface: 16px;
   --radius-control: 10px;
@@ -38,5 +38,5 @@
   --color-accent-fg: oklch(0.13 0 0);
 }
 
-/* Sanket ships dark-only ("Monsoon Intelligence" identity) — always .dark, no toggle */
+/* Sanket ships dark-only ("Monsoon Intelligence" identity), always .dark, no toggle */
 html { color-scheme: dark; }

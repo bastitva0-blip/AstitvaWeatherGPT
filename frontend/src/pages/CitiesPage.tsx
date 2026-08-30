@@ -66,7 +66,7 @@ export function CitiesPage() {
                   {editMode ? (
                     <Button variant="ghost" color="error" size="sm" onClick={(e) => { e.stopPropagation(); removeCity(c.name); }}>Remove</Button>
                   ) : (
-                    <span className="mono">—°C</span>
+                    <span className="mono">N/A</span>
                   )}
                 </div>
               </div>

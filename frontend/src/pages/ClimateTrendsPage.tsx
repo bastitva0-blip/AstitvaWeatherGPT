@@ -53,7 +53,7 @@ export function ClimateTrendsPage() {
 
       {empty && (
         <Banner color="warning" actions={<Button variant="ghost" size="sm" onClick={() => load(loc)}>Retry</Button>}>
-          No historical data found for {loc || "this location"} — try a major city like Delhi or Mumbai.
+          No historical data found for {loc || "this location"}, try a major city like Delhi or Mumbai.
         </Banner>
       )}
 

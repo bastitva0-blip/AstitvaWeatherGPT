@@ -21,7 +21,7 @@
     "heavy_rain": "شدید بارش",
     "heatwave": "لو کا انتباہ",
     "marine_warning": "سمندری انتباہ",
-    "fishermen_alert": "ماہی گیر انتباہ — سمندر میں نہ جائیں",
+    "fishermen_alert": "ماہی گیر انتباہ, سمندر میں نہ جائیں",
     "dismiss": "بند کریں",
     "no_alerts": "No active alerts"
   },
@@ -34,7 +34,7 @@
     "visibility": "مرئیت",
     "nwp_model": "NWP ماڈل",
     "sea_safe": "سمندر میں جانا محفوظ ہے",
-    "sea_unsafe": "سمندر میں نہ جائیں — خطرناک"
+    "sea_unsafe": "سمندر میں نہ جائیں, خطرناک"
   },
   "climate": {
     "title": "موسمیاتی رجحان",

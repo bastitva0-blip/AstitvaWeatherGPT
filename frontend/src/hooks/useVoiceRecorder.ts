@@ -4,7 +4,7 @@ import { transcribeVoice } from "../lib/api";
 const MAX_SECONDS = 60;
 const AUTO_STOP_WARN_SECONDS = 55;
 
-// BCP-47 codes for the Web Speech API — this is the same on-device/cloud
+// BCP-47 codes for the Web Speech API, this is the same on-device/cloud
 // speech engine Android Chrome (and WhatsApp's OS-level dictation) uses,
 // so it's both faster (no server round trip, streams interim results live)
 // and generally more accurate than our own faster-whisper backend path for
@@ -126,7 +126,7 @@ export function useVoiceRecorder(sessionId: string, hintLang?: string) {
     if (recognitionRef.current) {
       setIsProcessing(true);
       recognitionRef.current.stop();
-      // onend may never fire if recognition errors silently — force reset.
+      // onend may never fire if recognition errors silently, force reset.
       setTimeout(() => {
         setIsRecording(false);
         setIsProcessing(false);

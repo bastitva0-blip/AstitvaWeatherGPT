@@ -18,7 +18,7 @@ export function FeedbackButtons({ messageId, responseText, feedback }: { message
     setFeedback(messageId, sentiment);
     await submit(messageId, sentiment, responseText, reason);
     setSheetOpen(false);
-    toast("Thanks — helps us improve accuracy");
+    toast("Thanks, helps us improve accuracy");
   }
 
   return (

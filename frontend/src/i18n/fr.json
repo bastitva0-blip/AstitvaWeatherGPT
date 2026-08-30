@@ -18,7 +18,7 @@
     "city_hint": "Vous pourrez ajouter d'autres villes plus tard.",
     "city_selected": "Lieu sélectionné",
     "notif_title": "Recevez des alertes avant qu'elles ne comptent.",
-    "notif_body": "Sanket peut envoyer des notifications push pour les alertes de cyclone et de seuil — même lorsque l'application est fermée.",
+    "notif_body": "Sanket peut envoyer des notifications push pour les alertes de cyclone et de seuil, même lorsque l'application est fermée.",
     "notif_ready": "Vous êtes prêt",
     "notif_enable": "Activer les notifications push",
     "notif_later": "Vous pouvez l'activer plus tard dans les paramètres",
@@ -32,13 +32,13 @@
   },
   "alerts": {
     "cyclone": "Alerte cyclone", "heavy_rain": "Fortes pluies", "heatwave": "Alerte canicule",
-    "marine_warning": "Avertissement maritime", "fishermen_alert": "Alerte pêcheurs — Ne prenez pas la mer", "dismiss": "Fermer",
+    "marine_warning": "Avertissement maritime", "fishermen_alert": "Alerte pêcheurs, Ne prenez pas la mer", "dismiss": "Fermer",
     "no_alerts": "Aucune alerte active"
   },
   "weather": {
     "rainfall": "Précipitations", "temperature": "Température", "humidity": "Humidité", "wind": "Vent",
     "wave_height": "Hauteur des vagues", "visibility": "Visibilité", "nwp_model": "Modèle NWP",
-    "sea_safe": "Sûr de prendre la mer", "sea_unsafe": "Ne prenez pas la mer — dangereux"
+    "sea_safe": "Sûr de prendre la mer", "sea_unsafe": "Ne prenez pas la mer, dangereux"
   },
   "climate": { "title": "Tendances climatiques", "fetch": "Voir la tendance", "download_csv": "Télécharger CSV", "increasing": "En hausse", "decreasing": "En baisse" },
   "home": { "greeting": "Bonjour, {{name}}" },

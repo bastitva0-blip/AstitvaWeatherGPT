@@ -7,7 +7,7 @@ import { useLangStore } from "../../stores/langStore";
 const ERROR_MESSAGES: Record<string, string> = {
   denied: "Microphone permission denied",
   unsupported: "Voice input not supported in this browser",
-  transcribe_failed: "Could not transcribe audio — try again",
+  transcribe_failed: "Could not transcribe audio, try again",
 };
 
 export function VoiceButton({
