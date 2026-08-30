@@ -44,6 +44,12 @@ export function ChatInput({
         <Input
           value={text}
           onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              submit(text);
+            }
+          }}
           placeholder="Ask about weather..."
           wrapperClassName="flex-1"
         />
