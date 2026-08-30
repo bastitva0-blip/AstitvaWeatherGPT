@@ -6,6 +6,7 @@ import { useChatStore } from "../stores/chatStore";
 import { useCitiesStore } from "../stores/citiesStore";
 import { useAlertStore } from "../stores/alertStore";
 import { usePushNotifications } from "../hooks/usePushNotifications";
+import { usePWAInstall } from "../hooks/usePWAInstall";
 import { getCachedTimestamp } from "../hooks/useOnlineStatus";
 import { PageHeader } from "@devalok/shilp-sutra/composed/page-header";
 import { Sheet, SheetContent, SheetTitle } from "@devalok/shilp-sutra/ui/sheet";
@@ -20,6 +21,7 @@ export function SettingsPage() {
   const lang = useLangStore((s) => s.lang);
   const [unit, setUnit] = useState<"C" | "F">("C");
   const { granted, enable } = usePushNotifications();
+  const { canInstall, installed, promptInstall } = usePWAInstall();
   const [digest, setDigest] = useState(false);
   const [confirmClear, setConfirmClear] = useState<"chat" | "cities" | null>(null);
   const clearChat = useChatStore((s) => s.clear);
@@ -54,6 +56,16 @@ export function SettingsPage() {
           />
         </div>
         <div className="settings-cell"><span>Default location</span><span>{cities[0]?.name || "Not set"}</span></div>
+        {(canInstall || installed) && (
+          <div className="settings-cell">
+            <span>Install app</span>
+            {installed ? (
+              <span style={{ color: "var(--text-muted)" }}>Installed</span>
+            ) : (
+              <Button variant="ghost" onClick={promptInstall}>Download PWA</Button>
+            )}
+          </div>
+        )}
       </div>
 
       <Sheet open={langOpen} onOpenChange={setLangOpen}>
