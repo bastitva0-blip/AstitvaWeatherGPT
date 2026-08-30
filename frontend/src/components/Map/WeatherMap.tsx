@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, ZoomControl, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { CoastalZones } from "./CoastalZones";
 import { LayerToggle, type MapLayer } from "./LayerToggle";
@@ -60,7 +60,8 @@ export function WeatherMap() {
         />
         {search && <IconButton icon={<IconX />} variant="ghost" aria-label="Clear" onClick={() => setSearch("")} />}
       </div>
-      <MapContainer center={[20.5, 78.9]} zoom={5} style={{ height: "100%", width: "100%" }}>
+      <MapContainer center={[20.5, 78.9]} zoom={5} zoomControl={false} style={{ height: "100%", width: "100%" }}>
+        <ZoomControl position="bottomleft" />
         <TileLayer url={TILE_URL} eventHandlers={{ tileerror: () => setTileError(true) }} attribution="CartoDB Dark Matter" />
         {layer === "coastal" && <CoastalZones />}
         <ClickHandler onPick={(lat, lon) => loadWeatherAt(`${lat.toFixed(2)},${lon.toFixed(2)}`, lat, lon)} />
