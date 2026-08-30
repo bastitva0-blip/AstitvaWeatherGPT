@@ -80,16 +80,16 @@ export function DeveloperPage() {
   const CONFIGS: Record<string, string> = {
     "Claude Desktop": `{
   "mcpServers": {
-    "weathergpt": {
+    "sanket": {
       "command": "npx",
-      "args": ["-y", "@weathergpt/mcp-server"],
-      "env": { "WEATHERGPT_API_KEY": "${keyPlaceholder}" }
+      "args": ["-y", "@sanket/mcp-server"],
+      "env": { "SANKET_API_KEY": "${keyPlaceholder}" }
     }
   }
 }`,
-    "Cursor / Windsurf": `{ "mcp.servers": { "weathergpt": { "url": "https://api.weathergpt.in/mcp", "headers": { "X-API-Key": "${keyPlaceholder}" } } } }`,
-    "Gemini": `gemini mcp add weathergpt --url https://api.weathergpt.in/mcp --header "X-API-Key: ${keyPlaceholder}"`,
-    "OpenAI": `# Add as a custom tool endpoint\nMCP SSE URL: https://api.weathergpt.in/mcp\nAuth header: X-API-Key: ${keyPlaceholder}`,
+    "Cursor / Windsurf": `{ "mcp.servers": { "sanket": { "url": "https://api.sanket.in/mcp", "headers": { "X-API-Key": "${keyPlaceholder}" } } } }`,
+    "Gemini": `gemini mcp add sanket --url https://api.sanket.in/mcp --header "X-API-Key: ${keyPlaceholder}"`,
+    "OpenAI": `# Add as a custom tool endpoint\nMCP SSE URL: https://api.sanket.in/mcp\nAuth header: X-API-Key: ${keyPlaceholder}`,
   };
 
   return (

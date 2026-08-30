@@ -38,5 +38,5 @@
   --color-accent-fg: oklch(0.13 0 0);
 }
 
-/* WeatherGPT ships dark-only ("Monsoon Intelligence" identity) — always .dark, no toggle */
+/* Sanket ships dark-only ("Monsoon Intelligence" identity) — always .dark, no toggle */
 html { color-scheme: dark; }

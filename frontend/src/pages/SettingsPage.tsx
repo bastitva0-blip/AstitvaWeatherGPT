@@ -33,7 +33,7 @@ export function SettingsPage() {
     const blob = new Blob([JSON.stringify({ messages, cities, alerts }, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url; a.download = "weathergpt-data.json"; a.click();
+    a.href = url; a.download = "sanket-data.json"; a.click();
     URL.revokeObjectURL(url);
   }
 
@@ -107,9 +107,11 @@ export function SettingsPage() {
 
       <div className="settings-group">
         <div className="settings-group__title">About</div>
-        <div className="settings-cell" onClick={() => navigate("/app/about")}><span>Data sources</span><span>→</span></div>
-        <div className="settings-cell"><span>Version</span><span>WeatherGPT v3.0.0 · SIH26068</span></div>
-        <div className="settings-cell">Built by Astitva Bhardwaj</div>
+        <div className="settings-cell" onClick={() => navigate("/app/about")}><span>Coverage & sources</span><span>→</span></div>
+        <div className="settings-cell" onClick={() => window.open("/team", "_blank")}><span>About the team</span><span>→</span></div>
+        <div className="settings-cell" onClick={() => window.open("https://github.com/bastitva0-blip/AstitvaWeatherGPT", "_blank", "noopener,noreferrer")}><span>Open source</span><span>GitHub ↗</span></div>
+        <div className="settings-cell"><span>Version</span><span>Sanket v3.0.0 · SIH26068</span></div>
+        <div className="settings-cell">Built by Team Eloquence</div>
       </div>
     </div>
   );
