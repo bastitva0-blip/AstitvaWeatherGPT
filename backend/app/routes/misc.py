@@ -3,6 +3,7 @@ POST /api/feedback, GET /api/aqi, GET /api/metar, GET /api/agro, POST /api/push/
 See WeatherGPT frontend prompt, section 25."""
 from __future__ import annotations
 
+import secrets
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -11,10 +12,28 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.auth import verify_api_key
-from app.models.database import HallucinationLog, PushSubscription, get_db
+from app.models.database import HallucinationLog, PushSubscription, User, get_db
 from app.services import agro_service, aqi_service, aviation_service, gis_service, weather_service
 
 router = APIRouter()
+
+
+class DevKeyRequest(BaseModel):
+    email: str
+    name: str | None = None
+
+
+@router.post("/api/dev/key")
+async def issue_dev_key(body: DevKeyRequest, db: AsyncSession = Depends(get_db)):
+    """Get-or-create a per-user API key for the Developer page. Signed-in users only
+    (frontend gates this behind Firebase auth) — no X-API-Key required to bootstrap."""
+    existing = (await db.execute(select(User).where(User.email == body.email))).scalar_one_or_none()
+    if existing is not None:
+        return {"api_key": existing.apiKey}
+    user = User(apiKey=f"wgpt_{secrets.token_urlsafe(24)}", email=body.email, name=body.name)
+    db.add(user)
+    await db.commit()
+    return {"api_key": user.apiKey}
 
 
 class FeedbackRequest(BaseModel):

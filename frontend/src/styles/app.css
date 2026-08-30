@@ -189,7 +189,8 @@
 .settings-cell:last-child { border-radius: 0 0 var(--radius-card) var(--radius-card); border-bottom: none; }
 
 /* Developer */
-.code-block { background: #030A12; border: 1px solid var(--border); border-radius: var(--radius-card); padding: 1rem; font-family: var(--font-mono); font-size: 0.8rem; overflow-x: auto; position: relative; }
+.code-block { background: #030A12; border: 1px solid var(--border); border-radius: var(--radius-card); padding: 2.5rem 1rem 1rem; font-family: var(--font-mono); font-size: 0.8rem; overflow-x: auto; position: relative; }
+.code-block__copy { position: absolute; top: 8px; right: 8px; }
 .tool-card { border: 1px solid var(--border); border-radius: var(--radius-card); margin-bottom: 0.75rem; overflow: hidden; }
 .tool-card__header { padding: 0.9rem 1rem; display: flex; justify-content: space-between; cursor: pointer; font-weight: 600; }
 .tool-card__body { padding: 0 1rem 1rem; }

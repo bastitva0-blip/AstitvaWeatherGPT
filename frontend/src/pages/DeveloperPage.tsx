@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { sendQuery, fetchLiveWeather } from "../lib/api";
+import { useAuthStore } from "../stores/authStore";
 import { PageHeader } from "@devalok/shilp-sutra/composed/page-header";
 import { Card, CardContent } from "@devalok/shilp-sutra/ui/card";
 import { Button } from "@devalok/shilp-sutra/ui/button";
@@ -26,7 +27,7 @@ function CopyBtn({ text }: { text: string }) {
   return (
     <Button
       variant="outline" size="compact-sm"
-      style={{ position: "absolute", top: 8, right: 8 }}
+      className="code-block__copy"
       onClick={() => { navigator.clipboard.writeText(text); toast("Copied ✓"); }}
     >
       Copy
@@ -40,7 +41,27 @@ export function DeveloperPage() {
   const [tryMessage, setTryMessage] = useState("Will it rain in Kolkata?");
   const [tryResult, setTryResult] = useState<string | null>(null);
   const [latency, setLatency] = useState<number | null>(null);
-  const apiKey = sessionStorage.getItem("wgpt_dev_key") || (import.meta.env.VITE_API_KEY || "test-key");
+  const [apiKey, setApiKey] = useState<string | null>(() => sessionStorage.getItem("wgpt_dev_key"));
+  const userEmail = useAuthStore((s) => s.userEmail);
+  const userName = useAuthStore((s) => s.userName);
+
+  useEffect(() => {
+    if (apiKey || !userEmail) return;
+    const base = import.meta.env.VITE_API_BASE || "";
+    fetch(`${base}/api/dev/key`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userEmail, name: userName }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.api_key) {
+          sessionStorage.setItem("wgpt_dev_key", data.api_key);
+          setApiKey(data.api_key);
+        }
+      })
+      .catch(() => {});
+  }, [apiKey, userEmail, userName]);
 
   async function runTool() {
     const t0 = performance.now();
@@ -54,19 +75,20 @@ export function DeveloperPage() {
     }
   }
 
+  const keyPlaceholder = apiKey ?? "…";
   const CONFIGS: Record<string, string> = {
     "Claude Desktop": `{
   "mcpServers": {
     "weathergpt": {
       "command": "npx",
       "args": ["-y", "@weathergpt/mcp-server"],
-      "env": { "WEATHERGPT_API_KEY": "${apiKey}" }
+      "env": { "WEATHERGPT_API_KEY": "${keyPlaceholder}" }
     }
   }
 }`,
-    "Cursor / Windsurf": `{ "mcp.servers": { "weathergpt": { "url": "https://api.weathergpt.in/mcp", "headers": { "X-API-Key": "${apiKey}" } } } }`,
-    "Gemini": `gemini mcp add weathergpt --url https://api.weathergpt.in/mcp --header "X-API-Key: ${apiKey}"`,
-    "OpenAI": `# Add as a custom tool endpoint\nMCP SSE URL: https://api.weathergpt.in/mcp\nAuth header: X-API-Key: ${apiKey}`,
+    "Cursor / Windsurf": `{ "mcp.servers": { "weathergpt": { "url": "https://api.weathergpt.in/mcp", "headers": { "X-API-Key": "${keyPlaceholder}" } } } }`,
+    "Gemini": `gemini mcp add weathergpt --url https://api.weathergpt.in/mcp --header "X-API-Key: ${keyPlaceholder}"`,
+    "OpenAI": `# Add as a custom tool endpoint\nMCP SSE URL: https://api.weathergpt.in/mcp\nAuth header: X-API-Key: ${keyPlaceholder}`,
   };
 
   return (
@@ -76,11 +98,11 @@ export function DeveloperPage() {
       <Card variant="outline" style={{ borderLeftWidth: 3, borderLeftColor: "var(--color-accent-9)" }}>
         <CardContent>
           <p style={{ fontWeight: 600 }}>Your API Key</p>
-          <p className="mono">{showKey ? apiKey : "●".repeat(16)}</p>
-          <Button variant="outline" size="sm" onClick={() => { setShowKey(true); setTimeout(() => setShowKey(false), 5000); }}>Show 5s</Button>
-          <Button variant="outline" size="sm" onClick={() => { navigator.clipboard.writeText(apiKey); toast("Copied ✓"); }}>Copy</Button>
+          <p className="mono">{apiKey ? (showKey ? apiKey : "●".repeat(16)) : "Sign in to generate a key…"}</p>
+          <Button variant="outline" size="sm" disabled={!apiKey} onClick={() => { setShowKey(true); setTimeout(() => setShowKey(false), 5000); }}>Show 5s</Button>
+          <Button variant="outline" size="sm" disabled={!apiKey} onClick={() => { if (apiKey) { navigator.clipboard.writeText(apiKey); toast("Copied ✓"); } }}>Copy</Button>
           <p style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Requests today: 847 / 1000 · Rate limit: 60 req/min</p>
-          <Button variant="ghost" color="error">Regenerate key</Button>
+          <Button variant="ghost" color="error" disabled={!apiKey}>Regenerate key</Button>
         </CardContent>
       </Card>
 
