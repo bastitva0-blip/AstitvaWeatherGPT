@@ -11,7 +11,7 @@ import { IconButton } from "@devalok/shilp-sutra/ui/icon-button";
 import { IconSearch, IconX } from "@tabler/icons-react";
 
 const CARTO_TOKEN = import.meta.env.VITE_CARTO_TOKEN;
-const TILE_URL = `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png${CARTO_TOKEN ? `?api_key=${CARTO_TOKEN}` : ""}`;
+const TILE_URL = `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png${CARTO_TOKEN ? `?key=${CARTO_TOKEN}` : ""}`;
 
 function ClickHandler({ onPick }: { onPick: (lat: number, lon: number) => void }) {
   useMapEvents({ click: (e) => onPick(e.latlng.lat, e.latlng.lng) });
