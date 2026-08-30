@@ -1,5 +1,30 @@
 {
-  "nav": { "chat": "Chat", "alerts": "Alertes", "history": "Historique", "climate": "Climat", "settings": "Paramètres" },
+  "nav": { "home": "Accueil", "chat": "Chat", "map": "Carte", "cities": "Villes", "compare": "Comparer", "alerts": "Alertes", "history": "Historique", "climate": "Climat", "settings": "Paramètres", "developer": "Développeur", "admin": "Admin", "about": "À propos" },
+  "auth": {
+    "title": "Connaissez votre ciel.",
+    "subtitle": "Connectez-vous pour enregistrer des lieux, définir des alertes et utiliser la voix.",
+    "google": "Continuer avec Google",
+    "email": "Continuer avec e-mail",
+    "email_label": "E-mail",
+    "password_label": "Mot de passe",
+    "continue": "Continuer",
+    "free_forever": "Gratuit pour toujours. Aucune carte de crédit."
+  },
+  "onboarding": {
+    "lang_title": "WeatherGPT parle votre langue",
+    "location_title": "Où avez-vous besoin de la météo ?",
+    "gps_button": "Utiliser ma position GPS",
+    "city_placeholder": "Tapez votre ville",
+    "city_hint": "Vous pourrez ajouter d'autres villes plus tard.",
+    "city_selected": "Lieu sélectionné",
+    "notif_title": "Recevez des alertes avant qu'elles ne comptent.",
+    "notif_body": "WeatherGPT peut envoyer des notifications push pour les alertes de cyclone et de seuil — même lorsque l'application est fermée.",
+    "notif_ready": "Vous êtes prêt",
+    "notif_enable": "Activer les notifications push",
+    "notif_later": "Vous pouvez l'activer plus tard dans les paramètres",
+    "start": "Commencer à utiliser WeatherGPT",
+    "continue": "Continuer →"
+  },
   "chat": {
     "placeholder": "Posez une question météo...", "send": "Envoyer", "listening": "Écoute en cours...",
     "thinking": "Réflexion...", "voice_denied": "Permission micro refusée", "voice_too_long": "L'enregistrement ne doit pas dépasser 60 secondes",

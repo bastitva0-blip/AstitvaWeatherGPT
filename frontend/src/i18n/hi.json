@@ -1,10 +1,42 @@
 {
   "nav": {
+    "home": "होम",
     "chat": "चैट",
+    "map": "मैप",
+    "cities": "शहर",
+    "compare": "तुलना",
     "alerts": "अलर्ट",
     "history": "इतिहास",
     "climate": "जलवायु",
-    "settings": "सेटिंग"
+    "settings": "सेटिंग",
+    "developer": "डेवलपर",
+    "admin": "एडमिन",
+    "about": "जानकारी"
+  },
+  "auth": {
+    "title": "अपने आसमान को जानें।",
+    "subtitle": "स्थान सहेजने, अलर्ट सेट करने और वॉइस उपयोग के लिए साइन इन करें।",
+    "google": "Google से जारी रखें",
+    "email": "ईमेल से जारी रखें",
+    "email_label": "ईमेल",
+    "password_label": "पासवर्ड",
+    "continue": "जारी रखें",
+    "free_forever": "हमेशा मुफ़्त। कोई क्रेडिट कार्ड नहीं।"
+  },
+  "onboarding": {
+    "lang_title": "WeatherGPT बोलता है आपकी भाषा",
+    "location_title": "आपको मौसम कहाँ का चाहिए?",
+    "gps_button": "मेरा GPS स्थान उपयोग करें",
+    "city_placeholder": "अपना शहर टाइप करें",
+    "city_hint": "आप बाद में और शहर जोड़ सकते हैं।",
+    "city_selected": "चयनित स्थान",
+    "notif_title": "अलर्ट ज़रूरी होने से पहले पाएं।",
+    "notif_body": "WeatherGPT चक्रवात चेतावनी और सीमा अलर्ट के लिए पुश नोटिफिकेशन भेज सकता है — ऐप बंद होने पर भी।",
+    "notif_ready": "आप तैयार हैं",
+    "notif_enable": "पुश नोटिफिकेशन सक्षम करें",
+    "notif_later": "आप इसे बाद में सेटिंग में सक्षम कर सकते हैं",
+    "start": "WeatherGPT उपयोग शुरू करें",
+    "continue": "जारी रखें →"
   },
   "chat": {
     "placeholder": "मौसम के बारे में पूछें...",

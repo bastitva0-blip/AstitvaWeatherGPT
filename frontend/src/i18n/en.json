@@ -1,10 +1,42 @@
 {
   "nav": {
+    "home": "Home",
     "chat": "Chat",
+    "map": "Map",
+    "cities": "Cities",
+    "compare": "Compare",
     "alerts": "Alerts",
     "history": "History",
     "climate": "Climate",
-    "settings": "Settings"
+    "settings": "Settings",
+    "developer": "Developer",
+    "admin": "Admin",
+    "about": "About"
+  },
+  "auth": {
+    "title": "Know your sky.",
+    "subtitle": "Sign in to save locations, set alerts, and use voice.",
+    "google": "Continue with Google",
+    "email": "Continue with email",
+    "email_label": "Email",
+    "password_label": "Password",
+    "continue": "Continue",
+    "free_forever": "Free forever. No credit card."
+  },
+  "onboarding": {
+    "lang_title": "WeatherGPT speaks your language",
+    "location_title": "Where do you need weather?",
+    "gps_button": "Use my GPS location",
+    "city_placeholder": "Type your city",
+    "city_hint": "You can add more cities later.",
+    "city_selected": "Selected location",
+    "notif_title": "Get alerts before they matter.",
+    "notif_body": "WeatherGPT can send push notifications for cyclone warnings and threshold alerts — even when the app is closed.",
+    "notif_ready": "You're all set",
+    "notif_enable": "Enable push notifications",
+    "notif_later": "You can enable this later in Settings",
+    "start": "Start using WeatherGPT",
+    "continue": "Continue →"
   },
   "chat": {
     "placeholder": "Ask about weather...",
