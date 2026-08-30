@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Input } from "@devalok/shilp-sutra/ui/input";
 import { IconButton } from "@devalok/shilp-sutra/ui/icon-button";
-import { IconArrowUp, IconPlus } from "@tabler/icons-react";
+import { IconArrowUp } from "@tabler/icons-react";
 import { VoiceButton } from "../UI/VoiceButton";
 
 const MAX_MESSAGE_LENGTH = 500;
@@ -40,7 +40,6 @@ export function ChatInput({
         className={`chat-input-bar ${voiceStatus === "recording" ? "chat-input-bar--recording" : ""}`}
         onSubmit={(e) => { e.preventDefault(); submit(text); }}
       >
-        <IconButton icon={<IconPlus />} variant="ghost" aria-label="Attach" disabled />
         <Input
           value={text}
           onChange={(e) => setText(e.target.value)}
