@@ -21,6 +21,7 @@
     "d3-scale": "^4.0.2",
     "d3-selection": "^3.0.0",
     "d3-shape": "^3.2.0",
+    "firebase": "^12.18.0",
     "framer-motion": "^12.43.0",
     "i18next": "^23.11.5",
     "leaflet": "^1.9.4",
