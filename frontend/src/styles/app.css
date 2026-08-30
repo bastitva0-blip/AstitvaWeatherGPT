@@ -39,9 +39,9 @@
   display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; font-weight: 600;
 }
 
-.sidebar-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 49; }
+.sidebar-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1099; }
 .sidebar {
-  position: fixed; top: 0; left: 0; bottom: 0; width: 280px; z-index: 50;
+  position: fixed; top: 0; left: 0; bottom: 0; width: 280px; z-index: 1100;
   background: var(--bg-elevated); transform: translateX(-100%);
   transition: transform 280ms cubic-bezier(0.32,0.72,0,1); overflow-y: auto;
 }
@@ -148,16 +148,16 @@
 .citation-tag { background: var(--teal-glow); color: var(--teal); border-radius: var(--radius-pill); padding: 0.15rem 0.5rem; font-size: 0.75rem; text-decoration: none; margin-right: 0.25rem; }
 
 /* Map */
-.map-page { position: relative; height: calc(100vh - 60px); }
-.map-search { position: absolute; top: 64px; left: 12px; right: 12px; z-index: 20; background: var(--bg-elevated); border-radius: var(--radius-pill); box-shadow: var(--shadow-float); display: flex; align-items: center; padding: 0.3rem 1rem; }
+.map-page { position: relative; height: calc(100vh - 60px); isolation: isolate; }
+.map-search { position: absolute; top: 64px; left: 12px; right: 12px; z-index: 1020; background: var(--bg-elevated); border-radius: var(--radius-pill); box-shadow: var(--shadow-float); display: flex; align-items: center; padding: 0.3rem 1rem; }
 .map-search input { flex: 1; background: none; border: none; padding: 0.5rem; }
-.map-popup { position: absolute; left: 0; right: 0; bottom: 0; z-index: 30; background: var(--bg-elevated); border-radius: 20px 20px 0 0; padding: 1rem; max-height: 45vh; overflow-y: auto; }
+.map-popup { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1030; background: var(--bg-elevated); border-radius: 20px 20px 0 0; padding: 1rem; max-height: 45vh; overflow-y: auto; }
 .map-popup__handle { width: 40px; height: 4px; background: var(--border-bright); border-radius: 2px; margin: 0 auto 0.75rem; }
-.layer-toggle { position: absolute; bottom: 100px; right: 12px; z-index: 30; }
+.layer-toggle { position: absolute; bottom: 100px; right: 12px; z-index: 1030; }
 .layer-toggle__btn { background: var(--bg-elevated); border-radius: 50%; width: 48px; height: 48px; box-shadow: var(--shadow-float); font-size: 1.3rem; }
 .layer-toggle__panel { position: absolute; bottom: 56px; right: 0; background: var(--bg-elevated); border-radius: var(--radius-card); padding: 0.5rem; box-shadow: var(--shadow-float); min-width: 200px; }
 .layer-toggle__panel label { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem; font-size: 0.9rem; }
-.timeline-scrubber { position: absolute; bottom: 60px; left: 0; right: 0; z-index: 30; background: var(--bg-elevated); border-radius: 16px 16px 0 0; padding: 0.75rem; }
+.timeline-scrubber { position: absolute; bottom: 60px; left: 0; right: 0; z-index: 1030; background: var(--bg-elevated); border-radius: 16px 16px 0 0; padding: 0.75rem; }
 
 /* City cards */
 .city-card { height: 90px; border-radius: 16px; margin-bottom: 12px; position: relative; overflow: hidden; background-size: cover; background-position: center; display: flex; }
