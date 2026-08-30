@@ -11,7 +11,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, String
+from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, String, text
 from sqlalchemy.ext.asyncio import AsyncAttrs, AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.pool import StaticPool
@@ -35,6 +35,7 @@ class User(Base):
     __tablename__ = "users"
     id: Mapped[str] = mapped_column(String, primary_key=True, default=_cuid)
     apiKey: Mapped[str] = mapped_column(String, unique=True)
+    email: Mapped[str | None] = mapped_column(String, unique=True, nullable=True)
     name: Mapped[str | None] = mapped_column(String, nullable=True)
     createdAt: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
     sessions: Mapped[list["Session"]] = relationship(back_populates="user")
@@ -158,3 +159,12 @@ async def init_db() -> None:
     engine = get_engine()
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        if not settings.DATABASE_URL.startswith("sqlite"):
+            # users.email added after initial deploy — backfill the column on existing tables.
+            await conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS email VARCHAR"))
+            await conn.execute(text(
+                "DO $$ BEGIN "
+                "IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'users_email_key') THEN "
+                "ALTER TABLE users ADD CONSTRAINT users_email_key UNIQUE (email); "
+                "END IF; END $$;"
+            ))
