@@ -25,13 +25,14 @@ const TOOLS = [
 
 function CopyBtn({ text }: { text: string }) {
   return (
-    <Button
-      variant="outline" size="compact-sm"
-      className="code-block__copy"
-      onClick={() => { navigator.clipboard.writeText(text); toast("Copied ✓"); }}
-    >
-      Copy
-    </Button>
+    <div className="code-block__copy">
+      <Button
+        variant="outline" size="compact-sm"
+        onClick={() => { navigator.clipboard.writeText(text); toast("Copied ✓"); }}
+      >
+        Copy
+      </Button>
+    </div>
   );
 }
 

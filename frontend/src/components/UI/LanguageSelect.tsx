@@ -78,9 +78,11 @@ export function LanguageSelect() {
       <SheetTrigger asChild>
         <IconButton icon={<IconWorld />} variant="ghost" aria-label="Change language" />
       </SheetTrigger>
-      <SheetContent side="bottom">
+      <SheetContent side="bottom" className="lang-sheet">
         <SheetTitle>Language / {LABELS[lang].native}</SheetTitle>
-        <LanguageGrid onDone={() => setOpen(false)} />
+        <div className="lang-sheet__scroll">
+          <LanguageGrid onDone={() => setOpen(false)} />
+        </div>
       </SheetContent>
     </Sheet>
   );

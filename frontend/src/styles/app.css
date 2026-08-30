@@ -216,6 +216,8 @@ table.data-table th, table.data-table td { text-align: left; padding: 0.5rem; bo
 .lang-tile__check { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.4); border-radius: 50%; padding: 2px; }
 .lang-tile__native { font-size: 1.05rem; text-shadow: 0 1px 2px rgba(0,0,0,0.4); }
 .lang-tile__roman { font-size: 0.7rem; opacity: 0.85; }
+.lang-sheet { max-height: 85vh; display: flex; flex-direction: column; }
+.lang-sheet__scroll { overflow-y: auto; padding-bottom: 1rem; -webkit-overflow-scrolling: touch; }
 
 /* Radar sweep signature */
 .radar-container { position: absolute; width: 400px; height: 400px; top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; overflow: hidden; border-radius: 50%; }
