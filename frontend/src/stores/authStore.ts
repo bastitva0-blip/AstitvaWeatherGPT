@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { onAuthStateChanged, signOut, type User } from "firebase/auth";
+import { auth } from "../lib/firebase";
 
 interface AuthState {
   authed: boolean;
@@ -22,6 +24,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ authed: true, userName: name, userEmail: email });
   },
   logout: () => {
+    signOut(auth);
     ["wgpt_authed", "wgpt_name", "wgpt_email"].forEach((k) => localStorage.removeItem(k));
     set({ authed: false, userName: null, userEmail: null });
   },
@@ -30,3 +33,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ firstRun: false });
   },
 }));
+
+onAuthStateChanged(auth, (user: User | null) => {
+  if (user) {
+    useAuthStore.getState().login(user.displayName ?? user.email ?? "User", user.email ?? "");
+  }
+});
