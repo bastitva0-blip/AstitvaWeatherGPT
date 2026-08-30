@@ -36,7 +36,8 @@ export function ChatPage() {
     try {
       const response = await sendQuery(text, sessionId, voiceStatus !== "idle" ? "voice" : "text", locationHint);
       addMessage({ id: crypto.randomUUID(), role: "assistant", text: response.answer, response });
-    } catch {
+    } catch (err) {
+      console.error("sendQuery failed:", err);
       addMessage({ id: crypto.randomUUID(), role: "assistant", text: t("chat.error", "That message couldn't be processed. Try rephrasing your weather question.") });
     } finally {
       setThinking(false);
