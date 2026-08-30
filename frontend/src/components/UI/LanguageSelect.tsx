@@ -1,12 +1,19 @@
 import { useState } from "react";
 import { IconButton } from "@devalok/shilp-sutra/ui/icon-button";
-import { IconWorld } from "@tabler/icons-react";
+import { IconWorld, IconCheck } from "@tabler/icons-react";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@devalok/shilp-sutra/ui/sheet";
-import { Button } from "@devalok/shilp-sutra/ui/button";
 import { useLangStore, type Lang } from "../../stores/langStore";
 
 const INDIAN: Lang[] = ["hi", "ta", "te", "bn", "mr", "kn", "gu", "pa", "or", "ml", "ur", "en"];
 const INTL: Lang[] = ["ar", "fr", "es", "zh", "sw"];
+
+/** One flat, saturated hue per language — Hotstar/Netflix-style tile picker. */
+const COLORS: Record<Lang, string> = {
+  hi: "#E63946", ta: "#F4A261", te: "#2A9D8F", bn: "#8E44AD", mr: "#E76F51",
+  kn: "#457B9D", gu: "#F1C40F", pa: "#06A77D", or: "#D62839", ml: "#3D5A80",
+  ur: "#588157", en: "#1D3557", ar: "#BC6C25", fr: "#3A86FF", es: "#FB5607",
+  zh: "#D00000", sw: "#2B9348",
+};
 
 const LABELS: Record<Lang, { native: string; roman: string }> = {
   hi: { native: "हिन्दी", roman: "Hindi" },
@@ -28,7 +35,23 @@ const LABELS: Record<Lang, { native: string; roman: string }> = {
   sw: { native: "Kiswahili", roman: "Swahili" },
 };
 
-/** Full grid picker — for onboarding / bottom sheet. */
+function LangTile({ lang, selected, onClick }: { lang: Lang; selected: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      className={`lang-tile${selected ? " selected" : ""}`}
+      style={{ background: `linear-gradient(160deg, ${COLORS[lang]}, ${COLORS[lang]}cc)` }}
+      onClick={onClick}
+      aria-pressed={selected}
+    >
+      {selected && <IconCheck className="lang-tile__check" size={18} />}
+      <span className="font-display lang-tile__native">{LABELS[lang].native}</span>
+      <span className="lang-tile__roman">{LABELS[lang].roman}</span>
+    </button>
+  );
+}
+
+/** Full grid picker — for onboarding / bottom sheet. Netflix/Hotstar-style colorful tiles. */
 export function LanguageGrid({ onDone }: { onDone?: () => void }) {
   const lang = useLangStore((s) => s.lang);
   const setLang = useLangStore((s) => s.setLang);
@@ -36,17 +59,11 @@ export function LanguageGrid({ onDone }: { onDone?: () => void }) {
   return (
     <div className="lang-grid">
       {INDIAN.map((l) => (
-        <Button key={l} variant={lang === l ? "soft" : "outline"} color={lang === l ? "accent" : "neutral"} onClick={() => pick(l)} style={{ flexDirection: "column", height: "auto", padding: "0.75rem" }}>
-          <span className="font-display" style={{ fontSize: "1.1rem" }}>{LABELS[l].native}</span>
-          <span style={{ fontSize: "0.75rem", opacity: 0.7 }}>{LABELS[l].roman}</span>
-        </Button>
+        <LangTile key={l} lang={l} selected={lang === l} onClick={() => pick(l)} />
       ))}
       <div className="lang-divider">International</div>
       {INTL.map((l) => (
-        <Button key={l} variant={lang === l ? "soft" : "outline"} color={lang === l ? "accent" : "neutral"} onClick={() => pick(l)} style={{ flexDirection: "column", height: "auto", padding: "0.75rem" }}>
-          <span className="font-display" style={{ fontSize: "1.1rem" }}>{LABELS[l].native}</span>
-          <span style={{ fontSize: "0.75rem", opacity: 0.7 }}>{LABELS[l].roman}</span>
-        </Button>
+        <LangTile key={l} lang={l} selected={lang === l} onClick={() => pick(l)} />
       ))}
     </div>
   );

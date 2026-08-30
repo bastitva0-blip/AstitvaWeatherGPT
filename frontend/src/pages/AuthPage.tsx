@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@devalok/shilp-sutra/ui/button";
 import { Card, CardContent } from "@devalok/shilp-sutra/ui/card";
 import { Input } from "@devalok/shilp-sutra/ui/input";
+import { IconBrandGoogle } from "@tabler/icons-react";
 import {
   signInWithPopup,
   signInWithEmailAndPassword,
@@ -12,6 +14,7 @@ import { auth, googleProvider } from "../lib/firebase";
 import { useAuthStore } from "../stores/authStore";
 
 export function AuthPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { login, firstRun } = useAuthStore();
   const [showEmailForm, setShowEmailForm] = useState(false);
@@ -65,27 +68,35 @@ export function AuthPage() {
   return (
     <div className="auth-page">
       <div style={{ fontSize: "2rem" }}>🌩</div>
-      <h1 className="font-display">Know your sky.</h1>
-      <p style={{ color: "var(--text-muted)" }}>Sign in to save locations, set alerts, and use voice.</p>
+      <h1 className="font-display">{t("auth.title")}</h1>
+      <p style={{ color: "var(--text-muted)" }}>{t("auth.subtitle")}</p>
       <Card variant="elevated" style={{ width: "100%", maxWidth: 380, marginTop: "1.5rem" }}>
         <CardContent style={{ padding: "2rem" }}>
-          <Button variant="outline" fullWidth style={{ marginBottom: "1rem" }} onClick={withGoogle} disabled={busy}>
-            Continue with Google
+          <Button
+            variant="soft"
+            color="neutral"
+            fullWidth
+            style={{ marginBottom: "1rem" }}
+            startIcon={<IconBrandGoogle />}
+            onClick={withGoogle}
+            disabled={busy}
+          >
+            {t("auth.google")}
           </Button>
           <div style={{ color: "var(--text-muted)", fontSize: "0.8rem", margin: "0.5rem 0", textAlign: "center" }}>— OR —</div>
           {showEmailForm ? (
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-              <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-              <Button fullWidth onClick={withEmail} disabled={busy || !email || !password}>
-                Continue
+              <Input type="email" placeholder={t("auth.email_label")} value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input type="password" placeholder={t("auth.password_label")} value={password} onChange={(e) => setPassword(e.target.value)} />
+              <Button fullWidth onClick={withEmail} disabled={busy || !email || !password} loading={busy}>
+                {t("auth.continue")}
               </Button>
             </div>
           ) : (
-            <Button fullWidth onClick={() => setShowEmailForm(true)}>Continue with email</Button>
+            <Button variant="soft" fullWidth onClick={() => setShowEmailForm(true)}>{t("auth.email")}</Button>
           )}
           {error && <p style={{ color: "var(--color-danger, #e5484d)", fontSize: "0.8rem", marginTop: "0.75rem" }}>{error}</p>}
-          <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "1rem" }}>Free forever. No credit card.</p>
+          <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "1rem" }}>{t("auth.free_forever")}</p>
         </CardContent>
       </Card>
     </div>
