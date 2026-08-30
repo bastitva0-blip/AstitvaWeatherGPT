@@ -60,7 +60,9 @@
 .coverage-list__check { color: var(--safe); flex-shrink: 0; margin-top: 0.15rem; }
 .landing-nav__links a, .landing-nav__links button { cursor: pointer; }
 .mobile-overlay a { cursor: pointer; }
-.team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+@media (max-width: 720px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 420px) { .team-grid { grid-template-columns: 1fr; } }
 .team-card {
   background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-card);
   padding: 1.25rem 1rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
