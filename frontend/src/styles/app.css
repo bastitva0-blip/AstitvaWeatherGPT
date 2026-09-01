@@ -115,6 +115,16 @@
 .chat-bubble--assistant { align-self: flex-start; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 20px 20px 20px 4px; }
 .chat-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; text-align: center; padding: 2rem; }
 .chat-suggestions { display: flex; gap: 0.5rem; overflow-x: auto; padding: 0.5rem 1rem; }
+.chat-quick-actions {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.6rem;
+  padding: 0.5rem 1rem; width: 100%; max-width: 720px;
+}
+.chat-quick-actions__box {
+  background: var(--bg-elevated); border: 1px solid var(--border-bright); border-radius: var(--radius-md, 12px);
+  padding: 0.9rem 0.75rem; font-size: 0.85rem; font-weight: 500; color: var(--text-primary);
+  cursor: pointer; text-align: center;
+}
+.chat-quick-actions__box:hover { border-color: var(--teal); color: var(--teal); }
 .chip {
   background: var(--bg-elevated); border: 1px solid var(--border-bright); border-radius: var(--radius-pill);
   padding: 0.5rem 1rem; font-size: 0.85rem; white-space: nowrap; color: var(--text-primary);

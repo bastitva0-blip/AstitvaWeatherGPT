@@ -29,6 +29,14 @@ export function ChatBubble({ message }: { message: ChatMessage }) {
               </a>
             ))}
           </div>
+          {r.llm_source && (
+            <div className="llm-badge" style={{ marginTop: "0.3rem" }}>
+              {r.llm_source === "qwen-local" && <span title="Running on our own server">Qwen 2.5 7B · Local</span>}
+              {r.llm_source === "nvidia-nim" && <span title="NVIDIA cloud inference">NVIDIA NIM · Llama 3.2 11B</span>}
+              {r.llm_source === "nvidia-nim-fallback" && <span title="Local unavailable, using cloud fallback">NVIDIA NIM · Fallback</span>}
+              {r.llm_source === "deterministic" && <span title="No LLM available">Template</span>}
+            </div>
+          )}
         </div>
       )}
       {!isUser && r && (

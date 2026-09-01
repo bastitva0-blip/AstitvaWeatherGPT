@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "WeatherGPT Chat",
+  "version": "1.0.0",
+  "description": "Ask WeatherGPT a weather question from any tab.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "WeatherGPT Chat"
+  },
+  "options_page": "options.html",
+  "permissions": ["storage"],
+  "host_permissions": ["http://localhost:8000/*", "https://*/*"]
+}

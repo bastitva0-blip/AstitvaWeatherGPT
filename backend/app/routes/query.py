@@ -137,7 +137,7 @@ async def query(body: QueryRequest, api_key: str = Depends(verify_api_key), db: 
     # degradation on an already-degraded path, not worth a second LLM call.
     llm_response = await llm_service.generate(
         weather_data, rag_chunks, nlp_result, gfs_data, extra_facts=extra_facts, extra_citations=extra_citations,
-        target_lang=nlp_result["lang"],
+        target_lang=nlp_result["lang"], detail_level=body.detail_level,
     )
 
     await _ensure_session(db, body.session_id, api_key, nlp_result["lang"])

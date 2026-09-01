@@ -25,12 +25,24 @@ export interface QueryResponse {
   };
   alert_level: "none" | "advisory" | "watch" | "warning";
   use_case_context: string;
+  llm_source: string;
 }
 
-export function sendQuery(message: string, sessionId: string, inputMode: "text" | "voice" = "text", locationHint?: string) {
+export type DetailLevel = "short" | "medium" | "long";
+
+export function sendQuery(
+  message: string,
+  sessionId: string,
+  inputMode: "text" | "voice" = "text",
+  locationHint?: string,
+  detailLevel: DetailLevel = "short",
+) {
   return request<QueryResponse>("/api/query", {
     method: "POST",
-    body: JSON.stringify({ message, session_id: sessionId, input_mode: inputMode, location_hint: locationHint || undefined }),
+    body: JSON.stringify({
+      message, session_id: sessionId, input_mode: inputMode,
+      location_hint: locationHint || undefined, detail_level: detailLevel,
+    }),
   });
 }
 

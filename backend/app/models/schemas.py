@@ -103,6 +103,7 @@ class QueryRequest(BaseModel):
     session_id: str
     location_hint: str | None = None
     input_mode: Literal["text", "voice"] = "text"
+    detail_level: Literal["short", "medium", "long"] = "short"
 
 
 class QueryResponse(BaseModel):
@@ -113,6 +114,7 @@ class QueryResponse(BaseModel):
     use_case_context: Literal[
         "farmer", "fisherman", "disaster", "researcher", "aviation", "urban", "general"
     ] = "general"
+    llm_source: str = "nvidia-nim"
 
 
 class AlertSubscribeRequest(BaseModel):

@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>WeatherGPT Chat — Settings</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 420px; margin: 2rem auto; color: #1a1a1a; }
+    label { display: block; margin-top: 1rem; font-size: 0.85rem; font-weight: 600; }
+    input { width: 100%; padding: 0.5rem; margin-top: 0.25rem; box-sizing: border-box; }
+    button { margin-top: 1.25rem; padding: 0.5rem 1rem; cursor: pointer; }
+    #status { margin-top: 0.75rem; font-size: 0.85rem; color: #1c6f68; }
+  </style>
+</head>
+<body>
+  <h2>WeatherGPT Chat — Settings</h2>
+  <label for="apiBase">Backend API URL</label>
+  <input id="apiBase" type="text" placeholder="http://localhost:8000" />
+  <label for="apiKey">API Key</label>
+  <input id="apiKey" type="text" placeholder="test-key" />
+  <button id="save">Save</button>
+  <div id="status"></div>
+  <script src="options.js"></script>
+</body>
+</html>
