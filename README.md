@@ -19,6 +19,8 @@
   <img src="https://img.shields.io/badge/TypeScript-5.4-3178C6?style=flat-square&logo=typescript&logoColor=white" />
   <img src="https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white" />
   <img src="https://img.shields.io/badge/NVIDIA%20NIM-Llama%203.2%2011B-76B900?style=flat-square&logo=nvidia&logoColor=white" />
+  <img src="https://img.shields.io/badge/Local%20LLM-Qwen%202.5%207B%20(Ollama)-1c6f68?style=flat-square" />
+  <img src="https://img.shields.io/badge/Chrome-Extension-yellow?style=flat-square&logo=googlechrome&logoColor=white" />
   <img src="https://img.shields.io/badge/PostgreSQL-15-336791?style=flat-square&logo=postgresql&logoColor=white" />
   <img src="https://img.shields.io/badge/Redis-7-DC382D?style=flat-square&logo=redis&logoColor=white" />
   <img src="https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white" />
@@ -53,6 +55,7 @@
 - [🏗️ System Architecture](#️-system-architecture)
 - [🧠 AI & NLP Pipeline](#-ai--nlp-pipeline)
 - [🔌 MCP Server](#-mcp-server--ai-agent-integration)
+- [🧩 Chrome Extension](#-chrome-extension)
 - [🗂️ Project Structure](#️-project-structure)
 - [🚀 Quick Start](#-quick-start)
 - [⚙️ Environment Variables](#️-environment-variables)
@@ -106,13 +109,21 @@
   <td>✅ Live</td><td>GDACS (UN OCHA/EC)</td>
 </tr>
 <tr>
-  <td rowspan="3"><strong>🤖 AI</strong></td>
+  <td rowspan="5"><strong>🤖 AI</strong></td>
   <td>Natural language query understanding in 17 languages</td>
   <td>✅ Live</td><td>Keyword classifier + NVIDIA NIM</td>
 </tr>
 <tr>
   <td>Grounded LLM answer (facts from real APIs, never the model's memory)</td>
   <td>✅ Live</td><td>NVIDIA NIM — Llama 3.2 11B</td>
+</tr>
+<tr>
+  <td>Hybrid inference — self-hosted Qwen 2.5 7B (Ollama) as primary, NVIDIA NIM as automatic fallback</td>
+  <td>✅ Live</td><td>Ollama (local) + NVIDIA NIM</td>
+</tr>
+<tr>
+  <td>Three-tier answer depth — Short / Medium / Long, selectable per message</td>
+  <td>✅ Live</td><td>Tiered system prompts + token budgets</td>
 </tr>
 <tr>
   <td>RAG context retrieval over IMD bulletins corpus</td>
@@ -202,6 +213,11 @@
   <td>Per-user admin dashboard (query history, intent distribution)</td>
   <td>✅ Live</td><td>PostgreSQL</td>
 </tr>
+<tr>
+  <td><strong>🧩 Extension</strong></td>
+  <td>Chrome extension — popup chatbot, quick-action shortcuts, hits the same <code>/api/query</code> backend</td>
+  <td>✅ Live</td><td>Manifest V3</td>
+</tr>
 </tbody>
 </table>
 
@@ -247,9 +263,9 @@
 │     ├─ aqi_service        OWM Air Pollution  (urban intent only)   │   │
 │     └─ gis_service.get_coastal_zone()   (marine intent only)       │   │
 │                                                                     │   │
-│  ③ llm_service.generate()   NVIDIA NIM — answer in user's lang     │   │
-│     LLM writes ONE sentence. Facts come from step ②.               │   │
-│     Deterministic fallback if LLM unavailable.                     │   │
+│  ③ llm_service.generate()   Qwen 2.5 7B (Ollama) → NIM → template   │   │
+│     LLM writes answer at requested detail tier. Facts from step ②. │   │
+│     Deterministic fallback if both LLM paths unavailable.          │   │
 │                                                                     │   │
 │  ④ persist Query row → PostgreSQL                                  │   │
 │     └─ return QueryResponse ←──────────────────────────────────────┘   │
@@ -286,6 +302,8 @@
 | **Keyword classifier for intent/slots, not LLM** | 2 extra sequential LLM calls were adding 13–15s/query on the hot path — instant classifier is already the tested fallback | `nlp_service.py` docstring |
 | **LLM writes answer directly in target language** | Eliminated second back-translation call (~1.3–3s per non-English query in production) | `llm_service.py` `_answer_system_prompt()` |
 | **Llama 3.2 11B over 120B reasoning model** | ~1.3s/call vs 10–15s — meets <2000ms P95 latency criterion | `config.py` NVIDIA_MODEL default |
+| **Local Qwen 2.5 7B (Ollama) as primary inference path** | Self-hosted answers with zero per-token cloud cost and no external API dependency for the demo path; NVIDIA NIM steps in automatically on any local failure or when the local runtime isn't up | `llm_client.py` — Ollama-first, NIM-fallback |
+| **Three answer-detail tiers, not one fixed length** | A farmer wants one line, a researcher wants every number — same facts, different system prompt + token budget per tier | `llm_service.py` `_DETAIL_RULES` / `_DETAIL_MAX_TOKENS` |
 | **Global Nominatim before India-biased** | India-first was silently resolving "Paris" to a Mumbai suburb — caught live in production | `gis_service.py` comment block |
 | **Wave height is never synthetic** | This field drives the fisherman SAFE/UNSAFE verdict — `None` for inland is correct, not a gap to fill | `weather_service.py` `_fetch_marine_wave_height()` |
 | **Versioned Redis cache keys (v2)** | Stale synthetic data from before real-API switch would have been served after redeploy without version bump | `weather_service.py` `cache_key = f"weather:v2:..."` |
@@ -355,12 +373,16 @@ User message (any of 17 languages)
 
         │
         ▼
- 7. LLM Answer Generation  (NVIDIA NIM — Llama 3.2 11B)
-    System: [base rules] + "Write answer in {target_lang} native script"
+ 7. LLM Answer Generation  (Qwen 2.5 7B via Ollama, primary → NVIDIA NIM Llama 3.2 11B, fallback)
+    System: [detail-tier rules: short/medium/long] + "Write answer in
+             {target_lang} native script" + safety rule
     User:   flat facts string from step 6 — model cannot invent numbers
     Safety rule in system prompt: use fishing_zone_safe verdict exactly;
     if None (inland) → say "not enough data", never guess SAFE/UNSAFE
-    Deterministic fallback answer if LLM unavailable/fails.
+    llm_source ("qwen-local" / "nvidia-nim" / "nvidia-nim-fallback" /
+    "deterministic") is returned alongside the answer so the UI can show
+    which engine actually answered.
+    Deterministic (tiered) fallback answer if both LLM paths fail.
 
         │
         ▼
@@ -430,6 +452,21 @@ gemini mcp add sanket --url https://api.sanket.in/mcp --header "X-API-Key: your-
 
 ---
 
+## 🧩 Chrome Extension
+
+A Manifest V3 popup chatbot (`extension/`) that talks straight to `/api/query` — no login flow, no full app shell, just a chat window one click away in any tab.
+
+- Same 5 quick-action boxes as the app (Weather Check, ATC Check, Fisherman Check, Farmer Advisory, Disaster Alert)
+- Themed to match the PWA — same color tokens, Space Grotesk/Inter fonts, chat-bubble styling
+- Configurable backend URL + API key via an options page (defaults to the live Railway backend)
+
+**Install (unpacked):**
+```
+chrome://extensions → enable Developer mode → Load unpacked → select extension/
+```
+
+---
+
 ## 🗂️ Project Structure
 
 ```
@@ -492,7 +529,7 @@ AstitvaWeatherGPT/
 │   ├── 📁 src/
 │   │   ├── 📁 assets/team/       # Real team photos (6 × .jpg)
 │   │   ├── 📁 components/
-│   │   │   ├── Chat/             # ChatBubble, ChatInput, FeedbackButtons, SuggestionChips
+│   │   │   ├── Chat/             # ChatBubble, ChatInput, FeedbackButtons, QuickActions
 │   │   │   ├── Map/              # WeatherMap, WeatherPopup, CoastalZones, LayerToggle, TimelineScrubber
 │   │   │   ├── Shell/            # TopBar, Sidebar, BottomNav, OfflineBanner
 │   │   │   ├── UI/               # AlertToast, ClimateTrendChart, VoiceButton, LanguageSelect
@@ -518,6 +555,11 @@ AstitvaWeatherGPT/
 ├── 📁 monitoring/
 │   ├── prometheus.yml
 │   └── grafana/dashboard.json
+│
+├── 📁 extension/                 # Chrome extension (Manifest V3)
+│   ├── manifest.json
+│   ├── popup.html / popup.js     # Popup chatbot — quick actions + free-text chat
+│   └── options.html / options.js # Backend URL + API key configuration
 │
 ├── 📁 nginx/nginx.conf
 ├── 📁 .github/workflows/deploy.yml
@@ -609,9 +651,13 @@ npm run dev
 
 | Variable | Default | Description |
 |---|---|---|
-| `NVIDIA_API_KEY` | — | NVIDIA NIM key — required for real LLM answers |
+| `NVIDIA_API_KEY` | — | NVIDIA NIM key — fallback LLM answers |
 | `NVIDIA_BASE_URL` | `https://integrate.api.nvidia.com/v1` | NIM endpoint |
-| `NVIDIA_MODEL` | `meta/llama-3.2-11b-vision-instruct` | LLM model string |
+| `NVIDIA_MODEL` | `meta/llama-3.2-11b-vision-instruct` | NIM model string |
+| `LOCAL_LLM_ENABLED` | `false` | Routes answer generation through a self-hosted Qwen 2.5 7B (Ollama) instance first, before NIM — flip on any machine running Ollama |
+| `LOCAL_MODEL` | `qwen2.5:7b-instruct` | Ollama model tag |
+| `OLLAMA_BASE_URL` | `http://localhost:11434/v1` | Ollama's OpenAI-compatible endpoint |
+| `OLLAMA_HOST` | `localhost` | Host used for the Ollama reachability check |
 | `WHISPER_MODEL_SIZE` | `base` | faster-whisper model size |
 
 ### Optional
@@ -641,7 +687,7 @@ npm run dev
 | `/team` | `TeamPage` | Public | Team Eloquence cards with click-to-expand detail + LinkedIn |
 | `/onboarding` | `OnboardingPage` | 🔒 | First-run: language picker + location permission |
 | `/app` | `HomePage` | 🔒 | Weather hero card, current conditions dashboard |
-| `/app/chat` | `ChatPage` | 🔒 | Main conversational AI chat with suggestion chips |
+| `/app/chat` | `ChatPage` | 🔒 | Main conversational AI chat — 5 quick-action boxes, Short/Medium/Long detail toggle |
 | `/app/map` | `MapPage` | 🔒 | Leaflet/Carto map — coastal zones, cyclone tracks, rainfall overlay |
 | `/app/cities` | `CitiesPage` | 🔒 | Browse and pin saved cities (citiesStore) |
 | `/app/compare` | `ComparePage` | 🔒 | Side-by-side weather comparison for 2+ locations |
@@ -674,7 +720,8 @@ X-API-Key: your-key
   "message": "kal Mumbai mein barish hogi kya?",
   "session_id": "uuid-v4-here",
   "location_hint": "Mumbai",
-  "input_mode": "text"
+  "input_mode": "text",
+  "detail_level": "short"
 }
 ```
 
@@ -705,9 +752,12 @@ X-API-Key: your-key
     "coastal_zone": "Maharashtra Coast"
   },
   "alert_level": "none",
-  "use_case_context": "general"
+  "use_case_context": "general",
+  "llm_source": "qwen-local"
 }
 ```
+
+`detail_level` accepts `short` (1–2 sentence answer, default), `medium` (short paragraph with key supporting numbers), or `long` (full technical briefing walking through every fact — built for a domain-expert reader). `llm_source` in the response reports which engine actually generated the answer: `qwen-local`, `nvidia-nim`, `nvidia-nim-fallback`, or `deterministic`.
 
 ### All Endpoints
 
