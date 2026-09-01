@@ -3,30 +3,86 @@
 <head>
   <meta charset="utf-8" />
   <title>WeatherGPT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    body { width: 340px; height: 460px; margin: 0; font-family: system-ui, sans-serif; display: flex; flex-direction: column; background: #0f1720; color: #e8edf2; }
-    header { padding: 0.6rem 0.75rem; font-weight: 600; border-bottom: 1px solid #223; display: flex; justify-content: space-between; align-items: center; }
-    header a { color: #7fd1c7; font-size: 0.75rem; text-decoration: none; }
-    #messages { flex: 1; overflow-y: auto; padding: 0.6rem 0.75rem; display: flex; flex-direction: column; gap: 0.5rem; }
-    .msg { padding: 0.5rem 0.65rem; border-radius: 10px; max-width: 85%; font-size: 0.85rem; line-height: 1.3; white-space: pre-wrap; }
-    .msg.user { align-self: flex-end; background: #1c6f68; }
-    .msg.bot { align-self: flex-start; background: #1b2530; border: 1px solid #223; }
-    .msg.error { color: #ff8a8a; }
-    form { display: flex; gap: 0.4rem; padding: 0.6rem 0.75rem; border-top: 1px solid #223; }
-    input { flex: 1; background: #1b2530; border: 1px solid #223; border-radius: 8px; color: inherit; padding: 0.45rem 0.6rem; font-size: 0.85rem; }
-    button { background: #1c6f68; border: none; border-radius: 8px; color: #fff; padding: 0.45rem 0.8rem; font-size: 0.85rem; cursor: pointer; }
-    button:disabled { opacity: 0.5; cursor: default; }
+    :root {
+      --bg-deep: #020B14;
+      --bg-surface: #071A2B;
+      --bg-elevated: #0D2640;
+      --teal: #00D4AA;
+      --teal-deep: #064E42;
+      --teal-glow: rgba(0, 212, 170, 0.1);
+      --danger: #FF4444;
+      --text-primary: #E8F4F8;
+      --text-muted: #4A6B82;
+      --border: #0D2640;
+      --border-bright: #1A3D5C;
+      --radius-card: 16px;
+      --radius-pill: 999px;
+      --font-display: "Space Grotesk", sans-serif;
+      --font-body: "Inter", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      width: 360px; height: 500px; margin: 0; display: flex; flex-direction: column;
+      background: var(--bg-deep); color: var(--text-primary); font-family: var(--font-body);
+    }
+    header {
+      height: 52px; flex: none; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 0.9rem; background: var(--bg-surface); border-bottom: 1px solid var(--border);
+    }
+    header .title { font-family: var(--font-display); font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 0.4rem; }
+    header .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); }
+    header a { color: var(--text-muted); font-size: 0.72rem; text-decoration: none; }
+    header a:hover { color: var(--teal); }
+
+    #messages { flex: 1; overflow-y: auto; padding: 0.85rem; display: flex; flex-direction: column; gap: 0.55rem; }
+    #messages:empty::before {
+      content: "Ask about weather, cyclones, air quality, crop advisories or airport conditions.";
+      color: var(--text-muted); font-size: 0.82rem; text-align: center; margin: auto; display: block; padding: 1rem;
+    }
+    .msg { padding: 0.55rem 0.75rem; border-radius: var(--radius-card); max-width: 85%; font-size: 0.85rem; line-height: 1.4; white-space: pre-wrap; }
+    .msg.user { align-self: flex-end; background: var(--teal-deep); color: #fff; border-radius: 16px 16px 4px 16px; }
+    .msg.bot { align-self: flex-start; background: var(--bg-elevated); border: 1px solid var(--border-bright); border-radius: 16px 16px 16px 4px; }
+    .msg.error { align-self: flex-start; background: rgba(255,68,68,0.1); border: 1px solid var(--danger); color: #ffb3b3; border-radius: 16px 16px 16px 4px; }
+
+    .quick-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; padding: 0 0.85rem 0.7rem; }
+    .quick-actions button {
+      background: var(--bg-elevated); border: 1px solid var(--border-bright); border-radius: 10px;
+      color: var(--text-primary); font-size: 0.72rem; font-weight: 500; padding: 0.55rem 0.4rem; cursor: pointer;
+    }
+    .quick-actions button:hover { border-color: var(--teal); color: var(--teal); }
+
+    .thinking { align-self: flex-start; color: var(--text-muted); font-size: 0.8rem; padding: 0 0.75rem; }
+
+    form {
+      display: flex; gap: 0.45rem; padding: 0.7rem 0.85rem; border-top: 1px solid var(--border);
+      background: var(--bg-surface); flex: none;
+    }
+    input {
+      flex: 1; background: var(--bg-elevated); border: 1px solid var(--border-bright); border-radius: var(--radius-pill);
+      color: inherit; padding: 0.5rem 0.9rem; font-size: 0.85rem; font-family: var(--font-body);
+    }
+    input:focus { outline: none; border-color: var(--teal); }
+    button[type="submit"] {
+      background: var(--teal); border: none; border-radius: 50%; width: 36px; height: 36px; flex: none;
+      color: var(--bg-deep); font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    button[type="submit"]:disabled { opacity: 0.5; cursor: default; }
   </style>
 </head>
 <body>
   <header>
-    WeatherGPT
+    <span class="title"><span class="dot"></span>WeatherGPT</span>
     <a href="options.html" target="_blank" id="settings-link">Settings</a>
   </header>
+  <div class="quick-actions" id="quick-actions"></div>
   <div id="messages"></div>
   <form id="chat-form">
     <input id="chat-text" type="text" placeholder="Ask about weather..." autocomplete="off" />
-    <button type="submit" id="chat-send">Send</button>
+    <button type="submit" id="chat-send" aria-label="Send">&uarr;</button>
   </form>
   <script src="popup.js"></script>
 </body>
