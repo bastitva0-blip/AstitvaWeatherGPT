@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { ChatBubble } from "../components/Chat/ChatBubble";
 import { ChatInput } from "../components/Chat/ChatInput";
-import { SuggestionChips } from "../components/Chat/SuggestionChips";
+import { QuickActions } from "../components/Chat/QuickActions";
 import { useWebSocket } from "../hooks/useWebSocket";
-import { sendQuery } from "../lib/api";
+import { sendQuery, type DetailLevel } from "../lib/api";
 import { useAlertStore } from "../stores/alertStore";
 import { useChatStore } from "../stores/chatStore";
 import { useAuthStore } from "../stores/authStore";
@@ -18,6 +18,7 @@ export function ChatPage() {
   const { t } = useTranslation();
   const [thinking, setThinking] = useState(false);
   const [voiceStatus, setVoiceStatus] = useState<"idle" | "recording" | "processing">("idle");
+  const [detailLevel, setDetailLevel] = useState<DetailLevel>("short");
   const alerts = useAlertStore((s) => s.alerts);
   const activeCity = useCitiesStore((s) => s.activeCity);
   const savedCities = useCitiesStore((s) => s.cities);
@@ -34,7 +35,7 @@ export function ChatPage() {
     addMessage({ id: crypto.randomUUID(), role: "user", text });
     setThinking(true);
     try {
-      const response = await sendQuery(text, sessionId, voiceStatus !== "idle" ? "voice" : "text", locationHint);
+      const response = await sendQuery(text, sessionId, voiceStatus !== "idle" ? "voice" : "text", locationHint, detailLevel);
       addMessage({ id: crypto.randomUUID(), role: "assistant", text: response.answer, response });
     } catch (err) {
       console.error("sendQuery failed:", err);
@@ -55,8 +56,8 @@ export function ChatPage() {
             <div style={{ position: "relative", fontSize: "2rem" }}>🌩</div>
             <h2 className="font-display" style={{ position: "relative" }}>{t("home.greeting", { name: userName || "" })}</h2>
             <p style={{ color: "var(--text-muted)", position: "relative" }}>What would you like to know about today's weather?</p>
-            <div style={{ position: "relative", width: "100%" }}>
-              <SuggestionChips onPick={submit} />
+            <div style={{ position: "relative", width: "100%", display: "flex", justifyContent: "center" }}>
+              <QuickActions onPick={submit} />
             </div>
           </div>
         )}
@@ -66,7 +67,10 @@ export function ChatPage() {
         {thinking && <Spinner size="sm" />}
       </div>
 
-      <ChatInput sessionId={sessionId} onSubmit={submit} voiceStatus={voiceStatus} onVoiceStatusChange={setVoiceStatus} />
+      <ChatInput
+        sessionId={sessionId} onSubmit={submit} voiceStatus={voiceStatus} onVoiceStatusChange={setVoiceStatus}
+        detailLevel={detailLevel} onDetailLevelChange={setDetailLevel}
+      />
     </div>
   );
 }

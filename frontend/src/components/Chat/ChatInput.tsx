@@ -1,18 +1,27 @@
 import { useState } from "react";
 import { Input } from "@devalok/shilp-sutra/ui/input";
 import { IconButton } from "@devalok/shilp-sutra/ui/icon-button";
+import { Button } from "@devalok/shilp-sutra/ui/button";
 import { IconArrowUp } from "@tabler/icons-react";
 import { VoiceButton } from "../UI/VoiceButton";
+import type { DetailLevel } from "../../lib/api";
 
 const MAX_MESSAGE_LENGTH = 500;
+const DETAIL_LEVELS: { value: DetailLevel; label: string }[] = [
+  { value: "short", label: "Short" },
+  { value: "medium", label: "Medium" },
+  { value: "long", label: "Long (detailed)" },
+];
 
 export function ChatInput({
-  sessionId, onSubmit, voiceStatus, onVoiceStatusChange,
+  sessionId, onSubmit, voiceStatus, onVoiceStatusChange, detailLevel, onDetailLevelChange,
 }: {
   sessionId: string;
   onSubmit: (text: string) => void;
   voiceStatus: "idle" | "recording" | "processing";
   onVoiceStatusChange: (s: "idle" | "recording" | "processing") => void;
+  detailLevel: DetailLevel;
+  onDetailLevelChange: (d: DetailLevel) => void;
 }) {
   const [text, setText] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -30,6 +39,20 @@ export function ChatInput({
 
   return (
     <div>
+      <div style={{ display: "flex", gap: "0.35rem", marginBottom: "0.35rem" }}>
+        {DETAIL_LEVELS.map((d) => (
+          <Button
+            key={d.value}
+            type="button"
+            size="compact-sm"
+            shape="pill"
+            variant={detailLevel === d.value ? "solid" : "soft"}
+            onClick={() => onDetailLevelChange(d.value)}
+          >
+            {d.label}
+          </Button>
+        ))}
+      </div>
       {text.length > 400 && (
         <div style={{ textAlign: "right", fontSize: "0.75rem", color: text.length >= 500 ? "var(--danger)" : text.length >= 480 ? "var(--saffron)" : "var(--text-muted)" }}>
           {text.length} / {MAX_MESSAGE_LENGTH}

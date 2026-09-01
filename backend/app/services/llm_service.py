@@ -14,7 +14,6 @@ guaranteed to trace back to a real API call, never the model's imagination.
 """
 from __future__ import annotations
 
-import asyncio
 import logging
 
 from app.services import llm_client
@@ -25,24 +24,48 @@ logger = logging.getLogger(__name__)
 FISHERMEN_WAVE_THRESHOLD_M = 2.5
 FISHERMEN_WIND_THRESHOLD_KMH = 45
 
-_BASE_ANSWER_RULES = """You are WeatherGPT, a weather assistant for India built for the Ministry of Earth Sciences.
-Write ONE short, natural, practical sentence (max 2 sentences) answering the user's query,
-using ONLY the weather facts given to you below — never invent or add numbers, locations,
-or conditions not present in those facts. Plain text only, no JSON, no markdown, no preamble.
+_SAFETY_RULE = """
 Safety-critical rule: the "Fishing zone safe" fact is a pre-computed verdict from IMD wave/wind
 thresholds — you MUST use its exact value (True = SAFE, False = UNSAFE) if it is not None, and
 MUST NOT independently judge safety from the wind/wave numbers yourself. If it is None, say
 there isn't enough data to judge sea safety — do not guess SAFE or UNSAFE."""
 
+_DETAIL_RULES = {
+    "short": (
+        """Write ONE short, natural, practical sentence (max 2 sentences) answering the user's query,
+using ONLY the weather facts given to you below — never invent or add numbers, locations,
+or conditions not present in those facts. Plain text only, no JSON, no markdown, no preamble."""
+    ),
+    "medium": (
+        """Write a short paragraph (3-5 sentences) answering the user's query, using ONLY the
+weather facts given to you below — never invent or add numbers, locations, or conditions not
+present in those facts. Cover the headline condition plus the 2-3 most relevant supporting
+numbers (e.g. rainfall, wind, temperature) for the user's use case. Plain text only, no JSON,
+no markdown, no preamble."""
+    ),
+    "long": (
+        """Write a detailed, technical briefing (as many sentences as needed, no length cap)
+answering the user's query, using ONLY the weather facts given to you below — never invent or
+add numbers, locations, or conditions not present in those facts. Walk through EVERY numeric
+fact provided (temperature range, rainfall and probability, wind speed/direction, humidity,
+visibility, wave height, any active warnings, NWP model used) and briefly explain what each
+number means for the user's use case, as if briefing a domain expert or "nerd" who wants full
+detail, not a summary. Plain text only, no JSON, no markdown, no preamble."""
+    ),
+}
 
-def _answer_system_prompt(target_lang: str) -> str:
+_DETAIL_MAX_TOKENS = {"short": 150, "medium": 350, "long": 800}
+
+
+def _answer_system_prompt(target_lang: str, detail_level: str) -> str:
+    base = f"You are WeatherGPT, a weather assistant for India built for the Ministry of Earth Sciences.\n{_DETAIL_RULES[detail_level]}{_SAFETY_RULE}"
     if target_lang == "en" or target_lang not in _LANG_NAMES:
-        return _BASE_ANSWER_RULES
+        return base
     # Writing the answer directly in the target language (instead of writing
     # English then back-translating in a second LLM call) cuts one full
     # round-trip off every non-English query's latency — found to add
     # ~1.3-3s per query in production testing.
-    return _BASE_ANSWER_RULES + (
+    return base + (
         f"\nWrite your answer in {_LANG_NAMES[target_lang]}, using its native script "
         f"(e.g. Devanagari for Hindi/Marathi, not romanized/Latin transliteration) — not English."
     )
@@ -96,7 +119,7 @@ def _build_facts(weather_data: dict, nlp_result: dict, gfs_data: list[dict]) -> 
     }
 
 
-def _deterministic_answer(weather_data: dict, fishing_safe: bool | None) -> str:
+def _deterministic_answer(weather_data: dict, fishing_safe: bool | None, detail_level: str = "short") -> str:
     location = weather_data.get("location", "your location")
     date = weather_data.get("date", "the requested date")
     condition = (weather_data.get("condition") or "unknown").lower()
@@ -104,18 +127,42 @@ def _deterministic_answer(weather_data: dict, fishing_safe: bool | None) -> str:
     answer = f"In {location} on {date}, expect {condition} with {rainfall}mm rainfall."
     if fishing_safe is not None:
         answer += " SAFE to go to sea." if fishing_safe else " UNSAFE — do not venture into the sea."
+
+    if detail_level == "short":
+        return answer
+
+    answer += (
+        f" Temperature {weather_data.get('temperature_min')}-{weather_data.get('temperature_max')}C, "
+        f"humidity {weather_data.get('humidity_percent')}%, "
+        f"wind {weather_data.get('wind_speed_kmh')}km/h {weather_data.get('wind_direction')}."
+    )
+    if detail_level == "medium":
+        return answer
+
+    cyclone_name = weather_data.get("cyclone_name")
+    cyclone_note = f" ({cyclone_name})" if weather_data.get("cyclone_warning") and cyclone_name else ""
+    answer += (
+        f" Rainfall probability {weather_data.get('rainfall_probability')}%. "
+        f"Visibility {weather_data.get('visibility_km')}km. "
+        f"Wave height {weather_data.get('wave_height_m')}m. "
+        f"NWP model: {weather_data.get('nwp_model') or 'none'}. "
+        f"Cyclone warning: {weather_data.get('cyclone_warning')}{cyclone_note}. "
+        f"Heatwave warning: {weather_data.get('heatwave_warning')}. "
+        f"Source: {weather_data.get('source')}."
+    )
     return answer
 
 
 async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict, gfs_data: list[dict],
                     extra_facts: str | None = None, extra_citations: list[dict] | None = None,
-                    target_lang: str = "en") -> dict:
+                    target_lang: str = "en", detail_level: str = "short") -> dict:
     facts = _build_facts(weather_data, nlp_result, gfs_data)
     fishing_safe = facts.pop("fishing_safe")
     if extra_citations:
         facts["citations"].extend(extra_citations)
 
     answer = None
+    llm_source = "deterministic"
     if llm_client.is_configured():
         try:
             facts_summary = (
@@ -137,14 +184,15 @@ async def generate(weather_data: dict, rag_chunks: list[dict], nlp_result: dict,
                 f"User query: {nlp_result.get('en_text')}"
                 + (f", {extra_facts}" if extra_facts else "")
             )
-            raw = await asyncio.to_thread(
-                llm_client.chat_completion, _answer_system_prompt(target_lang), facts_summary, 150
+            raw, llm_source = await llm_client.chat_completion(
+                _answer_system_prompt(target_lang, detail_level), facts_summary, _DETAIL_MAX_TOKENS[detail_level]
             )
             answer = raw.strip().strip('"')
         except Exception as e:
-            logger.warning(f"NVIDIA LLM answer generation failed, using deterministic answer: {e}")
+            logger.warning(f"LLM answer generation failed, using deterministic answer: {e}")
 
     if not answer:
-        answer = _deterministic_answer(weather_data, fishing_safe)
+        answer = _deterministic_answer(weather_data, fishing_safe, detail_level)
+        llm_source = "deterministic"
 
-    return {"answer": answer, **facts}
+    return {"answer": answer, "llm_source": llm_source, **facts}
