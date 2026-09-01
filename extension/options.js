@@ -1,4 +1,4 @@
-const DEFAULTS = { apiBase: "http://localhost:8000", apiKey: "test-key" };
+const DEFAULTS = { apiBase: "https://backend-production-c6aa1.up.railway.app", apiKey: "test-key" };
 
 async function load() {
   const stored = await chrome.storage.sync.get(DEFAULTS);
