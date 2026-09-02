@@ -18,6 +18,11 @@
 }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
+.arch-hero {
+  background: linear-gradient(180deg, #04121F 0%, var(--bg-elevated) 100%);
+  padding: 1.25rem; border-radius: 0;
+}
+
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 40;
   display: flex; justify-content: space-around;
@@ -317,6 +322,16 @@ table.data-table th, table.data-table td { text-align: left; padding: 0.5rem; bo
   gap: 0.6rem;
   position: relative;
   z-index: 1;
+}
+.user-real {
+  position: absolute;
+  width: 560px;
+  height: 560px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
 }
 .auth-logo__icon {
   width: 42px;
