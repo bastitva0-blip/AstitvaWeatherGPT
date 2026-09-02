@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./AppShell";
+import { GlobalRadar } from "./components/GlobalRadar";
 import { useAuthStore } from "./stores/authStore";
 import { LandingPage } from "./pages/LandingPage";
 import { AuthPage } from "./pages/AuthPage";
@@ -29,7 +30,9 @@ export default function App() {
   const authed = useAuthStore((s) => s.authed);
 
   return (
-    <Routes>
+    <>
+      <GlobalRadar />
+      <Routes>
       <Route path="/" element={authed ? <Navigate to="/app" replace /> : <LandingPage />} />
       <Route path="/auth" element={<AuthPage />} />
       <Route path="/team" element={<TeamPage />} />
@@ -51,6 +54,7 @@ export default function App() {
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+      </Routes>
+    </>
   );
 }

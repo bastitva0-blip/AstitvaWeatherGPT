@@ -272,6 +272,46 @@ table.data-table th, table.data-table td { text-align: left; padding: 0.5rem; bo
   min-height: 100vh;
 }
 
+/* Global radar background (whole site) */
+.global-radar {
+  position: fixed;
+  width: 900px;
+  height: 900px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+.global-radar__ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 212, 170, 0.06);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.global-radar__ring--outer { width: 100%; height: 100%; }
+.global-radar__ring--inner { width: 56%; height: 56%; }
+.global-radar__sweep {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(0, 212, 170, 0.1) 26deg,
+    rgba(0, 212, 170, 0.03) 52deg,
+    transparent 64deg
+  );
+}
+@media (prefers-reduced-motion: no-preference) {
+  .global-radar__sweep {
+    animation: authRadarSpin 8s linear infinite;
+  }
+}
+
 /* Radar sweep */
 .auth-radar {
   position: absolute;
