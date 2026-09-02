@@ -5,9 +5,7 @@
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 1rem; background: var(--bg-surface); border-bottom: 1px solid var(--border);
 }
-.topbar--transparent { background: transparent; border: none; position: absolute; width: 100%; color: #fff; }
-.topbar__title { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; }
-.topbar__actions { display: flex; align-items: center; gap: 0.75rem; }
+
 .icon-btn { background: none; border: none; color: var(--text-primary); font-size: 1.3rem; padding: 0.25rem; }
 .wis2-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-left: 4px; }
 .wis2-dot--live { background: var(--teal); }
@@ -17,6 +15,10 @@
   .wis2-dot--live { animation: pulse 2s infinite; }
 }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.topbar--transparent { background: transparent; border: none; position: absolute; width: 100%; color: #fff; }
+.topbar__title { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; }
+.topbar__actions { display: flex; align-items: center; gap: 0.75rem; }
 
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 40;
@@ -34,34 +36,31 @@
 
 .app-shell__content { flex: 1; padding-bottom: 4.5rem; width: 100%; max-width: 720px; margin: 0 auto; }
 
-.offline-banner {
-  background: var(--saffron); color: var(--bg-deep); padding: 0.5rem 1rem;
-  display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; font-weight: 600;
-}
-
 .sidebar-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1099; }
 .sidebar {
   position: fixed; top: 0; left: 0; bottom: 0; width: 280px; z-index: 1100;
   background: var(--bg-elevated); transform: translateX(-100%);
   transition: transform 280ms cubic-bezier(0.32,0.72,0,1); overflow-y: auto;
 }
-.sidebar.open { transform: translateX(0); }
-.sidebar__user { padding: 1.5rem 1rem; border-bottom: 1px solid var(--border); }
-.sidebar__avatar {
-  width: 48px; height: 48px; border-radius: 50%; background: var(--teal-glow); color: var(--teal);
-  display: flex; align-items: center; justify-content: center; font-weight: 700; margin-bottom: 0.5rem;
-}
+
 .sidebar__section { padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
 .sidebar__label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); padding: 0.5rem 1rem; letter-spacing: 0.08em; }
 .sidebar a, .sidebar button.sidebar__item {
   display: block; width: 100%; text-align: left; padding: 0.6rem 1rem; color: var(--text-primary); text-decoration: none; font-size: 0.95rem;
 }
 .sidebar a.active { color: var(--teal); }
-
+.offline-banner {
+  background: var(--saffron); color: var(--bg-deep); padding: 0.5rem 1rem;
+  display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; font-weight: 600;
+}
 /* Weather home */
 .hero-card {
   background: linear-gradient(180deg, #04121F 0%, var(--bg-elevated) 100%);
   padding: 1.25rem; border-radius: 0;
+}
+.cyclone-fullscreen {
+  position: fixed; inset: 0; z-index: 9999; background: var(--danger-deep); color: #fff;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center;
 }
 .hero-card__top { display: flex; justify-content: space-between; align-items: center; }
 .hero-card__city { font-family: var(--font-display); font-size: 1.5rem; }
@@ -90,12 +89,14 @@
 
 .forecast-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); }
 .forecast-row:last-child { border-bottom: none; }
-
-/* Cyclone full-screen */
-.cyclone-fullscreen {
-  position: fixed; inset: 0; z-index: 9999; background: var(--danger-deep); color: #fff;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center;
+.sidebar.open { transform: translateX(0); }
+.sidebar__user { padding: 1.5rem 1rem; border-bottom: 1px solid var(--border); }
+.sidebar__avatar {
+  width: 48px; height: 48px; border-radius: 50%; background: var(--teal-glow); color: var(--teal);
+  display: flex; align-items: center; justify-content: center; font-weight: 700; margin-bottom: 0.5rem;
 }
+/* Cyclone full-screen */
+
 @media (prefers-reduced-motion: no-preference) {
   .cyclone-fullscreen { animation: fadeIn 150ms; }
 }
