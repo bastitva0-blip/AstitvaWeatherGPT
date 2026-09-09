@@ -22,7 +22,8 @@ class Settings(BaseSettings):
     IMD_API_KEY: str = ""
     TWILIO_ACCOUNT_SID: str = ""
     TWILIO_AUTH_TOKEN: str = ""
-    TWILIO_WHATSAPP_NUMBER: str = ""
+    TWILIO_WHATSAPP_NUMBER: str = "whatsapp:+14155238886"  # Twilio sandbox default
+    TWILIO_PHONE_NUMBER: str = ""   # Your Twilio SMS number in E.164 format
 
     # NWP
     GFS_NOMADS_BASE_URL: str = "https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl"
@@ -43,6 +44,18 @@ class Settings(BaseSettings):
     TOP_CITIES_CACHE: int = 100
     WHISPER_MODEL_SIZE: str = "base"
 
+    # ── Web Push (VAPID) ──
+    VAPID_PRIVATE_KEY: str = ""          # Generate: python3 -c "from py_vapid import Vapid; v=Vapid(); v.generate_keys(); print(v.private_pem().decode())"
+    VAPID_PUBLIC_KEY: str = ""           # base64url-encoded public key (used by frontend)
+    VAPID_CLAIMS_EMAIL: str = "mailto:team@sanket.in"
+
+    # ── Feedback email digest ──
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""                  # Gmail or SMTP user
+    SMTP_PASSWORD: str = ""              # Gmail app password
+    FEEDBACK_DIGEST_EMAIL: str = ""      # Where to send the weekly digest
+
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     def model_post_init(self, __context) -> None:
@@ -59,3 +72,6 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+# Injected at module level below Settings class — appended to existing settings

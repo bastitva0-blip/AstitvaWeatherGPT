@@ -86,3 +86,40 @@ SIH26068 | Status as of 2026-08-28
 ## Decision log
 
 - 2026-08-28: Decided to fix Part A (criteria gaps) before B-F feature expansion.
+
+---
+
+## ✅ Features Added (post-initial build)
+
+### Quick Wins — Done
+- [x] **7-day forecast** — `get_gfs_extended_forecast` date-increment bug fixed; `forecast_days` bumped to 7; new `GET /api/forecast/7day` endpoint
+- [x] **Saved locations** — `citiesStore` already persists to `localStorage` (was already done)
+- [ ] **Share button** — Frontend only; generate a WhatsApp-friendly PNG card from chat answer (TODO: `html2canvas` → blob → share via Web Share API)
+
+### SMS + WhatsApp Bot
+- [x] `sms_service.py` — Twilio client wrapper for SMS + WhatsApp
+- [x] `routes/sms.py` — `/api/sms/inbound` + `/api/whatsapp/inbound` Twilio webhooks
+- [x] Same NLP pipeline, `detail_level="short"` forced for SMS character limits
+- [x] `twilio==9.1.0` added to requirements.txt
+- [x] `TWILIO_PHONE_NUMBER` + `TWILIO_WHATSAPP_NUMBER` added to config + .env.example
+- [ ] **To activate:** uncomment twilio in requirements, set 3 env vars, point Twilio webhook URLs to Railway backend
+
+### Voice Response (TTS)
+- [x] `tts_service.py` — gTTS primary (17 languages), pyttsx3 offline fallback
+- [x] `POST /api/tts` — takes `text` + `lang`, returns base64 MP3
+- [x] Language code map covers all 17 Sanket languages
+- [ ] **Frontend TODO:** after receiving assistant answer, call `/api/tts`, play `audio_base64` via `new Audio("data:audio/mp3;base64,...")`
+
+### Crop Calendar
+- [x] `crop_calendar_service.py` — 8 crops × 12 months × ICAR thresholds
+- [x] `GET /api/crop-calendar?crop=wheat` — full year calendar
+- [x] `GET /api/crop-calendar/current?crop=rice` — just this month's advisory
+- [x] Phase emoji (🌱🌿🌾💤) + water need icons
+- [ ] **Frontend TODO:** new `/app/crop-calendar` page with month grid view
+
+### Push Notifications for Alerts (P1 — backend ready, needs cron)
+- [ ] Wire APScheduler job to check GDACS every 15 min and trigger `/api/push/send` for saved-location users within 500km radius
+
+### Offline Cached Last Answer (P1 — frontend only)
+- [ ] On chat response, write to IndexedDB key `sanket_offline_cache` (last 3 answers)
+- [ ] In service worker offline handler, serve cached answers instead of blank shell

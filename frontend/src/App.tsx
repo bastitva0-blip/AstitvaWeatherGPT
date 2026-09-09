@@ -19,6 +19,7 @@ import { DeveloperPage } from "./pages/DeveloperPage";
 import { AdminPage } from "./pages/AdminPage";
 import { AboutPage } from "./pages/AboutPage";
 import { TeamPage } from "./pages/TeamPage";
+import { CropCalendarPage } from "./pages/CropCalendarPage";
 
 function Protected({ children }: { children: ReactNode }) {
   const authed = useAuthStore((s) => s.authed);
@@ -33,27 +34,28 @@ export default function App() {
     <>
       <GlobalRadar />
       <Routes>
-      <Route path="/" element={authed ? <Navigate to="/app" replace /> : <LandingPage />} />
-      <Route path="/auth" element={<AuthPage />} />
-      <Route path="/team" element={<TeamPage />} />
-      <Route path="/onboarding" element={<Protected><OnboardingPage /></Protected>} />
+        <Route path="/" element={authed ? <Navigate to="/app" replace /> : <LandingPage />} />
+        <Route path="/auth"  element={<AuthPage />} />
+        <Route path="/team"  element={<TeamPage />} />
+        <Route path="/onboarding" element={<Protected><OnboardingPage /></Protected>} />
 
-      <Route path="/app" element={<Protected><AppShell /></Protected>}>
-        <Route index element={<HomePage />} />
-        <Route path="chat" element={<ChatPage />} />
-        <Route path="map" element={<MapPage />} />
-        <Route path="cities" element={<CitiesPage />} />
-        <Route path="compare" element={<ComparePage />} />
-        <Route path="alerts" element={<AlertsPage />} />
-        <Route path="history" element={<HistoryPage />} />
-        <Route path="climate" element={<ClimateTrendsPage />} />
-        <Route path="settings" element={<SettingsPage />} />
-        <Route path="developer" element={<DeveloperPage />} />
-        <Route path="admin" element={<AdminPage />} />
-        <Route path="about" element={<AboutPage />} />
-      </Route>
+        <Route path="/app" element={<Protected><AppShell /></Protected>}>
+          <Route index element={<HomePage />} />
+          <Route path="chat"          element={<ChatPage />} />
+          <Route path="map"           element={<MapPage />} />
+          <Route path="cities"        element={<CitiesPage />} />
+          <Route path="compare"       element={<ComparePage />} />
+          <Route path="alerts"        element={<AlertsPage />} />
+          <Route path="history"       element={<HistoryPage />} />
+          <Route path="climate"       element={<ClimateTrendsPage />} />
+          <Route path="crop-calendar" element={<CropCalendarPage />} />
+          <Route path="settings"      element={<SettingsPage />} />
+          <Route path="developer"     element={<DeveloperPage />} />
+          <Route path="admin"         element={<AdminPage />} />
+          <Route path="about"         element={<AboutPage />} />
+        </Route>
 
-      <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );

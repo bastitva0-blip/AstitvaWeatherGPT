@@ -1,46 +1,59 @@
-import { NavLink } from "react-router-dom";
-import { Button } from "@devalok/shilp-sutra/ui/button";
-import { Avatar, AvatarFallback } from "@devalok/shilp-sutra/ui/avatar";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { AppSidebar } from "@devalok/shilp-sutra/shell";
 import { useAuthStore } from "../../stores/authStore";
 
-const GITHUB_URL = "https://github.com/bastitva0-blip/AstitvaWeatherGPT";
-const DOCS_URL = "https://backend-production-c6aa1.up.railway.app/docs";
-
 export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { userName, userEmail, logout } = useAuthStore();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { signOut, userName, userEmail } = useAuthStore();
+
+  const sections = [
+    {
+      label: t("sidebar.analysis"),
+      items: [
+        { label: t("nav.climate"),       to: "/app/climate"       },
+        { label: t("nav.crop_calendar"), to: "/app/crop-calendar" },
+        { label: t("nav.compare"),       to: "/app/compare"       },
+        { label: t("nav.history"),       to: "/app/history"       },
+        { label: t("sidebar.coverage"),  to: "/app/about"         },
+        { label: t("sidebar.about_team"),href: "/team"            },
+      ],
+    },
+    {
+      label: t("sidebar.developer_label"),
+      items: [
+        { label: t("nav.developer"),  to: "/app/developer" },
+        { label: t("nav.admin"),      to: "/app/admin"     },
+        { label: t("sidebar.api_docs"),  href: "/docs"     },
+        { label: t("sidebar.github"),    href: "https://github.com" },
+      ],
+    },
+    {
+      label: t("sidebar.account"),
+      items: [
+        { label: t("nav.settings"), to: "/app/settings" },
+        {
+          label: t("sidebar.sign_out"),
+          onClick: async () => { await signOut(); navigate("/"); onClose(); },
+        },
+      ],
+    },
+  ];
 
   return (
-    <aside className={`sidebar ${open ? "open" : ""}`}>
-      <div className="sidebar__user">
-        <Avatar><AvatarFallback>{(userName || "?").slice(0, 2).toUpperCase()}</AvatarFallback></Avatar>
-        <div style={{ fontWeight: 600, marginTop: "0.5rem" }}>{userName}</div>
-        <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>{userEmail}</div>
-      </div>
-      <div className="sidebar__section">
-        {[
-          ["Home", "/app"], ["Chat", "/app/chat"], ["Map", "/app/map"], ["Cities", "/app/cities"],
-          ["Compare", "/app/compare"], ["Alerts", "/app/alerts"], ["History", "/app/history"],
-        ].map(([label, to]) => (
-          <NavLink key={to} to={to} end={to === "/app"} onClick={onClose}>{label}</NavLink>
-        ))}
-      </div>
-      <div className="sidebar__section">
-        <div className="sidebar__label">Analysis</div>
-        <NavLink to="/app/climate" onClick={onClose}>Climate Trends</NavLink>
-        <NavLink to="/app/about" onClick={onClose}>Coverage & Sources</NavLink>
-        <a href="/team" onClick={onClose}>About the Team ↗</a>
-      </div>
-      <div className="sidebar__section">
-        <div className="sidebar__label">Developer</div>
-        <NavLink to="/app/developer" onClick={onClose}>API & MCP</NavLink>
-        <a href={DOCS_URL} target="_blank" rel="noreferrer">API Docs ↗</a>
-        <a href={GITHUB_URL} target="_blank" rel="noreferrer">GitHub ↗</a>
-      </div>
-      <div className="sidebar__section">
-        <div className="sidebar__label">Account</div>
-        <NavLink to="/app/settings" onClick={onClose}>Settings</NavLink>
-        <Button variant="ghost" color="error" fullWidth onClick={logout} style={{ justifyContent: "flex-start" }}>Sign out</Button>
-      </div>
-    </aside>
+    <AppSidebar
+      open={open} onClose={onClose}
+      userName={userName || ""} userEmail={userEmail || ""}
+      sections={sections.map((s) => ({
+        label: s.label,
+        items: s.items.map((item) => ({
+          label: item.label,
+          href: (item as any).href,
+          to: (item as any).to,
+          onClick: (item as any).onClick,
+        })),
+      }))}
+    />
   );
 }
