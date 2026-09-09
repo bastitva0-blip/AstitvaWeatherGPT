@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAuthStore } from "../stores/authStore";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@devalok/shilp-sutra/ui/button";
 import { Badge } from "@devalok/shilp-sutra/ui/badge";
@@ -40,7 +41,9 @@ const COVERAGE: string[] = [
 
 export function LandingPage() {
   const navigate = useNavigate();
+  const { authed } = useAuthStore();
   const [menuOpen, setMenuOpen] = useState(false);
+  const goToApp = () => navigate(authed ? "/app" : "/auth");
 
   return (
     <div className="landing">
@@ -52,7 +55,7 @@ export function LandingPage() {
           <a href="#api">API</a>
           <a href="#coverage">Coverage</a>
           <Button onClick={() => navigate("/team")} variant="ghost">Team</Button>
-          <Button onClick={() => navigate("/auth")} shape="pill">Try Free</Button>
+          <Button onClick={goToApp} shape="pill">Try Free</Button>
         </div>
         <IconButton icon={<IconMenu2 />} variant="ghost" className="landing-nav__hamburger" aria-label="Menu" onClick={() => setMenuOpen(true)} />
       </nav>
@@ -68,8 +71,8 @@ export function LandingPage() {
             <a onClick={() => { setMenuOpen(false); navigate("/team"); }}>Team</a>
           </div>
           <div style={{ position: "fixed", bottom: "1.5rem", left: "1.5rem", right: "1.5rem", display: "flex", gap: "1rem" }}>
-            <Button variant="outline" fullWidth onClick={() => navigate("/auth")}>Sign in</Button>
-            <Button fullWidth onClick={() => navigate("/auth")}>Try Free</Button>
+            <Button variant="outline" fullWidth onClick={goToApp}>Sign in</Button>
+            <Button fullWidth onClick={goToApp}>Try Free</Button>
           </div>
         </div>
       )}
@@ -80,7 +83,7 @@ export function LandingPage() {
         <h1 className="hero-headline">Weather for farmers.<br />Fishermen. Pilots. All of India.</h1>
         <p className="hero-sub">Real-time forecasts, cyclone alerts, fishing advisories, AQI, and climate trends, in your language, for your district.</p>
         <div className="hero-ctas">
-          <Button shape="pill" size="lg" onClick={() => navigate("/auth")}>Start for free →</Button>
+          <Button shape="pill" size="lg" onClick={goToApp}>Start for free →</Button>
           <Button variant="outline" shape="pill" size="lg" onClick={() => document.querySelector(".preview-card")?.scrollIntoView({ behavior: "smooth" })}>Watch demo</Button>
         </div>
         <p className="hero-caption">Free · Open source · 17 languages · SIH 2026</p>
@@ -183,7 +186,7 @@ print(result.alert_level)`}</div>
           ))}
         </div>
         <div className="hero-ctas">
-          <Button shape="pill" onClick={() => navigate("/auth")}>Get API key</Button>
+          <Button shape="pill" onClick={goToApp}>Get API key</Button>
           <Button variant="outline" shape="pill" onClick={() => window.open(DOCS_URL, "_blank", "noopener,noreferrer")}>MCP Docs</Button>
         </div>
         <p style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>Free tier · 60 req/min · Open source · No credit card</p>
@@ -207,7 +210,7 @@ print(result.alert_level)`}</div>
       <section className="footer-cta">
         <h2 className="section-headline">Weather that works for India.</h2>
         <p style={{ color: "var(--text-muted)" }}>Free to use. Open source. Built for SIH 2026.</p>
-        <Button shape="pill" size="lg" onClick={() => navigate("/auth")}>Try Sanket Free</Button>
+        <Button shape="pill" size="lg" onClick={goToApp}>Try Sanket Free</Button>
         <div className="footer-links">
           <a href={GITHUB_URL} target="_blank" rel="noreferrer">GitHub</a>
           <a href={DOCS_URL} target="_blank" rel="noreferrer">API Docs</a>

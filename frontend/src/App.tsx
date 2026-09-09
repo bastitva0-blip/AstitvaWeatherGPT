@@ -34,7 +34,7 @@ export default function App() {
     <>
       <GlobalRadar />
       <Routes>
-        <Route path="/" element={authed ? <Navigate to="/app" replace /> : <LandingPage />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/auth"  element={<AuthPage />} />
         <Route path="/team"  element={<TeamPage />} />
         <Route path="/onboarding" element={<Protected><OnboardingPage /></Protected>} />
