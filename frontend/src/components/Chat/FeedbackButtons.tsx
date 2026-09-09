@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { submitFeedback } from "../../lib/feedback";
+import { postFeedback } from "../../lib/feedback";
 
 const ISSUES = ["wrong_data", "wrong_location", "hallucinated", "other"] as const;
 
@@ -13,12 +13,12 @@ export function FeedbackButtons({ messageId, responseText, feedback }: {
 
   async function handleGood() {
     setState("submitted"); setSubmitted("positive");
-    await submitFeedback(messageId, responseText, "positive_feedback");
+    await postFeedback({ query_id: messageId, sentiment: "positive", reason: null, response_text: responseText });
   }
 
   async function handleIssue(issue: string) {
     setState("submitted"); setSubmitted("negative");
-    await submitFeedback(messageId, responseText, issue);
+    await postFeedback({ query_id: messageId, sentiment: "negative", reason: issue, response_text: responseText });
   }
 
   if (state === "submitted") return (
