@@ -1,18 +1,24 @@
-import { StatCard } from "@devalok/shilp-sutra/ui/stat-card";
-import { IconWind, IconDroplet, IconEye, IconCloudRain } from "@tabler/icons-react";
+import { useTranslation } from "react-i18next";
 import type { WeatherData } from "../../lib/api";
 
 export function StatGrid({ data }: { data: WeatherData }) {
-  const cells = [
-    { icon: <IconWind />, label: "Wind", value: `${data.wind_direction ?? "N/A"} ${data.wind_speed_kmh ?? "N/A"}km/h` },
-    { icon: <IconDroplet />, label: "Humidity", value: data.humidity_percent != null ? `${data.humidity_percent}%` : "N/A" },
-    { icon: <IconEye />, label: "Visibility", value: data.visibility_km != null ? `${data.visibility_km}km` : "N/A" },
-    { icon: <IconCloudRain />, label: "Rainfall", value: `${data.rainfall_mm ?? 0}mm` },
+  const { t } = useTranslation();
+  const stats = [
+    { label: t("weather.rainfall"),    value: data.rainfall_mm != null ? `${data.rainfall_mm} mm` : "—", icon: "🌧" },
+    { label: t("weather.humidity"),    value: data.humidity_percent != null ? `${data.humidity_percent}%` : "—", icon: "💧" },
+    { label: t("weather.wind"),        value: data.wind_speed_kmh != null ? `${data.wind_speed_kmh} km/h` : "—", icon: "💨" },
+    { label: t("weather.wave_height"), value: data.wave_height_m != null ? `${data.wave_height_m} m` : "—", icon: "🌊" },
+    { label: t("weather.visibility"),  value: data.visibility_km != null ? `${data.visibility_km} km` : "—", icon: "👁" },
+    { label: t("weather.nwp_model"),   value: "GFS / Open-Meteo", icon: "📡" },
   ];
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "0.5rem" }}>
-      {cells.map((c) => (
-        <StatCard key={c.label} size="sm" label={c.label} value={c.value} icon={c.icon} accentStyle="icon" />
+    <div className="stat-grid">
+      {stats.map((s) => (
+        <div key={s.label} className="stat-card">
+          <span className="stat-card__icon">{s.icon}</span>
+          <span className="stat-card__value mono">{s.value}</span>
+          <span className="stat-card__label">{s.label}</span>
+        </div>
       ))}
     </div>
   );

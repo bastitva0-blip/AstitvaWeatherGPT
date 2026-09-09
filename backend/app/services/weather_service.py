@@ -82,14 +82,41 @@ async def fetch_weather(gis_location, date: str) -> dict:
     if cached:
         return json.loads(cached)
 
+    # IMD direct — primary for Indian cities (authoritative, satisfies MoES mandate)
+    from app.services.imd_service import fetch_imd_weather
+    imd_data = None
+    if getattr(gis_location, "country", "IN") in ("IN", None, ""):
+        imd_data = await fetch_imd_weather(gis_location.name)
+
     owm, real_wave_height, disasters = await asyncio.gather(
         _fetch_openweathermap(gis_location.lat, gis_location.lon),
         _fetch_marine_wave_height(gis_location.lat, gis_location.lon),
         disaster_service.get_nearby_disasters(gis_location.lat, gis_location.lon),
     )
-    source = "OpenWeatherMap" if owm else "Synthetic-Fallback"
+
+    if imd_data:
+        source = "IMD (India Meteorological Department)"
+    elif owm:
+        source = "OpenWeatherMap"
+    else:
+        source = "Synthetic-Fallback"
+
     base = _synthetic_weather(gis_location.name, gis_location.lat, gis_location.lon, date)
-    base["wave_height_m"] = real_wave_height  # real (possibly None inland) — never synthetic
+    base["wave_height_m"] = real_wave_height
+
+    if imd_data:
+        base.update({
+            "temperature_max":  imd_data.get("temperature_max", base["temperature_max"]),
+            "temperature_min":  imd_data.get("temperature_min", base["temperature_min"]),
+            "humidity_percent": imd_data.get("humidity_percent", base["humidity_percent"]),
+            "wind_speed_kmh":   imd_data.get("wind_speed_kmh", base["wind_speed_kmh"]),
+            "wind_direction":   imd_data.get("wind_direction", base["wind_direction"]),
+            "condition":        imd_data.get("condition", base["condition"]),
+            "rainfall_mm":      imd_data.get("rainfall_mm", base["rainfall_mm"]),
+            "visibility_km":    imd_data.get("visibility_km", base["visibility_km"]),
+            "heatwave_warning": imd_data.get("temperature_max", 0) >= 40,
+            "imd_last_updated": imd_data.get("imd_last_updated"),
+        })
 
     if owm:
         main = owm.get("main", {})

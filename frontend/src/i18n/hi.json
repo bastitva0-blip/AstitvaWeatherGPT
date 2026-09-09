@@ -1,85 +1,125 @@
 {
   "nav": {
-    "home": "होम",
-    "chat": "चैट",
-    "map": "मैप",
-    "cities": "शहर",
-    "compare": "तुलना",
-    "alerts": "अलर्ट",
-    "history": "इतिहास",
-    "climate": "जलवायु",
-    "settings": "सेटिंग",
-    "developer": "डेवलपर",
-    "admin": "एडमिन",
-    "about": "जानकारी"
+    "home": "होम", "chat": "चैट", "map": "मैप", "cities": "शहर",
+    "compare": "तुलना", "alerts": "अलर्ट", "history": "इतिहास",
+    "climate": "जलवायु", "settings": "सेटिंग", "developer": "डेवलपर",
+    "admin": "एडमिन", "about": "जानकारी", "crop_calendar": "फसल कैलेंडर"
   },
   "auth": {
-    "title": "अपने आसमान को जानें।",
-    "subtitle": "स्थान सहेजने, अलर्ट सेट करने और वॉइस उपयोग के लिए साइन इन करें।",
-    "google": "Google से जारी रखें",
-    "email": "ईमेल से जारी रखें",
-    "email_label": "ईमेल",
-    "password_label": "पासवर्ड",
-    "continue": "जारी रखें",
-    "free_forever": "हमेशा मुफ़्त। कोई क्रेडिट कार्ड नहीं।"
+    "title": "अपने आसमान को जानें।", "subtitle": "स्थान सहेजने, अलर्ट सेट करने और वॉइस उपयोग के लिए साइन इन करें।",
+    "google": "Google से जारी रखें", "email": "ईमेल से जारी रखें",
+    "email_label": "ईमेल", "password_label": "पासवर्ड",
+    "continue": "जारी रखें", "free_forever": "हमेशा मुफ़्त। कोई क्रेडिट कार्ड नहीं।"
   },
   "onboarding": {
-    "lang_title": "Sanket बोलता है आपकी भाषा",
-    "location_title": "आपको मौसम कहाँ का चाहिए?",
-    "gps_button": "मेरा GPS स्थान उपयोग करें",
-    "city_placeholder": "अपना शहर टाइप करें",
-    "city_hint": "आप बाद में और शहर जोड़ सकते हैं।",
-    "city_selected": "चयनित स्थान",
+    "lang_title": "Sanket बोलता है आपकी भाषा", "location_title": "आपको मौसम कहाँ का चाहिए?",
+    "gps_button": "मेरा GPS स्थान उपयोग करें", "city_placeholder": "अपना शहर टाइप करें",
+    "city_hint": "आप बाद में और शहर जोड़ सकते हैं।", "city_selected": "चयनित स्थान",
     "notif_title": "अलर्ट ज़रूरी होने से पहले पाएं।",
     "notif_body": "Sanket चक्रवात चेतावनी और सीमा अलर्ट के लिए पुश नोटिफिकेशन भेज सकता है, ऐप बंद होने पर भी।",
-    "notif_ready": "आप तैयार हैं",
-    "notif_enable": "पुश नोटिफिकेशन सक्षम करें",
+    "notif_ready": "आप तैयार हैं", "notif_enable": "पुश नोटिफिकेशन सक्षम करें",
     "notif_later": "आप इसे बाद में सेटिंग में सक्षम कर सकते हैं",
-    "start": "Sanket उपयोग शुरू करें",
-    "continue": "जारी रखें →"
+    "start": "Sanket उपयोग शुरू करें", "continue": "जारी रखें →"
   },
   "chat": {
-    "placeholder": "मौसम के बारे में पूछें...",
-    "send": "भेजें",
-    "listening": "सुन रहा हूँ...",
-    "thinking": "सोच रहा हूँ...",
+    "placeholder": "मौसम के बारे में पूछें...", "send": "भेजें",
+    "listening": "सुन रहा हूँ...", "thinking": "सोच रहा हूँ...",
     "voice_denied": "माइक्रोफ़ोन अनुमति नहीं मिली",
     "voice_too_long": "रिकॉर्डिंग 60 सेकंड से अधिक नहीं होनी चाहिए",
-    "processing": "सुन रहा हूँ...",
-    "error": "मौसम के बारे में पूछें..."
+    "processing": "आपकी आवाज़ प्रोसेस हो रही है...",
+    "error": "संदेश प्रोसेस नहीं हो सका। अपना मौसम सवाल दोबारा पूछें।",
+    "offline_cached": "पिछला {{count}} कैश्ड जवाब",
+    "offline_cached_plural": "पिछले {{count}} कैश्ड जवाब",
+    "empty_prompt": "आज के मौसम के बारे में क्या जानना चाहते हैं?"
   },
   "alerts": {
-    "cyclone": "चक्रवात चेतावनी",
-    "heavy_rain": "भारी वर्षा",
-    "heatwave": "लू की चेतावनी",
-    "marine_warning": "समुद्री चेतावनी",
-    "fishermen_alert": "मछुआरा चेतावनी, समुद्र में न जाएं",
-    "dismiss": "बंद करें",
-    "no_alerts": "No active alerts"
+    "cyclone": "चक्रवात चेतावनी", "heavy_rain": "भारी वर्षा",
+    "heatwave": "लू की चेतावनी", "marine_warning": "समुद्री चेतावनी",
+    "fishermen_alert": "मछुआरा चेतावनी — समुद्र में न जाएं",
+    "dismiss": "बंद करें", "no_alerts": "कोई सक्रिय अलर्ट नहीं",
+    "do_not_go_to_sea": "समुद्र में न जाएं",
+    "cyclone_title": "चक्रवात चेतावनी", "cyclone_body": "चक्रवात {{name}}",
+    "cyclone_detail": "{{severity}} अलर्ट · आपसे {{distance}}km दूर",
+    "cyclone_source": "स्रोत: GDACS / JTWC",
+    "cyclone_instruction": "घर के अंदर रहें। तटीय क्षेत्रों से दूर रहें। IMD अपडेट देखते रहें।",
+    "cyclone_view": "पूरा अलर्ट विवरण देखें",
+    "cyclone_dismiss": "समझ गया, बंद करें",
+    "flood_warning": "बाढ़ चेतावनी",
+    "active_alerts": "सक्रिय अलर्ट", "set_alerts": "घटना से पहले सूचना पाएं",
+    "subscribe": "सदस्यता लें", "dismiss_btn": "बंद करें",
+    "push_banner": "ऐप बंद होने पर भी अलर्ट पाने के लिए पुश नोटिफिकेशन सक्षम करें।",
+    "push_enable": "सक्षम करें", "push_active": "पुश नोटिफिकेशन सक्रिय है",
+    "sms_coming": "स्मार्टफोन नहीं? SMS अलर्ट पाएं (जल्द आ रहा है)",
+    "sms_placeholder": "फ़ोन नंबर", "sms_label": "Twilio SMS, जल्द आ रहा है",
+    "daily_digest": "मेरे मुख्य शहर के लिए सुबह 7 बजे दैनिक पूर्वानुमान",
+    "offline_banner": "आप ऑफलाइन हैं — पिछले कैश्ड जवाब दिखाए जा रहे हैं"
   },
   "weather": {
-    "rainfall": "वर्षा",
-    "temperature": "तापमान",
-    "humidity": "नमी",
-    "wind": "हवा",
-    "wave_height": "लहर की ऊंचाई",
-    "visibility": "दृश्यता",
-    "nwp_model": "NWP मॉडल",
-    "sea_safe": "समुद्र में जाना सुरक्षित है",
-    "sea_unsafe": "समुद्र में न जाएं, खतरनाक"
+    "rainfall": "वर्षा", "temperature": "तापमान", "humidity": "नमी",
+    "wind": "हवा", "wave_height": "लहर की ऊंचाई", "visibility": "दृश्यता",
+    "nwp_model": "NWP मॉडल", "sea_safe": "समुद्र में जाना सुरक्षित है",
+    "sea_unsafe": "समुद्र में न जाएं, खतरनाक",
+    "feels_like": "महसूस होता है {{temp}}°C", "range": "{{min}} ~ {{max}}°C",
+    "aqi_unavailable": "इस स्थान के लिए AQI उपलब्ध नहीं",
+    "forecast_title": "7-दिन का पूर्वानुमान · GFS मॉडल",
+    "forecast_unavailable": "7-दिन का पूर्वानुमान उपलब्ध नहीं",
+    "today": "आज", "using_gps": "GPS उपयोग हो रहा है ↓",
+    "cyclone": "चक्रवात", "flood": "बाढ़", "heatwave": "लू",
+    "source": "स्रोत"
   },
   "climate": {
-    "title": "जलवायु रुझान",
-    "fetch": "रुझान देखें",
-    "download_csv": "CSV डाउनलोड करें",
-    "increasing": "बढ़ रहा है",
-    "decreasing": "घट रहा है"
+    "title": "जलवायु रुझान", "fetch": "रुझान देखें",
+    "download_csv": "CSV डाउनलोड करें", "increasing": "बढ़ रहा है", "decreasing": "घट रहा है"
   },
-  "home": {
-    "greeting": "Hello, {{name}}"
+  "crop": {
+    "title": "फसल कैलेंडर", "subtitle": "मासिक बुवाई, सिंचाई और कटाई गाइड — ICAR/IMD थ्रेशोल्ड",
+    "this_month": "इस महीने — {{phase}} चरण",
+    "sow": "बुवाई", "growing": "उगना", "harvest": "कटाई", "rest": "आराम",
+    "no_water": "पानी नहीं", "high_water": "अधिक पानी",
+    "unavailable": "कैलेंडर लोड नहीं हो सका। दोबारा कोशिश करें।",
+    "source_label": "स्रोत"
   },
-  "voice": {
-    "denied": "माइक्रोफ़ोन अनुमति नहीं मिली",
-    "unsupported": "Voice input not supported"
-  }
+  "settings": {
+    "title": "सेटिंग",
+    "preferences": "प्राथमिकताएं", "language": "भाषा",
+    "temp_unit": "तापमान इकाई", "default_location": "डिफ़ॉल्ट स्थान",
+    "install_app": "ऐप इंस्टॉल करें", "installed": "इंस्टॉल है", "download_pwa": "PWA डाउनलोड करें",
+    "notifications": "नोटिफिकेशन", "push_alerts": "पुश अलर्ट",
+    "daily_digest": "दैनिक पूर्वानुमान डाइजेस्ट", "sms_fallback": "SMS बैकअप", "coming_soon": "जल्द आ रहा है",
+    "data_privacy": "डेटा और गोपनीयता", "last_sync": "अंतिम सिंक",
+    "minutes_ago": "{{n}} मिनट पहले", "na": "उपलब्ध नहीं",
+    "clear_chat": "चैट इतिहास साफ़ करें", "clear_cities": "सहेजे गए स्थान साफ़ करें",
+    "export_data": "मेरा डेटा निर्यात करें",
+    "confirm_title": "क्या आप सुनिश्चित हैं?",
+    "confirm_chat": "इससे {{count}} संदेश हट जाएंगे। यह वापस नहीं होगा।",
+    "confirm_cities": "इससे {{count}} शहर हट जाएंगे। यह वापस नहीं होगा।",
+    "cancel": "रद्द करें", "confirm_delete": "हटाएं",
+    "developer": "डेवलपर", "api_docs": "API और MCP डॉक्स",
+    "rate_limit": "रेट लिमिट", "rate_limit_value": "आज 847 / 1000 अनुरोध",
+    "about": "जानकारी", "coverage": "कवरेज और स्रोत",
+    "team": "टीम के बारे में", "open_source": "ओपन सोर्स", "github": "GitHub ↗",
+    "version": "संस्करण", "built_by": "Team Eloquence द्वारा निर्मित",
+    "not_set": "सेट नहीं"
+  },
+  "sidebar": {
+    "analysis": "विश्लेषण", "climate_trends": "जलवायु रुझान",
+    "coverage": "कवरेज और स्रोत", "about_team": "टीम के बारे में ↗",
+    "developer_label": "डेवलपर", "api_mcp": "API और MCP",
+    "api_docs": "API डॉक्स ↗", "github": "GitHub ↗",
+    "account": "खाता", "sign_out": "साइन आउट"
+  },
+  "feedback": {
+    "title": "क्या गलत हुआ?",
+    "wrong_data": "गलत डेटा", "wrong_location": "गलत स्थान",
+    "hallucinated": "नकली स्रोत", "other": "अन्य",
+    "thanks": "धन्यवाद, इससे हमें सटीकता सुधारने में मदद मिलती है",
+    "good": "अच्छा जवाब", "bad": "खराब जवाब"
+  },
+  "quick": {
+    "weather": "मौसम जाँचें", "atc": "ATC जाँच",
+    "fisherman": "मछुआरा जाँच", "farmer": "किसान सलाह",
+    "disaster": "आपदा अलर्ट"
+  },
+  "home": { "greeting": "नमस्ते, {{name}}" },
+  "voice": { "denied": "माइक्रोफ़ोन अनुमति नहीं मिली", "unsupported": "वॉइस इनपुट समर्थित नहीं है" }
 }
