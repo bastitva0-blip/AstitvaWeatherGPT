@@ -36,3 +36,10 @@ requests==2.32.3
 # sentence-transformers==3.0.1
 # cfgrib==0.9.10.4
 # twilio==9.1.0
+
+# ── New features (added post SIH2026 initial build) ──
+twilio==9.1.0          # SMS + WhatsApp bot
+gTTS==2.5.1            # Text-to-speech (17 Indian languages via Google TTS)
+pyttsx3==2.90          # Offline TTS fallback (English only)
+apscheduler==3.10.4     # Cron jobs: push alert check (15min) + feedback digest (weekly)
+pywebpush==2.0.0        # W3C Web Push for GDACS alert notifications

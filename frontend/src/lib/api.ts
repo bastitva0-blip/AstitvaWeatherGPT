@@ -147,3 +147,54 @@ export async function transcribeVoice(blob: Blob, sessionId: string, hintLang?: 
   if (!res.ok) throw new Error(`voice transcribe failed: ${res.status}`);
   return res.json();
 }
+
+// ── NEW: TTS ──
+export async function fetchTTS(text: string, lang: string): Promise<string | null> {
+  try {
+    const res = await request<{ audio_base64: string | null }>(`/api/tts`, {
+      method: "POST",
+      body: JSON.stringify({ text, lang }),
+    });
+    return res.audio_base64 ?? null;
+  } catch { return null; }
+}
+
+// ── NEW: 7-day forecast ──
+export interface DayForecast {
+  date: string;
+  location: string;
+  temperature_c: number;
+  rainfall_mm_per_hr: number;
+  humidity_percent: number;
+  wind_speed_kmh: number;
+  wind_direction_deg: number;
+  model: string;
+}
+export function fetch7DayForecast(location: string) {
+  return request<{ location: string; days: number; forecast: DayForecast[] }>(
+    `/api/forecast/7day?location=${encodeURIComponent(location)}`
+  );
+}
+
+// ── NEW: Crop calendar ──
+export interface CropMonth {
+  month: number;
+  month_name: string;
+  phase: string;
+  phase_emoji: string;
+  action: string;
+  water_need: string;
+  water_emoji: string;
+  is_current: boolean;
+}
+export interface CropCalendar {
+  crop: string;
+  current_month: number;
+  current_phase: string;
+  current_action: string;
+  months: CropMonth[];
+  source: string;
+}
+export function fetchCropCalendar(crop: string) {
+  return request<CropCalendar>(`/api/crop-calendar?crop=${encodeURIComponent(crop)}`);
+}

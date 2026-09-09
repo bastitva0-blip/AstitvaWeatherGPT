@@ -1,20 +1,19 @@
 import { create } from "zustand";
+import i18n from "../i18n";
 
-export const SUPPORTED_LANGS = [
-  "hi", "ta", "te", "bn", "mr", "kn", "gu", "pa", "or", "ml", "ur", "en",
-  "ar", "fr", "es", "zh", "sw",
-] as const;
-export type Lang = (typeof SUPPORTED_LANGS)[number];
+const RTL_LANGS = new Set(["ar", "ur"]);
 
-interface LangState {
-  lang: Lang;
-  setLang: (l: Lang) => void;
+interface LangStore {
+  lang: string;
+  setLang: (lang: string) => void;
 }
 
-export const useLangStore = create<LangState>((set) => ({
-  lang: (localStorage.getItem("wgpt_lang") as Lang) || "hi",
-  setLang: (l) => {
-    localStorage.setItem("wgpt_lang", l);
-    set({ lang: l });
+export const useLangStore = create<LangStore>((set) => ({
+  lang: localStorage.getItem("sanket_lang") || "en",
+  setLang: (lang: string) => {
+    localStorage.setItem("sanket_lang", lang);
+    // Change i18next language — triggers languageChanged event which updates html[dir] + html[lang]
+    i18n.changeLanguage(lang);
+    set({ lang });
   },
 }));
