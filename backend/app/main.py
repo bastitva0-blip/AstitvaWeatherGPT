@@ -13,7 +13,10 @@ from slowapi.util import get_remote_address
 
 from app.core.cache import close_redis, get_redis
 from app.models.database import init_db
-from app.routes import admin, alerts, climate, misc, query, voice, weather, websocket
+from app.routes import admin, alerts, climate, misc, query, voice, weather, websocket, sms, extras
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
+from apscheduler.triggers.interval import IntervalTrigger
 from app.services.gis_service import load_coastal_zones
 from app.services.wis2_service import WIS2Subscriber
 
@@ -40,6 +43,8 @@ app.include_router(voice.router, tags=["voice"])
 app.include_router(climate.router, tags=["climate"])
 app.include_router(websocket.router, tags=["websocket"])
 app.include_router(misc.router, tags=["misc"])
+app.include_router(sms.router, tags=["sms"])       # SMS + WhatsApp Twilio webhooks
+app.include_router(extras.router, tags=["extras"]) # TTS, crop calendar, 7-day forecast
 
 Instrumentator().instrument(app).expose(app)
 
@@ -60,9 +65,12 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
 _wis2_subscriber: WIS2Subscriber | None = None
 
 
+_scheduler: AsyncIOScheduler | None = None
+
+
 @app.on_event("startup")
 async def startup():
-    global _wis2_subscriber
+    global _wis2_subscriber, _scheduler
     try:
         await init_db()
     except Exception as e:
@@ -74,9 +82,37 @@ async def startup():
     _wis2_subscriber = WIS2Subscriber(redis_client=app.state.redis, loop=asyncio.get_event_loop())
     _wis2_subscriber.start()
 
+    # ── APScheduler cron jobs ──
+    _scheduler = AsyncIOScheduler(timezone="Asia/Kolkata")
+
+    # Push alert check every 15 minutes
+    from app.services.push_notify_service import run_push_alert_cron
+    _scheduler.add_job(
+        run_push_alert_cron,
+        IntervalTrigger(minutes=15),
+        id="push_alert_cron",
+        replace_existing=True,
+        max_instances=1,
+    )
+
+    # Weekly feedback digest — every Monday at 09:00 IST
+    from app.services.feedback_digest_service import run_feedback_digest
+    _scheduler.add_job(
+        run_feedback_digest,
+        CronTrigger(day_of_week="mon", hour=9, minute=0),
+        id="feedback_digest",
+        replace_existing=True,
+        max_instances=1,
+    )
+
+    _scheduler.start()
+    logger.info("APScheduler started: push_alert_cron (15min) + feedback_digest (Monday 09:00 IST)")
+
 
 @app.on_event("shutdown")
 async def shutdown():
+    if _scheduler and _scheduler.running:
+        _scheduler.shutdown(wait=False)
     if _wis2_subscriber:
         _wis2_subscriber.stop()
     await close_redis()

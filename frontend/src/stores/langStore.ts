@@ -1,20 +1,44 @@
 import { create } from "zustand";
+import i18n from "../i18n";
 
-export const SUPPORTED_LANGS = [
-  "hi", "ta", "te", "bn", "mr", "kn", "gu", "pa", "or", "ml", "ur", "en",
-  "ar", "fr", "es", "zh", "sw",
-] as const;
-export type Lang = (typeof SUPPORTED_LANGS)[number];
+const RTL_LANGS = new Set(["ar", "ur"]);
 
-interface LangState {
+export type Lang =
+  | "hi" | "ta" | "te" | "bn" | "mr" | "kn" | "gu" | "pa" | "or" | "ml"
+  | "ur" | "en" | "ar" | "fr" | "es" | "zh" | "sw";
+
+export const SUPPORTED_LANGS: { code: Lang; native: string; roman: string }[] = [
+  { code: "en", native: "English",    roman: "English"    },
+  { code: "hi", native: "हिन्दी",     roman: "Hindi"      },
+  { code: "ta", native: "தமிழ்",      roman: "Tamil"      },
+  { code: "te", native: "తెలుగు",     roman: "Telugu"     },
+  { code: "bn", native: "বাংলা",      roman: "Bengali"    },
+  { code: "mr", native: "मराठी",      roman: "Marathi"    },
+  { code: "kn", native: "ಕನ್ನಡ",      roman: "Kannada"    },
+  { code: "gu", native: "ગુજરાતી",    roman: "Gujarati"   },
+  { code: "pa", native: "ਪੰਜਾਬੀ",     roman: "Punjabi"    },
+  { code: "or", native: "ଓଡ଼ିଆ",      roman: "Odia"       },
+  { code: "ml", native: "മലയാളം",     roman: "Malayalam"  },
+  { code: "ur", native: "اردو",       roman: "Urdu"       },
+  { code: "ar", native: "العربية",    roman: "Arabic"     },
+  { code: "fr", native: "Français",   roman: "French"     },
+  { code: "es", native: "Español",    roman: "Spanish"    },
+  { code: "sw", native: "Kiswahili",  roman: "Swahili"    },
+  { code: "zh", native: "中文",        roman: "Chinese"    },
+];
+
+interface LangStore {
   lang: Lang;
-  setLang: (l: Lang) => void;
+  setLang: (lang: Lang) => void;
 }
 
-export const useLangStore = create<LangState>((set) => ({
-  lang: (localStorage.getItem("wgpt_lang") as Lang) || "hi",
-  setLang: (l) => {
-    localStorage.setItem("wgpt_lang", l);
-    set({ lang: l });
+export const useLangStore = create<LangStore>((set) => ({
+  lang: (localStorage.getItem("sanket_lang") as Lang) || "en",
+  setLang: (lang: Lang) => {
+    localStorage.setItem("sanket_lang", lang);
+    i18n.changeLanguage(lang);
+    document.documentElement.lang = lang;
+    document.documentElement.dir  = RTL_LANGS.has(lang) ? "rtl" : "ltr";
+    set({ lang });
   },
 }));
