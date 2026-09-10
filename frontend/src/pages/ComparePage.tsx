@@ -93,7 +93,7 @@ export function ComparePage() {
       </div>
 
       {/* City pickers — grid keeps both at 50% on any screen width */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "1.25rem" }}></div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "1.25rem" }}>
         <div>
           <p style={{ margin: "0 0 0.35rem 0.25rem", fontSize: "0.65rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.07em" }}>
             {loadingA ? "Loading…" : nameA ? nameA : "City A"}
