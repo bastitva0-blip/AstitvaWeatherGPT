@@ -682,7 +682,7 @@ npm run dev
 
 | Route | Page | Auth | Description |
 |---|---|---|---|
-| `/` | `LandingPage` | Public | Hero, features, CTA. Redirects `/app` if already signed in. |
+| `/` | `LandingPage` | Public | Hero, features, CTA, embedded product demo video. Redirects `/app` if already signed in. |
 | `/auth` | `AuthPage` | Public | Firebase Google OAuth + email/password sign-in |
 | `/team` | `TeamPage` | Public | Team Eloquence cards with click-to-expand detail + LinkedIn |
 | `/onboarding` | `OnboardingPage` | 🔒 | First-run: language picker + location permission |
@@ -690,7 +690,7 @@ npm run dev
 | `/app/chat` | `ChatPage` | 🔒 | Main conversational AI chat — 5 quick-action boxes, Short/Medium/Long detail toggle |
 | `/app/map` | `MapPage` | 🔒 | Leaflet/Carto map — coastal zones, cyclone tracks, rainfall overlay |
 | `/app/cities` | `CitiesPage` | 🔒 | Browse and pin saved cities (citiesStore) |
-| `/app/compare` | `ComparePage` | 🔒 | Side-by-side weather comparison for 2+ locations |
+| `/app/compare` | `ComparePage` | 🔒 | Side-by-side weather comparison for 2 locations, mobile-stacked layout |
 | `/app/alerts` | `AlertsPage` | 🔒 | Active alerts, threshold subscription management |
 | `/app/history` | `HistoryPage` | 🔒 | Query history log |
 | `/app/climate` | `ClimateTrendsPage` | 🔒 | Historical climate trend charts (ClimateTrendChart component) |
