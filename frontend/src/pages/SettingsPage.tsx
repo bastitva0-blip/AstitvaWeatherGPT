@@ -21,8 +21,9 @@ export function SettingsPage() {
   const lang = useLangStore((s) => s.lang);
   const [unit, setUnit] = useState<"C" | "F">("C");
   const { granted, enable } = usePushNotifications();
-  const { canInstall, installed, promptInstall } = usePWAInstall();
+  const { canInstall, installed, promptInstall, ios } = usePWAInstall();
   const [digest, setDigest] = useState(false);
+  const [iosHelp, setIosHelp] = useState(false);
   const [confirmClear, setConfirmClear] = useState<"chat" | "cities" | null>(null);
   const clearChat = useChatStore((s) => s.clear);
   const cities = useCitiesStore((s) => s.cities);
@@ -56,17 +57,31 @@ export function SettingsPage() {
           />
         </div>
         <div className="settings-cell"><span>Default location</span><span>{cities[0]?.name || "Not set"}</span></div>
-        {(canInstall || installed) && (
+        {(canInstall || installed || ios) && (
           <div className="settings-cell">
             <span>Install app</span>
             {installed ? (
               <span style={{ color: "var(--text-muted)" }}>Installed</span>
+            ) : ios ? (
+              <Button variant="ghost" onClick={() => setIosHelp(true)}>Add to Home Screen</Button>
             ) : (
               <Button variant="ghost" onClick={promptInstall}>Download PWA</Button>
             )}
           </div>
         )}
       </div>
+
+      <Dialog open={iosHelp} onOpenChange={setIosHelp}>
+        <DialogContent>
+          <DialogTitle>Add to Home Screen</DialogTitle>
+          <p>1. Tap the Share button in Safari's toolbar.<br />
+             2. Scroll down and tap "Add to Home Screen".<br />
+             3. Tap "Add" to confirm.</p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIosHelp(false)}>Got it</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Sheet open={langOpen} onOpenChange={setLangOpen}>
         <SheetContent side="bottom">

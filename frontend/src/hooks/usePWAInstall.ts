@@ -10,9 +10,14 @@ function isStandalone() {
     || (window.navigator as { standalone?: boolean }).standalone === true;
 }
 
+function isIos() {
+  return /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+}
+
 export function usePWAInstall() {
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
   const [installed, setInstalled] = useState(isStandalone());
+  const ios = isIos() && !isStandalone();
 
   useEffect(() => {
     function onBeforeInstallPrompt(e: Event) {
@@ -39,5 +44,5 @@ export function usePWAInstall() {
     return outcome === "accepted";
   }, [deferred]);
 
-  return { canInstall: !!deferred && !installed, installed, promptInstall };
+  return { canInstall: !!deferred && !installed, installed, promptInstall, ios };
 }
