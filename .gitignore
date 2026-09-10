@@ -8,3 +8,5 @@ dist/
 *.local
 prompt.md
 image.png
+.vercel
+.env*

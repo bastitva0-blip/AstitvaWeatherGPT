@@ -102,6 +102,18 @@ export function LandingPage() {
         </div>
       </div>
 
+      <div className="preview-card fadeUp" style={{ padding: 0, overflow: "hidden" }}>
+        <video
+          src="/videos/demo.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          controls
+          style={{ width: "100%", display: "block", borderRadius: "inherit" }}
+        />
+      </div>
+
       <section className="section" id="features">
         <div className="section-eyebrow">Why we built this</div>
         <h2 className="section-headline">India's weather, for the people who actually live with it.</h2>
